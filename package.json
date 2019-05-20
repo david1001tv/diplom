@@ -20,7 +20,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon -L index.js",
-    "seed:cities": "node scripts/seed.cities.js"
+    "seed:cities": "node scripts/seed.cities.js",
+    "seed:countries": "node scripts/seed.countries.js"
   },
   "version": "1.0.0",
   "description": "my fucking diplom",
