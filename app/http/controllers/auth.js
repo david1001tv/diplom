@@ -64,10 +64,9 @@ router.post('/register', async function (req, res) {
 router.post('/login', async function (req, res) {
     const {login, password} = req.body;
 
-    let user = await User.find({
+    let user = await User.findOne({
         $or: [{login: login}, {email: login}]
-    });
-
+    }).select('+password');
     if (!user) {
         return res.status(400).json({
             success: false,
