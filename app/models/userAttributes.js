@@ -24,6 +24,10 @@ module.exports = mongoose.model('user_attributes', new Schema({
   phone: {
     type: String,
     default: ''
+  },
+  interests: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true
