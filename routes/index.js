@@ -2,14 +2,14 @@ const router = require('express').Router();
 
 const authRouter = require(base_dir + '/app/http/controllers/auth');
 const accountRouter = require(base_dir + '/app/http/controllers/account');
-const conferencesRouter = require(base_dir + '/app/http/controllers/conference');
-const talksRouter = require(base_dir + '/app/http/controllers/talk');
+const adminConferencesRouter = require(base_dir + '/app/http/controllers/admin-conference');
+const adminTalksRouter = require(base_dir + '/app/http/controllers/admin-talk');
 
 const authMiddleware = require(base_dir + '/app/http/middleware/authMiddleware');
 
 router.use('/auth', authRouter);
 router.use('/account', authMiddleware, accountRouter);
-router.use('/admin', authMiddleware, conferencesRouter);
-router.use('/admin', authMiddleware, talksRouter);
+router.use('/admin', authMiddleware, adminConferencesRouter);
+router.use('/admin', authMiddleware, adminTalksRouter);
 
 module.exports = router;

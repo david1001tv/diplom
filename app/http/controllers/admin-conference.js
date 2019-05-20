@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const Conference = require(base_dir + '/app/models/conference');
+const AdminConference = require(base_dir + '/app/models/conference');
 const Talk = require(base_dir + '/app/models/talk');
 
 router.post('/conferences', async function (req, res) {
@@ -8,7 +8,7 @@ router.post('/conferences', async function (req, res) {
 
     let conference = {};
     try {
-        conference = await Conference.create({
+        conference = await AdminConference.create({
             name,
             description,
             address,
@@ -35,12 +35,12 @@ router.get('/conferences', async function (req, res) {
     const search = await querySearch(query, date, startDate, finishDate);
     const sort = {};
     sort[sortField] = (direction === 'desc') ? -1 : 1;
-    let conferences = await Conference.find(search, {
+    let conferences = await AdminConference.find(search, {
         skip: (+page - 1) * +limit,
         limit: limit,
         sort: sort
     }).populate('city');
-    let total = await Conference.find(search).count();
+    let total = await AdminConference.find(search).count();
 
     for (let i in conferences) {
         conferences[i].talks = await Talk.find({
@@ -62,11 +62,11 @@ router.get('/conferences', async function (req, res) {
 });
 
 router.get('/conferences/:id', async function (req, res) {
-    let conference = await Conference.findOne({_id: req.params.id});
+    let conference = await AdminConference.findOne({_id: req.params.id});
     if (!conference) {
         return res.status(404).json({
             success: false,
-            message: 'Conference not found'
+            message: 'AdminConference not found'
         });
     }
 
@@ -76,16 +76,16 @@ router.get('/conferences/:id', async function (req, res) {
 router.put('/conferences/:id', async function (req, res) {
     const {name, description, address, city, date} = req.body;
 
-    let conference = await Conference.findOne({_id: req.params.id});
+    let conference = await AdminConference.findOne({_id: req.params.id});
     if (!conference) {
         return res.status(404).json({
             success: false,
-            message: 'Conference not found'
+            message: 'AdminConference not found'
         });
     }
 
     try {
-        conference = await Conference.update({
+        conference = await AdminConference.update({
             name,
             description,
             address,
@@ -110,7 +110,7 @@ router.delete('/conferences/:id', async function (req, res) {
     let conference = {};
 
     try {
-        conference = await Conference.deleteOne({_id: req.params.id});
+        conference = await AdminConference.deleteOne({_id: req.params.id});
     } catch (e) {
         return res.status(400).json({
             success: false,
