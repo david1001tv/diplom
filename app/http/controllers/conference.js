@@ -36,18 +36,18 @@ router.get('/conferences', async function (req, res) {
     const sort = {};
     sort[sortField] = (direction === 'desc') ? -1 : 1;
     let conferences = await Conference.find(search, {
-        skip:(+page-1) * +limit,
-        limit:limit,
+        skip: (+page - 1) * +limit,
+        limit: limit,
         sort: sort
     }).populate('city');
     let total = await Conference.find(search).count();
 
-    for(let i in conferences) {
+    for (let i in conferences) {
         conferences[i].talks = await Talk.find({
             conference_id: conferences[i]._id
         }).populate({
             path: 'speaker',
-            model: 'user',
+            model: 'users',
             populate: {
                 path: 'attributes',
                 model: 'user_attributes'
@@ -59,6 +59,18 @@ router.get('/conferences', async function (req, res) {
         data: conferences,
         total: total
     });
+});
+
+router.get('/conferences/:id', async function (req, res) {
+    let conference = await Conference.findOne({_id: req.params.id});
+    if (!conference) {
+        return res.status(404).json({
+            success: false,
+            message: 'Conference not found'
+        });
+    }
+
+    return res.json(conference);
 });
 
 router.put('/conferences/:id', async function (req, res) {
@@ -96,7 +108,7 @@ router.put('/conferences/:id', async function (req, res) {
 
 router.delete('/conferences/:id', async function (req, res) {
     let conference = {};
-    
+
     try {
         conference = await Conference.deleteOne({_id: req.params.id});
     } catch (e) {
@@ -112,7 +124,7 @@ router.delete('/conferences/:id', async function (req, res) {
     });
 });
 
-async function querySearch (query, date, startDate, finishDate) {
+async function querySearch(query, date, startDate, finishDate) {
     let search = {};
     let $and = [];
     let queryOr = [];
@@ -121,20 +133,20 @@ async function querySearch (query, date, startDate, finishDate) {
         query = query.split(' ');
         for (let i = 0; i < query.length; i++) {
             queryOr = [
-                { name: new RegExp(query[i], 'i') },
-                { description: new RegExp(query[i], 'i') },
+                {name: new RegExp(query[i], 'i')},
+                {description: new RegExp(query[i], 'i')},
             ];
         }
     }
 
     if (startDate && finishDate) {
-        $and.push({ createdAt: { $gte: decodeURIComponent(startDate), $lt: decodeURIComponent(finishDate) } });
+        $and.push({createdAt: {$gte: decodeURIComponent(startDate), $lt: decodeURIComponent(finishDate)}});
     } else {
         if (startDate) {
-            $and.push({ createdAt: { $gte: decodeURIComponent(startDate) } });
+            $and.push({createdAt: {$gte: decodeURIComponent(startDate)}});
         }
         if (finishDate) {
-            $and.push({ createdAt: { $lt: decodeURIComponent(finishDate) } });
+            $and.push({createdAt: {$lt: decodeURIComponent(finishDate)}});
         }
     }
 
@@ -142,7 +154,7 @@ async function querySearch (query, date, startDate, finishDate) {
         search.$and = $and;
     }
     if (queryOr.length) {
-        search.$and = search.$and ? [...search.$and, ...[ { $or: queryOr } ] ] : [ { $or: queryOr } ];
+        search.$and = search.$and ? [...search.$and, ...[{$or: queryOr}]] : [{$or: queryOr}];
     }
 
     return search;

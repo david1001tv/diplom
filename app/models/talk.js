@@ -19,7 +19,7 @@ module.exports = mongoose.model('talks', new Schema({
     ref: 'users',
     required: true
   },
-  conference_id: {
+  conference: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'conferences',
     required: true
