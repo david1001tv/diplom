@@ -19,6 +19,11 @@ module.exports = mongoose.model('talks', new Schema({
     ref: 'users',
     required: true
   },
+  conference_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'conferences',
+    required: true
+  },
   info: {
     type: String,
     default: ''

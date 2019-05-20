@@ -1,6 +1,4 @@
 const router = require('express').Router();
-const jwt = require('jsonwebtoken');
-const config = require(base_dir + '/config').app;
 
 const User = require(base_dir + '/app/models/user');
 const UserAttributes = require(base_dir + '/app/models/userAttributes');
@@ -19,7 +17,7 @@ router.get('/', async function (req, res) {
 
     return res.json({
         success: true,
-        user
+        data: user
     });
 });
 
@@ -62,7 +60,7 @@ router.put('/', async function (req, res) {
 
     return res.json({
         success: true,
-        user
+        data: user
     });
 });
 
