@@ -39,7 +39,7 @@ router.post('/conferences', async function (req, res) {
 });
 
 router.get('/conferences', async function (req, res) {
-    const {limit = 10, page = 1, query, date, startDate, finishDate, direction = 'desc', sortField = 'name'} = req.body;
+    const {limit = 10, page = 1, query, date, startDate, finishDate, direction = 'desc', sortField = 'name'} = req.params;
 
     const search = await querySearch(query, date, startDate, finishDate);
     const sort = {};

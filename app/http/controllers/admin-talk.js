@@ -29,7 +29,7 @@ router.post('/talks', async function (req, res) {
 });
 
 router.get('/talks', async function (req, res) {
-    const {limit = 10, page = 1, query, speaker, direction = 'desc', sortField = 'name'} = req.body;
+    const {limit = 10, page = 1, query, speaker, direction = 'desc', sortField = 'name'} = req.params;
 
     const search = await querySearch(query, speaker);
     const sort = {};
