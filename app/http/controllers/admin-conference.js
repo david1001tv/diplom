@@ -1,18 +1,20 @@
 const router = require('express').Router();
 
-const AdminConference = require(base_dir + '/app/models/conference');
+const Conference = require(base_dir + '/app/models/conference');
 const Talk = require(base_dir + '/app/models/talk');
+const City = require(base_dir + '/app/models/city');
 
 router.post('/conferences', async function (req, res) {
     const {name, description, address, city, date} = req.body;
 
+    let cityFromDB = await City.findOne({_id:city});
     let conference = {};
     try {
-        conference = await AdminConference.create({
+        conference = await Conference.create({
             name,
             description,
             address,
-            city,
+            city: cityFromDB,
             date
         });
     } catch (e) {
@@ -35,12 +37,15 @@ router.get('/conferences', async function (req, res) {
     const search = await querySearch(query, date, startDate, finishDate);
     const sort = {};
     sort[sortField] = (direction === 'desc') ? -1 : 1;
-    let conferences = await AdminConference.find(search, {
+    let conferences = await Conference.find(search, null, {
         skip: (+page - 1) * +limit,
         limit: limit,
         sort: sort
-    }).populate('city');
-    let total = await AdminConference.find(search).count();
+    }).populate({
+        path: 'city',
+        model: 'cities'
+    });
+    let total = await Conference.find(search).count();
 
     for (let i in conferences) {
         conferences[i].talks = await Talk.find({
@@ -62,13 +67,13 @@ router.get('/conferences', async function (req, res) {
 });
 
 router.get('/conferences/:id', async function (req, res) {
-    let conference = await AdminConference.findOne({_id: req.params.id});
+    let conference = await Conference.findOne({_id: req.params.id});
     if (!conference) {
         return res.status(404).json({
             success: false,
             message: 'AdminConference not found'
         });
-    }
+    }``
 
     return res.json(conference);
 });
@@ -76,7 +81,9 @@ router.get('/conferences/:id', async function (req, res) {
 router.put('/conferences/:id', async function (req, res) {
     const {name, description, address, city, date} = req.body;
 
-    let conference = await AdminConference.findOne({_id: req.params.id});
+    let cityFromDB = await City.findOne({_id:city});
+
+    let conference = await Conference.findOne({_id: req.params.id});
     if (!conference) {
         return res.status(404).json({
             success: false,
@@ -85,11 +92,11 @@ router.put('/conferences/:id', async function (req, res) {
     }
 
     try {
-        conference = await AdminConference.update({
+        conference = await Conference.update({
             name,
             description,
             address,
-            city,
+            city: cityFromDB,
             date
         });
     } catch (e) {
@@ -110,7 +117,7 @@ router.delete('/conferences/:id', async function (req, res) {
     let conference = {};
 
     try {
-        conference = await AdminConference.deleteOne({_id: req.params.id});
+        conference = await Conference.deleteOne({_id: req.params.id});
     } catch (e) {
         return res.status(400).json({
             success: false,
@@ -124,7 +131,7 @@ router.delete('/conferences/:id', async function (req, res) {
     });
 });
 
-async function querySearch(query, date, startDate, finishDate) {
+function querySearch(query, date, startDate, finishDate) {
     let search = {};
     let $and = [];
     let queryOr = [];

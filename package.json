@@ -19,7 +19,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon -L index.js"
+    "dev": "nodemon -L index.js",
+    "seed:cities": "node scripts/seed.cities.js"
   },
   "version": "1.0.0",
   "description": "my fucking diplom",

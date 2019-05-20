@@ -3,7 +3,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
 // set up a mongoose model
-module.exports = mongoose.model('talks', new Schema({
+const TalkSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -30,4 +30,6 @@ module.exports = mongoose.model('talks', new Schema({
   }
 }, {
   timestamps: true
-})).plugin(uniqueValidator, { message: 'Field `{PATH}` must be unique' });
+}).plugin(uniqueValidator, { message: 'Field `{PATH}` must be unique' });
+
+module.exports = mongoose.model('talk', TalkSchema);

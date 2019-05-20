@@ -6,7 +6,7 @@ const UserAttributes = require(base_dir + '/app/models/userAttributes');
 router.get('/', async function (req, res) {
     const {userId} = req.body;
 
-    const user = await User.find({_id: userId}).populate(['attributes', 'country']);
+    const user = await User.findOne({_id: userId}).populate(['attributes', 'country']);
 
     if (!user) {
         return res.status(404).json({
