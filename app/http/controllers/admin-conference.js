@@ -8,6 +8,13 @@ router.post('/conferences', async function (req, res) {
     const {name, description, address, city, date} = req.body;
 
     let cityFromDB = await City.findOne({_id:city});
+    if (!cityFromDB) {
+        return res.status(400).json({
+            success: false,
+            message: 'Invalid city'
+        });
+    }
+
     let conference = {};
     try {
         conference = await Conference.create({
@@ -71,7 +78,7 @@ router.get('/conferences/:id', async function (req, res) {
     if (!conference) {
         return res.status(404).json({
             success: false,
-            message: 'AdminConference not found'
+            message: 'Conference not found'
         });
     }``
 
@@ -82,12 +89,18 @@ router.put('/conferences/:id', async function (req, res) {
     const {name, description, address, city, date} = req.body;
 
     let cityFromDB = await City.findOne({_id:city});
+    if (!cityFromDB) {
+        return res.status(400).json({
+            success: false,
+            message: 'Invalid city'
+        });
+    }
 
     let conference = await Conference.findOne({_id: req.params.id});
     if (!conference) {
         return res.status(404).json({
             success: false,
-            message: 'AdminConference not found'
+            message: 'Conference not found'
         });
     }
 
