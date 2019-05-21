@@ -16,7 +16,7 @@ const TalkSchema = new Schema({
   },
   speaker: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',
+    ref: 'speakers',
     required: true
   },
   conference: {

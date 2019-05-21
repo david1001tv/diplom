@@ -39,15 +39,13 @@ router.post('/conferences', async function (req, res) {
 });
 
 router.get('/conferences', async function (req, res) {
-    const {limit = 10, page = 1, query, date, startDate, finishDate, direction = 'desc', sortField = 'name'} = req.params;
+    const {limit = 10, page = 1, query, startDate, finishDate, sort = {'date': 1}, filter} = req.query;
 
-    const search = await querySearch(query, date, startDate, finishDate);
-    const sort = {};
-    sort[sortField] = (direction === 'desc') ? -1 : 1;
+    const search = await querySearch(query, startDate, finishDate, filter);
     let conferences = await Conference.find(search, null, {
         skip: (+page - 1) * +limit,
         limit: limit,
-        sort: sort
+        sort: sort,
     }).populate({
         path: 'city',
         model: 'cities'
@@ -80,7 +78,7 @@ router.get('/conferences/:id', async function (req, res) {
             success: false,
             message: 'Conference not found'
         });
-    }``
+    }
 
     return res.json(conference);
 });
@@ -144,7 +142,7 @@ router.delete('/conferences/:id', async function (req, res) {
     });
 });
 
-function querySearch(query, date, startDate, finishDate) {
+function querySearch(query, startDate, finishDate, filter) {
     let search = {};
     let $and = [];
     let queryOr = [];
@@ -160,13 +158,13 @@ function querySearch(query, date, startDate, finishDate) {
     }
 
     if (startDate && finishDate) {
-        $and.push({createdAt: {$gte: decodeURIComponent(startDate), $lt: decodeURIComponent(finishDate)}});
+        $and.push({date: {$gte: decodeURIComponent(startDate), $lt: decodeURIComponent(finishDate)}});
     } else {
         if (startDate) {
-            $and.push({createdAt: {$gte: decodeURIComponent(startDate)}});
+            $and.push({date: {$gte: decodeURIComponent(startDate)}});
         }
         if (finishDate) {
-            $and.push({createdAt: {$lt: decodeURIComponent(finishDate)}});
+            $and.push({date: {$lt: decodeURIComponent(finishDate)}});
         }
     }
 
@@ -175,6 +173,13 @@ function querySearch(query, date, startDate, finishDate) {
     }
     if (queryOr.length) {
         search.$and = search.$and ? [...search.$and, ...[{$or: queryOr}]] : [{$or: queryOr}];
+    }
+    if (filter) {
+        let key = Object.keys(filter)[0];
+        let values = filter[key];
+        search[key] = {
+            $in: values
+        }
     }
 
     return search;

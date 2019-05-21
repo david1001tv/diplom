@@ -5,6 +5,7 @@ const config = require(base_dir + '/config').app;
 const User = require(base_dir + '/app/models/user');
 const UserAttributes = require(base_dir + '/app/models/userAttributes');
 const AccessToken = require(base_dir + '/app/models/accessToken');
+const City = require(base_dir + '/app/models/city');
 
 router.post('/register', async function (req, res) {
     const {login, email, password, firstName, lastName, city, country, phone, interests} = req.body;
@@ -16,10 +17,20 @@ router.post('/register', async function (req, res) {
         });
     }
 
+    let strongPassword = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})');
+    if ((await strongPassword.test(password)) === false) {
+        return res.status(422).json({
+            success: false,
+            message: 'Weak password'
+        });
+    }
+
+    let cityFromDB = await City.findOne({id:city});
+
     const attributes = await UserAttributes.create({
         first_name: firstName,
         last_name: lastName,
-        city: city,
+        city: cityFromDB,
         country: country,
         phone: phone,
         interests: interests

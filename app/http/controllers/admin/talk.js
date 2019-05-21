@@ -1,16 +1,18 @@
 const router = require('express').Router();
 
 const Talk = require(base_dir + '/app/models/talk');
+const Speaker = require(base_dir + '/app/models/speaker');
 
 router.post('/talks', async function (req, res) {
     const {name, description, speaker, conference, info} = req.body;
+    let speakerFromDB = await Speaker.findOne({_id: speaker});
 
     let talk = {};
     try {
         talk = await Talk.create({
             name,
             description,
-            speaker,
+            speaker: speakerFromDB,
             conference,
             info
         });
@@ -29,11 +31,9 @@ router.post('/talks', async function (req, res) {
 });
 
 router.get('/talks', async function (req, res) {
-    const {limit = 10, page = 1, query, speaker, direction = 'desc', sortField = 'name'} = req.params;
+    const {limit = 10, page = 1, query, sort = {'name': 1}, filter} = req.query;
 
-    const search = await querySearch(query, speaker);
-    const sort = {};
-    sort[sortField] = (direction === 'desc') ? -1 : 1;
+    const search = await querySearch(query, filter);
     let talks = await Talk.find(search, {
         skip: (+page - 1) * +limit,
         limit: limit,
@@ -117,7 +117,7 @@ router.delete('/talks/:id', async function (req, res) {
     });
 });
 
-async function querySearch(query, speaker) {
+async function querySearch(query, filter) {
     let search = {};
     let $and = [];
     let queryOr = [];
@@ -133,15 +133,18 @@ async function querySearch(query, speaker) {
         }
     }
 
-    if (speaker) {
-        $and.push({speaker: speaker});
-    }
-
     if ($and.length) {
         search.$and = $and;
     }
     if (queryOr.length) {
         search.$and = search.$and ? [...search.$and, ...[{$or: queryOr}]] : [{$or: queryOr}];
+    }
+    if (filter) {
+        let key = Object.keys(filter)[0];
+        let values = filter[key];
+        search[key] = {
+            $in: values
+        }
     }
 
     return search;
