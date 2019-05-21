@@ -2,7 +2,6 @@ const router = require('express').Router();
 
 const User = require(base_dir + '/app/models/user');
 const UserAttributes = require(base_dir + '/app/models/userAttributes');
-const City = require(base_dir + '/app/models/city');
 
 router.get('/', async function (req, res) {
     const {userId} = req.body;
