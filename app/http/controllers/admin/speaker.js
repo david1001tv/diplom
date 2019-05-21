@@ -17,7 +17,7 @@ router.post('/speakers', async function (req, res) {
         email: email,
         github: github,
         interests: interests,
-        country: country
+        country: countryFromDB
     });
 
     if (account) {
@@ -86,7 +86,7 @@ router.put('/speakers/:id', async function (req, res) {
         });
     }
 
-    await Speaker.update({
+    await speaker.update({
         first_name: firstName,
         last_name: lastName,
         email: email,

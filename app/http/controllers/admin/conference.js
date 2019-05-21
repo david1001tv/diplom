@@ -86,7 +86,7 @@ router.put('/conferences/:id', async function (req, res) {
     }
 
     try {
-        conference = await Conference.update({
+        await conference.update({
             name,
             description,
             address,

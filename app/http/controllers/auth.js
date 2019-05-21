@@ -5,7 +5,6 @@ const config = require(base_dir + '/config').app;
 const User = require(base_dir + '/app/models/user');
 const UserAttributes = require(base_dir + '/app/models/userAttributes');
 const AccessToken = require(base_dir + '/app/models/accessToken');
-const City = require(base_dir + '/app/models/city');
 
 router.post('/register', async function (req, res) {
     const {login, email, password, firstName, lastName, city, country, phone, interests} = req.body;
@@ -61,6 +60,15 @@ router.post('/register', async function (req, res) {
         user: user._id,
         token: token,
         expires_at: new Date(Date.now() + config.accessTokenLife * 1000 + 30 * 3600 * 24 * 1000)
+    });
+
+    user = await User.findOne({_id: user._id}).populate({
+        path: 'attributes',
+        model: 'user_attributes',
+        populate: {
+            path: 'city',
+            model: 'cities'
+        }
     });
 
     return res.json({

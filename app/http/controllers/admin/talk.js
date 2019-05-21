@@ -72,7 +72,7 @@ router.put('/talks/:id', async function (req, res) {
     }
 
     try {
-        talk = await Talk.update({
+        await talk.update({
             name,
             description,
             speaker,
