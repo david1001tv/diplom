@@ -34,12 +34,10 @@ router.put('/', async function (req, res) {
         });
     }
 
-    let cityFromDB = await City.findOne({id:city});
-
     const newAttr = {
         first_name: firstName,
         last_name: lastName,
-        city: cityFromDB,
+        city: city,
         country: country,
         phone: phone,
         interests: interests
@@ -52,7 +50,14 @@ router.put('/', async function (req, res) {
     }
 
     await UserAttributes.update({_id: user.attributes.id}, newAttr);
-    user = await User.findOne({_id: userId}).populate(['attributes']);
+    user = await User.findOne({_id: userId}).populate({
+        path: 'attributes',
+        model: 'user_attributes',
+        populate: {
+            path: 'city',
+            model: 'cities'
+        }
+    });
 
     return res.json({
         success: true,

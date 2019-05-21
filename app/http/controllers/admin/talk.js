@@ -5,14 +5,13 @@ const Speaker = require(base_dir + '/app/models/speaker');
 
 router.post('/talks', async function (req, res) {
     const {name, description, speaker, conference, info} = req.body;
-    let speakerFromDB = await Speaker.findOne({_id: speaker});
 
     let talk = {};
     try {
         talk = await Talk.create({
             name,
             description,
-            speaker: speakerFromDB,
+            speaker,
             conference,
             info
         });
@@ -23,6 +22,8 @@ router.post('/talks', async function (req, res) {
             message: e.message
         });
     }
+
+    talk = await Talk.findOne({_id: talk._id}).populate('speaker');
 
     return res.json({
         success: true,
@@ -38,14 +39,7 @@ router.get('/talks', async function (req, res) {
         skip: (+page - 1) * +limit,
         limit: limit,
         sort: sort
-    }).populate('conference').populate({
-        path: 'speaker',
-        model: 'users',
-        populate: {
-            path: 'attributes',
-            model: 'user_attributes'
-        }
-    });
+    }).populate('conference').populate('speaker');
     let total = await Talk.find(search).count();
 
     return res.json({
@@ -92,6 +86,8 @@ router.put('/talks/:id', async function (req, res) {
             message: e.message
         });
     }
+
+    talk = await Talk.findOne({_id: talk._id}).populate('speaker');
 
     return res.json({
         success: true,

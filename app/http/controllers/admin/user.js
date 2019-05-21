@@ -15,12 +15,10 @@ router.post('/users', async function (req, res) {
         });
     }
 
-    let cityFromDB = await City.findOne({id:city});
-
     const attributes = await UserAttributes.create({
         first_name: firstName,
         last_name: lastName,
-        city: cityFromDB,
+        city: city,
         country: country,
         phone: phone,
         interests: interests
@@ -43,6 +41,15 @@ router.post('/users', async function (req, res) {
             message: e.message
         });
     }
+
+    user = await User.findOne({_id: user._id}).populate({
+        path: 'attributes',
+        model: 'user_attributes',
+        populate: {
+            path: 'city',
+            model: 'cities'
+        }
+    });
 
     //todo send mail with login & password
 
@@ -77,7 +84,14 @@ router.get('/users', async function (req, res) {
 });
 
 router.get('/users/:id', async function (req, res) {
-    let user = await User.findOne({_id: req.params.id});
+    let user = await User.findOne({_id: req.params.id}).populate({
+        path: 'attributes',
+        model: 'user_attributes',
+        populate: {
+            path: 'city',
+            model: 'cities'
+        }
+    });
     if (!user) {
         return res.status(404).json({
             success: false,
@@ -117,7 +131,14 @@ router.put('/users/:id', async function (req, res) {
     }
 
     await UserAttributes.update({_id: user.attributes.id}, newAttr);
-    user = await User.findOne({_id: req.params.id}).populate(['attributes']);
+    user = await User.findOne({_id: req.params.id}).populate({
+        path: 'attributes',
+        model: 'user_attributes',
+        populate: {
+            path: 'city',
+            model: 'cities'
+        }
+    });
 
     return res.json({
         success: true,

@@ -25,12 +25,10 @@ router.post('/register', async function (req, res) {
         });
     }
 
-    let cityFromDB = await City.findOne({id:city});
-
     const attributes = await UserAttributes.create({
         first_name: firstName,
         last_name: lastName,
-        city: cityFromDB,
+        city: city,
         country: country,
         phone: phone,
         interests: interests

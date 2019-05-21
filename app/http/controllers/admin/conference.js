@@ -7,21 +7,13 @@ const City = require(base_dir + '/app/models/city');
 router.post('/conferences', async function (req, res) {
     const {name, description, address, city, date} = req.body;
 
-    let cityFromDB = await City.findOne({_id:city});
-    if (!cityFromDB) {
-        return res.status(400).json({
-            success: false,
-            message: 'Invalid city'
-        });
-    }
-
     let conference = {};
     try {
         conference = await Conference.create({
             name,
             description,
             address,
-            city: cityFromDB,
+            city,
             date
         });
     } catch (e) {
@@ -31,6 +23,8 @@ router.post('/conferences', async function (req, res) {
             message: e.message
         });
     }
+
+    conference = await Conference.findOne({_id: conference._id}).populate('city');
 
     return res.json({
         success: true,
@@ -46,10 +40,7 @@ router.get('/conferences', async function (req, res) {
         skip: (+page - 1) * +limit,
         limit: limit,
         sort: sort,
-    }).populate({
-        path: 'city',
-        model: 'cities'
-    });
+    }).populate('city');
     let total = await Conference.find(search).count();
 
     for (let i in conferences) {
@@ -86,14 +77,6 @@ router.get('/conferences/:id', async function (req, res) {
 router.put('/conferences/:id', async function (req, res) {
     const {name, description, address, city, date} = req.body;
 
-    let cityFromDB = await City.findOne({_id:city});
-    if (!cityFromDB) {
-        return res.status(400).json({
-            success: false,
-            message: 'Invalid city'
-        });
-    }
-
     let conference = await Conference.findOne({_id: req.params.id});
     if (!conference) {
         return res.status(404).json({
@@ -107,7 +90,7 @@ router.put('/conferences/:id', async function (req, res) {
             name,
             description,
             address,
-            city: cityFromDB,
+            city,
             date
         });
     } catch (e) {
@@ -117,6 +100,8 @@ router.put('/conferences/:id', async function (req, res) {
             message: e.message
         });
     }
+
+    conference = await Conference.findOne({_id: conference._id}).populate('city');
 
     return res.json({
         success: true,

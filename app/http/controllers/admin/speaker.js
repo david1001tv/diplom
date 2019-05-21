@@ -11,13 +11,13 @@ router.post('/speakers', async function (req, res) {
 
     let countryFromDB = Country.findOne({_id: country});
 
-    const speaker = await Speaker.create({
+    let speaker = await Speaker.create({
         first_name: firstName,
         last_name: lastName,
         email: email,
         github: github,
         interests: interests,
-        country: countryFromDB
+        country: country
     });
 
     if (account) {
@@ -37,6 +37,8 @@ router.post('/speakers', async function (req, res) {
         });
         //todo send mail
     }
+
+    speaker = await Speaker.findOne({_id: speaker._id}).populate('country');
 
     return res.json({
         success: true,
@@ -84,15 +86,13 @@ router.put('/speakers/:id', async function (req, res) {
         });
     }
 
-    let countryFromDB = Country.findOne({_id: country});
-
     await Speaker.update({
         first_name: firstName,
         last_name: lastName,
         email: email,
         github: github,
         interests: interests,
-        country: countryFromDB
+        country: country
     });
     speaker = await Speaker.findOne({_id: req.params.id}).populate('country');
 
