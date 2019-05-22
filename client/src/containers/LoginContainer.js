@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
+import React, {Component} from 'react';
+import {observer, inject} from 'mobx-react';
 import {
   Redirect,
 } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -44,21 +44,22 @@ class LoginContainer extends Component {
 
   submitForm = e => {
     e.preventDefault()
-    const [login, pass] = this.form.elements 
+    const [login, pass] = this.form.elements
 
     this.props.AppStore.logIn(login.value, pass.value)
-      .then(res => {})
+      .then(res => {
+      })
       .catch(err => this.setState({errorMessage: err.message}))
   }
 
   render() {
-    const { errorMessage } = this.state;
-    const { classes } = this.props;
-    const { isLogged } = this.props.AppStore;
+    const {errorMessage} = this.state;
+    const {classes} = this.props;
+    const {isLogged} = this.props.AppStore;
 
     return <div>
       {
-        isLogged && <Redirect to='/' />
+        isLogged && <Redirect to='/'/>
       }
       <section>
         <Grid container spacing={0}>

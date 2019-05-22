@@ -30,6 +30,6 @@ const TalkSchema = new Schema({
   }
 }, {
   timestamps: true
-}).plugin(uniqueValidator, { message: 'Field `{PATH}` must be unique' });
+}).plugin(uniqueValidator, {message: 'Field `{PATH}` must be unique'});
 
 module.exports = mongoose.model('talk', TalkSchema);

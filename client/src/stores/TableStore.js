@@ -1,4 +1,4 @@
-import { observable, action, flow, decorate } from 'mobx';
+import {observable, action, flow, decorate} from 'mobx';
 import Api from '../Api';
 
 class TableStore {
@@ -51,7 +51,7 @@ class TableStore {
     try {
       const res = yield Api.patch(`${this.url}/${itemId}`, JSON.stringify(itemData))
       this.tableData = this.tableData.map(row => row._id === itemId ? res.data : row)
-    } catch(err) {
+    } catch (err) {
       // this.appStore.handleOpenSnack('Some error');
       throw err;
     } finally {
@@ -63,19 +63,19 @@ class TableStore {
     try {
       const res = yield Api.post(`${this.url}`, JSON.stringify(itemData));
       this.addNewItem(res.data);
-    } catch(err) {
+    } catch (err) {
       throw err;
     } finally {
       this.isLoading = false;
     }
   })
 
-  deleteItems = flow(function* (ids=[]) {
+  deleteItems = flow(function* (ids = []) {
     yield Api.delete(`${this.url}`, JSON.stringify({ids}));
     this.loadData();
   })
 
-  restoreItems = flow(function* (ids=[]) {
+  restoreItems = flow(function* (ids = []) {
     yield Api.patch(`${this.url}/restore`, JSON.stringify({ids}));
     this.tableData = this.tableData.map(row => ids.indexOf(row._id) !== -1 ? {...row, deleted: false} : row)
   })

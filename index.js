@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const config = require(base_dir + '/config');
 const router = require(base_dir + '/routes');
 
-mongoose.connect(config.database.dbUrl, { useMongoClient: true });
+mongoose.connect(config.database.dbUrl, {useMongoClient: true});
 
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());

@@ -1,4 +1,4 @@
-import { flow, decorate, observable, action } from 'mobx';
+import {flow, decorate, observable, action} from 'mobx';
 import TableStore from './TableStore';
 import Api from '../Api';
 
@@ -29,14 +29,14 @@ class UsersStore extends TableStore {
     this.loadData();
   }
 
-  resetPassword = flow(function* (userId){
+  resetPassword = flow(function* (userId) {
     return yield Api.patch(
       `${this.url}/${userId}`,
-      JSON.stringify({ password: true }))
+      JSON.stringify({password: true}))
   })
 
-  getCountries = flow(function* (){
-    const { data } = yield Api.get(`countries`);
+  getCountries = flow(function* () {
+    const {data} = yield Api.get(`countries`);
     this.countries = data;
   })
 }

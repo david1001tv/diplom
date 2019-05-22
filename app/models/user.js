@@ -30,7 +30,7 @@ const UserSchema = new Schema({
   }
 }, {
   timestamps: true
-}).plugin(uniqueValidator, { message: 'Field `{PATH}` must be unique' });
+}).plugin(uniqueValidator, {message: 'Field `{PATH}` must be unique'});
 
 UserSchema.pre('save', function (next) {
   let user = this;
