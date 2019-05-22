@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const cors = require('cors');
 
 const authRouter = require(base_dir + '/app/http/controllers/auth');
 const accountRouter = require(base_dir + '/app/http/controllers/account');
@@ -11,6 +12,7 @@ const countryRouter = require(base_dir + '/app/http/controllers/country');
 
 const authMiddleware = require(base_dir + '/app/http/middleware/authMiddleware');
 
+router.use(cors());
 router.use('/auth', authRouter);
 router.use('/cities', cityRouter);
 router.use('/countries', countryRouter);

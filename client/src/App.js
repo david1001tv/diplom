@@ -1,21 +1,42 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Provider } from 'mobx-react';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Routes from './Routes';
+import blue from '@material-ui/core/colors/blue';
+
+import ApplicationStore from './stores/AppStore';
+import UsersStore from "./stores/UsersStore";
+
+const theme = createMuiTheme({
+    palette: {
+        type: 'dark',
+        main: blue[900],
+    },
+
+    typography: {
+        useNextVariants: true,
+    },
+});
+
+window.theme = theme;
+
+const AppStore = new ApplicationStore();
+
+const stores = {
+    AppStore,
+    UsersStore: new UsersStore()
+};
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <MuiThemeProvider theme={theme}>
+                <Provider {...stores}>
+                    <Routes />
+                </Provider>
+            </MuiThemeProvider>
+        );
+    }
 }
 
 export default App;

@@ -117,7 +117,6 @@ router.post('/login', async function (req, res) {
     }
 });
 
-
 router.post('/refresh', async function (req, res) {
     const {token: oldToken} = req.body.token || req.headers['authorization'];
 
