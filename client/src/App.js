@@ -9,7 +9,7 @@ import UsersStore from "./stores/UsersStore";
 
 const theme = createMuiTheme({
   palette: {
-    type: 'dark',
+    type: 'light',
     main: blue[900],
   },
 

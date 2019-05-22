@@ -40,7 +40,7 @@ class LoginContainer extends Component {
 
   state = {
     errorMessage: ''
-  }
+  };
 
   submitForm = e => {
     e.preventDefault()

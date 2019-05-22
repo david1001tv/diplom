@@ -3,6 +3,7 @@ import {observer, inject} from 'mobx-react';
 import {
   BrowserRouter as Router,
   Switch,
+  Redirect,
   Route
 } from 'react-router-dom';
 import classNames from 'classnames';
@@ -10,11 +11,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {withStyles} from '@material-ui/core/styles';
 import NotFound from './containers/NotFound';
 import LoginContainer from './containers/LoginContainer'
+import LandingContainer from "./containers/LandingContainer";
+import Header from './components/Header'
 
 const styles = theme => ({
   section: {
     paddingTop: theme.spacing.unit * 8,
-    paddingLeft: theme.spacing.unit * 7
+    paddingLeft: theme.spacing.unit * 15
   },
 });
 
@@ -30,15 +33,16 @@ class Routes extends Component {
 
     return (
       <Router>
-        {/*<>*/}
         <CssBaseline/>
-        <section className={classNames({[classes.section]: isLogged})}>
+        {/*<section className={classNames({[classes.section]: isLogged})}>*/}
+          <Header />
           <Switch>
+            <Route exact path='/' render={props => <LandingContainer {...props} />}/>
             <Route exact path='/login' render={props => <LoginContainer {...props} />}/>
+
             <Route path='/' component={NotFound}/>
           </Switch>
-        </section>
-        {/*</>*/}
+        {/*</section>*/}
       </Router>
     )
   }
