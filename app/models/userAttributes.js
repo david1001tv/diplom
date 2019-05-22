@@ -14,8 +14,8 @@ module.exports = mongoose.model('user_attributes', new Schema({
     required: true
   },
   city: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'countries'
+    type: String,
+    default: ''
   },
   country: {
     type: String,

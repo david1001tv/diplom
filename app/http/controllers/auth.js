@@ -64,11 +64,7 @@ router.post('/register', async function (req, res) {
 
   user = await User.findOne({_id: user._id}).populate({
     path: 'attributes',
-    model: 'user_attributes',
-    populate: {
-      path: 'city',
-      model: 'cities'
-    }
+    model: 'user_attributes'
   });
 
   return res.json({

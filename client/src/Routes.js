@@ -12,6 +12,7 @@ import {withStyles} from '@material-ui/core/styles';
 import NotFound from './containers/NotFound';
 import LoginContainer from './containers/LoginContainer'
 import LandingContainer from "./containers/LandingContainer";
+import RegisterContainer from "./containers/RegisterContainer";
 import Header from './components/Header'
 
 const styles = theme => ({
@@ -38,6 +39,7 @@ class Routes extends Component {
         <Switch>
           <Route exact path='/' render={props => <LandingContainer {...props} />}/>
           <Route exact path='/login' render={props => <LoginContainer {...props} />}/>
+          <Route exact path='/register' render={props => <RegisterContainer {...props} />}/>
 
           <Route path='/' component={NotFound}/>
         </Switch>

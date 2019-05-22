@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -26,8 +26,11 @@ const styles = theme => ({
   link: {
     color: "#ffffff"
   },
-  button: {
+  buttonReg: {
     marginLeft: 20,
+  },
+  buttonLogin: {
+    marginLeft: 10
   },
   search: {
     marginLeft: 'auto',
@@ -40,7 +43,7 @@ class Header extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
     const {isLogged} = this.props.AppStore;
 
     return <AppBar className={classes.appBar}>
@@ -48,19 +51,22 @@ class Header extends Component {
         <ALink href={'/'} className={classes.link}>
           Cool service
         </ALink>
-        <Search className={classes.search} {...{value:''}}/>
+        <Search className={classes.search} {...{value: ''}}/>
         {
           isLogged ?
             <React.Fragment>
-            <IconButton className={classes.accountIcon} component={Link} to='/profile'>
-              <AccountCircle />
-            </IconButton>
-            <IconButton className={classes.exitIcon} onClick={() => Api.logOut()}>
-              <ExitToApp />
-            </IconButton>
+              <IconButton className={classes.accountIcon} component={Link} to='/profile'>
+                <AccountCircle/>
+              </IconButton>
+              <IconButton className={classes.exitIcon} onClick={() => Api.logOut()}>
+                <ExitToApp/>
+              </IconButton>
             </React.Fragment>
             :
-            <Button className={classes.button} variant='contained' component={Link} to='/login'>LogIn</Button>
+            <React.Fragment>
+              <Button className={classes.buttonReg} variant='contained' component={Link} to='/register'>Register</Button>
+              <Button className={classes.buttonLogin} variant='contained' component={Link} to='/login'>LogIn</Button>
+            </React.Fragment>
         }
       </Toolbar>
     </AppBar>

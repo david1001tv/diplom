@@ -44,11 +44,7 @@ router.post('/users', async function (req, res) {
 
   user = await User.findOne({_id: user._id}).populate({
     path: 'attributes',
-    model: 'user_attributes',
-    populate: {
-      path: 'city',
-      model: 'cities'
-    }
+    model: 'user_attributes'
   });
 
   //todo send mail with login & password
@@ -69,11 +65,7 @@ router.get('/users', async function (req, res) {
     sort: sort
   }).populate({
     path: 'attributes',
-    model: 'user_attributes',
-    populate: {
-      path: 'city',
-      model: 'cities'
-    }
+    model: 'user_attributes'
   });
   let total = await User.find(search).count();
 
@@ -86,11 +78,7 @@ router.get('/users', async function (req, res) {
 router.get('/users/:id', async function (req, res) {
   let user = await User.findOne({_id: req.params.id}).populate({
     path: 'attributes',
-    model: 'user_attributes',
-    populate: {
-      path: 'city',
-      model: 'cities'
-    }
+    model: 'user_attributes'
   });
   if (!user) {
     return res.status(404).json({
@@ -133,11 +121,7 @@ router.put('/users/:id', async function (req, res) {
   await UserAttributes.update({_id: user.attributes.id}, newAttr);
   user = await User.findOne({_id: req.params.id}).populate({
     path: 'attributes',
-    model: 'user_attributes',
-    populate: {
-      path: 'city',
-      model: 'cities'
-    }
+    model: 'user_attributes'
   });
 
   return res.json({
@@ -174,6 +158,9 @@ async function querySearch(query, filter) {
       queryOr = [
         {login: new RegExp(query[i], 'i')},
         {email: new RegExp(query[i], 'i')},
+        {first_name: new RegExp(query[i], 'i')},
+        {last_name: new RegExp(query[i], 'i')},
+        {interests: new RegExp(query[i], 'i')}
       ];
     }
   }

@@ -6,7 +6,7 @@ const UserAttributes = require(base_dir + '/app/models/userAttributes');
 router.get('/', async function (req, res) {
   const {userId} = req.body;
 
-  const user = await User.findOne({_id: userId}).populate(['attributes', 'country']);
+  const user = await User.findOne({_id: userId}).populate(['attributes']);
 
   if (!user) {
     return res.status(404).json({
@@ -51,11 +51,7 @@ router.put('/', async function (req, res) {
   await UserAttributes.update({_id: user.attributes.id}, newAttr);
   user = await User.findOne({_id: userId}).populate({
     path: 'attributes',
-    model: 'user_attributes',
-    populate: {
-      path: 'city',
-      model: 'cities'
-    }
+    model: 'user_attributes'
   });
 
   return res.json({

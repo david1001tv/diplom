@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
-  loginPaper: {
+  registerPaper: {
     ...theme.mixins.gutters(),
     position: 'absolute',
     top: '50%',
@@ -63,7 +63,7 @@ class LoginContainer extends Component {
       }
       <section>
         <Grid container spacing={0}>
-          <Paper className={classes.loginPaper}>
+          <Paper className={classes.registerPaper}>
             <form ref={node => this.form = node} onSubmit={this.submitForm}>
               {errorMessage && <Typography color='error'>{errorMessage}</Typography>}
               <TextField
