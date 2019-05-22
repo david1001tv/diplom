@@ -11,8 +11,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {withStyles} from '@material-ui/core/styles';
 import NotFound from './containers/NotFound';
 import LoginContainer from './containers/LoginContainer'
-import LandingContainer from "./containers/LandingContainer";
-import RegisterContainer from "./containers/RegisterContainer";
+import LandingContainer from './containers/LandingContainer';
+import RegisterContainer from './containers/RegisterContainer';
 import Header from './components/Header'
 
 const styles = theme => ({

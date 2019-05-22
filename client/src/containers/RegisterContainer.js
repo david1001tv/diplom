@@ -48,11 +48,7 @@ class RegisterContainer extends Component {
   }
 
   state = {
-    errorMessage: '',
-    city: '',
-    cities: [],
-    country: '',
-    countries: []
+    errorMessage: ''
   };
 
   componentDidMount() {

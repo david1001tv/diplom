@@ -9,6 +9,7 @@ const adminSpeakerRouter = require(base_dir + '/app/http/controllers/admin/speak
 const adminUserRouter = require(base_dir + '/app/http/controllers/admin/user');
 const cityRouter = require(base_dir + '/app/http/controllers/city');
 const countryRouter = require(base_dir + '/app/http/controllers/country');
+const conferencesRouter = require(base_dir + '/app/http/controllers/conference');
 
 const authMiddleware = require(base_dir + '/app/http/middleware/authMiddleware');
 
@@ -16,6 +17,7 @@ router.use(cors());
 router.use('/auth', authRouter);
 router.use('/cities', cityRouter);
 router.use('/countries', countryRouter);
+router.use('/conferences', conferencesRouter);
 router.use('/account', authMiddleware, accountRouter);
 router.use('/admin', authMiddleware, adminConferencesRouter);
 router.use('/admin', authMiddleware, adminTalksRouter);

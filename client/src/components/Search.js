@@ -38,7 +38,7 @@ class Search extends Component {
   submitForm = e => {
     e.preventDefault();
     this.props.onSubmit();
-  }
+  };
 
   render() {
     const { classes, onChange, value, handleClear } = this.props;

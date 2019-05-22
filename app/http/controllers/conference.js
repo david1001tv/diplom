@@ -2,43 +2,14 @@ const router = require('express').Router();
 
 const Conference = require(base_dir + '/app/models/conference');
 const Talk = require(base_dir + '/app/models/talk');
-const City = require(base_dir + '/app/models/city');
 
-router.post('/conferences', async function (req, res) {
-  const {name, description, address, city, date} = req.body;
-
-  let conference = {};
-  try {
-    conference = await Conference.create({
-      name,
-      description,
-      address,
-      city,
-      date
-    });
-  } catch (e) {
-    const status = e.name === 'ValidationError' ? 422 : 400;
-    return res.status(status).json({
-      success: false,
-      message: e.message
-    });
-  }
-
-  conference = await Conference.findOne({_id: conference._id}).populate('city');
-
-  return res.json({
-    success: true,
-    data: conference
-  });
-});
-
-router.get('/conferences', async function (req, res) {
+router.get('/', async function (req, res) {
   const {limit = 10, page = 1, query, startDate, finishDate, sort = {'date': 1}, filter} = req.query;
 
   const search = await querySearch(query, startDate, finishDate, filter);
   let conferences = await Conference.find(search, null, {
     skip: (+page - 1) * +limit,
-    limit: limit,
+    limit: +limit,
     sort: sort,
   }).populate('city');
   let total = await Conference.find(search).count();
@@ -48,7 +19,7 @@ router.get('/conferences', async function (req, res) {
       conference_id: conferences[i]._id
     }).populate({
       path: 'speaker',
-      model: 'speaker'
+      model: 'speakers'
     });
   }
 
@@ -58,7 +29,7 @@ router.get('/conferences', async function (req, res) {
   });
 });
 
-router.get('/conferences/:id', async function (req, res) {
+router.get('/:id', async function (req, res) {
   let conference = await Conference.findOne({_id: req.params.id}).populate('city');
   if (!conference) {
     return res.status(404).json({
@@ -74,59 +45,6 @@ router.get('/conferences/:id', async function (req, res) {
   });
 
   return res.json(conference);
-});
-
-router.put('/conferences/:id', async function (req, res) {
-  const {name, description, address, city, date} = req.body;
-
-  let conference = await Conference.findOne({_id: req.params.id});
-  if (!conference) {
-    return res.status(404).json({
-      success: false,
-      message: 'Conference not found'
-    });
-  }
-
-  try {
-    await conference.update({
-      name,
-      description,
-      address,
-      city,
-      date
-    });
-  } catch (e) {
-    const status = e.name === 'ValidationError' ? 422 : 400;
-    return res.status(status).json({
-      success: false,
-      message: e.message
-    });
-  }
-
-  conference = await Conference.findOne({_id: conference._id}).populate('city');
-
-  return res.json({
-    success: true,
-    data: conference
-  });
-});
-
-router.delete('/conferences/:id', async function (req, res) {
-  let conference = {};
-
-  try {
-    conference = await Conference.deleteOne({_id: req.params.id});
-  } catch (e) {
-    return res.status(400).json({
-      success: false,
-      message: e.message
-    });
-  }
-
-  return res.json({
-    success: true,
-    data: conference
-  });
 });
 
 function querySearch(query, startDate, finishDate, filter) {
