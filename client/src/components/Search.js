@@ -14,7 +14,8 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
-    }
+    },
+    marginLeft: 'auto'
   },
 
   icon: {
@@ -32,7 +33,7 @@ const styles = theme => ({
   }
 });
 
-class TableSearch extends Component {
+class Search extends Component {
 
   submitForm = e => {
     e.preventDefault();
@@ -58,4 +59,4 @@ class TableSearch extends Component {
   }
 }
 
-export default withStyles(styles)(TableSearch);
+export default withStyles(styles)(Search);

@@ -34,15 +34,13 @@ class Routes extends Component {
     return (
       <Router>
         <CssBaseline/>
-        {/*<section className={classNames({[classes.section]: isLogged})}>*/}
-          <Header />
-          <Switch>
-            <Route exact path='/' render={props => <LandingContainer {...props} />}/>
-            <Route exact path='/login' render={props => <LoginContainer {...props} />}/>
+        <Header/>
+        <Switch>
+          <Route exact path='/' render={props => <LandingContainer {...props} />}/>
+          <Route exact path='/login' render={props => <LoginContainer {...props} />}/>
 
-            <Route path='/' component={NotFound}/>
-          </Switch>
-        {/*</section>*/}
+          <Route path='/' component={NotFound}/>
+        </Switch>
       </Router>
     )
   }

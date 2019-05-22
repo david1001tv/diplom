@@ -4,6 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {inject, observer} from "mobx-react";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
 
 
 const styles = theme => ({
@@ -16,6 +17,9 @@ const styles = theme => ({
     marginTop: 150,
     marginBottom: 100
   },
+  header: {
+    paddingTop: 50
+  }
 });
 
 class LandingContainer extends Component {
@@ -30,7 +34,11 @@ class LandingContainer extends Component {
       <Grid item xs={12}>
         <Grid container className={classes.mainGrid} justify="center">
           <Grid key={0} item>
-            <Paper className={classes.paper}/>
+            <Paper className={classes.paper}>
+              <Typography className={classes.header} variant="h5" component="h3" align="center">
+                Welcome to my HELL!
+              </Typography>
+            </Paper>
           </Grid>
         </Grid>
       </Grid>
