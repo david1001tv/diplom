@@ -26,7 +26,7 @@ class MainTable extends Component {
 
   componentDidMount() {
     this.load([
-      {limit: 2},
+      {limit: this.state.perPage},
       {page: 1}
     ]);
   }
@@ -48,7 +48,7 @@ class MainTable extends Component {
     this.setState({offset: offset}, () => {
       this.load([
         {limit: 2},
-        {page: selected+1}
+        {page: selected + 1}
       ]);
     });
   };
@@ -59,18 +59,14 @@ class MainTable extends Component {
     return <React.Fragment>
       {
         this.state.data.map((conference, index) => {
-          if (index > 1) {
-
-          } else {
-            return <Conference
-              conference={conference}
-            />
-          }
+          return <Conference
+            conference={conference}
+          />
         })
       }
       <ReactPaginate
-        previousLabel={'previous'}
-        nextLabel={'next'}
+        previousLabel={'<<'}
+        nextLabel={'>>'}
         breakLabel={'...'}
         breakClassName={'break-me'}
         pageCount={this.state.pageCount}

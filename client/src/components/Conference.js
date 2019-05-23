@@ -2,11 +2,8 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import ALink from "@material-ui/core/Link";
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import {Typography} from "@material-ui/core";
-import Button from "@material-ui/core//Button";
-import Api from "../Api";
 
 const styles = theme => ({
   root: {
@@ -45,10 +42,6 @@ class Conference extends Component {
     super(props);
   }
 
-  state = {
-    isVisited: false
-  };
-
   formatDate = (date) => {
     const monthNames = [
       "January", "February", "March",
@@ -62,14 +55,6 @@ class Conference extends Component {
     let year = date.getFullYear();
 
     return day + ' ' + monthNames[monthIndex] + ' ' + year;
-  }
-
-  visit = e => {
-    Api.post().then(res => {
-      this.setState({
-        isVisited: true
-      });
-    });
   };
 
   render() {
@@ -87,13 +72,6 @@ class Conference extends Component {
           {conference.description}
         </Typography>
       </CardContent>
-      <CardActions className={classes.actions}>
-        <Button className={classes.visitButton} disabled={this.state.isVisited} onClick={this.visit}>
-          {
-            this.state.isVisited ? 'Added to wish list' : 'I want to visit'
-          }
-        </Button>
-      </CardActions>
     </Card>
   }
 }
