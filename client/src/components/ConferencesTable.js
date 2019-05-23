@@ -229,7 +229,7 @@ class ConferencesTable extends Component {
         <Paper>
           <Button className={classes.controlBtn} onClick={this.openDialog}>
             <Add />
-            Create user
+            Create conference
           </Button>
           <Button className={classes.controlBtn} onClick={this.props.ConferencesStore.makeReport}>
             <ArrowDownward/>

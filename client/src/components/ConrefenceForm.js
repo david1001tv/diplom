@@ -46,7 +46,8 @@ class ConferenceForm extends PureComponent {
 
   render() {
     const { classes, cities, fields, errors, isEditing, handleChange } = this.props;
-    fields.date = this.parseDate(fields.date);
+    fields.date = Number.isInteger(fields.date) ? this.parseDate(fields.date) : fields.date
+    console.log(fields);
 
     return <React.Fragment>
       <div className={classes.errors}>

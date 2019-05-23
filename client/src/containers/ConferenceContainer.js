@@ -121,7 +121,7 @@ class ConferenceContainer extends Component {
     Api.get('conferences/' + this.id).then(res => {
       this.setState({
         conference: res,
-        height: res.talks.length ? 300 + res.talks.length / 2 * 400 : 400
+        height: res.talks.length ? (200 + Math.ceil(res.talks.length / 2) * 400) : 400
       })
     });
   }

@@ -244,7 +244,7 @@ class SpeakersTable extends Component {
         <Paper>
           <Button className={classes.controlBtn} onClick={this.openDialog}>
             <Add />
-            Create user
+            Create speaker
           </Button>
           <Button className={classes.controlBtn} onClick={this.props.SpeakersStore.makeReport}>
             <ArrowDownward/>

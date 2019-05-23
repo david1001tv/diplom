@@ -236,7 +236,7 @@ class TalksTable extends Component {
         <Paper>
           <Button className={classes.controlBtn} onClick={this.openDialog}>
             <Add />
-            Create user
+            Create talk
           </Button>
           <Button className={classes.controlBtn} onClick={this.props.TalksStore.makeReport}>
             <ArrowDownward/>
