@@ -19,15 +19,15 @@ class MainTable extends Component {
 
   state = {
     data: [],
-    offset: 0,
-    perPage: 5,
+    perPage: 1,
+    page: 1,
     pageCount: 1
   };
 
   componentDidMount() {
     this.load([
       {limit: this.state.perPage},
-      {page: 1}
+      {page: this.state.page}
     ]);
   }
 
@@ -43,12 +43,11 @@ class MainTable extends Component {
 
   handlePageClick = data => {
     let selected = data.selected;
-    let offset = Math.ceil(selected * this.props.perPage);
 
-    this.setState({offset: offset}, () => {
+    this.setState({page: selected + 1}, () => {
       this.load([
-        {limit: 2},
-        {page: selected + 1}
+        {limit: this.state.perPage},
+        {page: this.state.page}
       ]);
     });
   };
