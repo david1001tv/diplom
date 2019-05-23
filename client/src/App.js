@@ -3,6 +3,7 @@ import {Provider} from 'mobx-react';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import Routes from './Routes';
 import blue from '@material-ui/core/colors/blue';
+import red from "@material-ui/core/colors/red";
 
 import ApplicationStore from './stores/AppStore';
 import UsersStore from "./stores/UsersStore";
@@ -11,8 +12,17 @@ import TableStore from './stores/TableStore';
 
 const theme = createMuiTheme({
   palette: {
-    type: 'light',
-    main: blue[900],
+    // type: 'light',
+    // main: blue[900],
+    primary: {
+      main: blue[900],
+    },
+    secondary: {
+      main: red[900],
+    },
+    background: {
+      default: "grey"
+    }
   },
 
   typography: {
