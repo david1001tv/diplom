@@ -7,6 +7,9 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Api from "../Api";
 import MainTable from "../components/MainTable";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Header from "../components/Header";
+import {BrowserRouter as Router} from "react-router-dom";
 
 
 const styles = theme => ({
@@ -18,13 +21,17 @@ const styles = theme => ({
     margin: '0 100px'
   },
   paper: {
-    height: 1500,
     width: 1400,
     marginTop: 150,
     marginBottom: 100
   },
   header: {
     paddingTop: 50
+  },
+  text: {
+    padding: '50px 100px 0 100px',
+    fontSize: 20,
+    fontFamily: 'Pangolin'
   }
 });
 
@@ -33,36 +40,68 @@ class LandingContainer extends Component {
     super(props);
   }
 
-  componentDidMount() {
+  state = {
+    params: [],
+    height: 1500
+  };
 
-  }
-
-  loadData(params = []) {
+  loadData = (params) => {
     let requestParams = '?';
     params.forEach(param => {
       let key = Object.keys(param)[0];
       let value = param[Object.keys(param)[0]];
       requestParams += (key + '=' + value + '&');
     });
+    Api.get('conferences' + requestParams).then(res => {
+      this.setState({
+        height: 220 + (res.total === 0 ? 230 : res.total * 220)
+      })
+    });
     return Api.get('conferences' + requestParams);
-  }
+  };
+
+  onSubmit = (params) => {
+    this.setState({
+      params: params
+    });
+  };
+
+  handleClear = () => {
+    this.setState({
+      params: [
+        {query: ''}
+      ]
+    });
+  };
 
   render() {
     const {classes} = this.props;
 
-    return <Grid container className={classes.mainGrid} justify="center">
-      <Grid key={0} item>
-        <Paper className={classes.paper}>
-          <Typography className={classes.header} variant="h3" component="h3" align="center">
-            Welcome to my HELL!
-          </Typography>
-          <MainTable
-            clasess={classes}
-            loadData={this.loadData}
-          />
-        </Paper>
+    return <React.Fragment>
+      <Header
+        onSubmit={this.onSubmit}
+        handleClear={this.handleClear}
+      />
+      <Grid container className={classes.mainGrid} justify="center">
+        <Grid key={0} item>
+          <Paper className={classes.paper} style={{height:this.state.height}}>
+            <Typography className={classes.header} variant="h3" component="h3" align="center">
+              Welcome to COOL CONFA!
+            </Typography>
+            <Typography className={classes.text} align="center">
+              Hello! You have come to the coolest portal with conferences in our country. On our portal you can get
+              acquainted with the list of all the nearest conferences, see all the prepared talks and see all the
+              speakers.
+            </Typography>
+            <MainTable
+              clasess={classes}
+              loadData={this.loadData}
+              params={this.state.params}
+            />
+          </Paper>
+        </Grid>
       </Grid>
-    </Grid>
+    </React.Fragment>
   }
 }
 

@@ -4,6 +4,7 @@ import ALink from "@material-ui/core/Link";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import {Typography} from "@material-ui/core";
+import LongText from "./LongText";
 
 const styles = theme => ({
   root: {
@@ -19,15 +20,15 @@ const styles = theme => ({
     margin: '30px 0px'
   },
   conferenceContainer: {
-    margin: '30px 50px'
+    margin: '30px 100px'
   },
   date: {
     fontSize: '13px'
   },
-  content: {
-    fontSize: '18px',
-    padding: '15px 0px'
-  },
+  // content: {
+  //   fontSize: '18px',
+  //   padding: '15px 0px'
+  // },
   visitButton: {
     fontSize: '15px',
     backgroundColor: 'deepskyblue'
@@ -68,11 +69,13 @@ class Conference extends Component {
         <Typography className={classes.date}>
           {this.formatDate(new Date(Date.parse(conference.date)))}
         </Typography>
-        <Typography className={classes.content}>
-          {conference.description}
-        </Typography>
-      </CardContent>
-    </Card>
+        <LongText
+          content={"Ut et nulla ac velit vestibulum rhoncus nec eu leo. Nunc ullamcorper augue a eros blandit, ac molestie neque posuere. Sed posuere ut massa ac tempus. Nullam non porttitor dui. Mauris et mattis quam. Morbi aliquam ultricies suscipit. Sed at nisl commodo, vehicula metus nec, vulputate justo. Phasellus vulputate tempus fringilla. Fusce bibendum ante est, ut imperdiet leo facilisis ac. Sed tincidunt egestas dolor, eu pellentesque odio viverra ac. Nunc dignissim dolor justo, auctor aliquam nunc fringilla facilisis. Ut et nulla ac velit vestibulum rhoncus nec eu leo. Nunc ullamcorper augue a eros blandit, ac molestie neque posuere. Sed posuere ut massa ac tempus. Nullam non porttitor dui. Mauris et mattis quam. Morbi aliquam ultricies suscipit. Sed at nisl commodo, vehicula metus nec, vulputate justo. Phasellus vulputate tempus fringilla. Fusce bibendum ante est, ut imperdiet leo facilisis ac. Sed tincidunt egestas dolor, eu pellentesque odio viverra ac. Nunc dignissim dolor justo, auctor aliquam nunc fringilla facilisis."}
+          limit={600}
+          link={'/conferences/' + conference._id}
+        />
+    </CardContent>
+  </Card>
   }
 }
 

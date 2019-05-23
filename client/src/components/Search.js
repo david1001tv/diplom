@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import {fade} from '@material-ui/core/styles/colorManipulator';
 
 
 const styles = theme => ({
@@ -37,22 +37,31 @@ class Search extends Component {
 
   submitForm = e => {
     e.preventDefault();
-    this.props.onSubmit();
+    this.props.onSubmit([
+      {
+        query: this.props.value
+      }
+    ]);
+  };
+
+  handleClear = () => {
+    this.props.onChange('');
+    this.props.handleClear();
   };
 
   render() {
-    const { classes, onChange, value, handleClear } = this.props;
+    const {classes, onChange, value} = this.props;
 
     return <form className={classes.search} onSubmit={this.submitForm}>
       <div className={classes.icon}>
-        <SearchIcon />
+        <SearchIcon/>
       </div>
       <InputBase
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder='Search…'
       />
-      <div className={value.length === 0 ? classes.hiddenIcon : classes.icon} onClick={handleClear}>
+      <div className={value.length === 0 ? classes.hiddenIcon : classes.icon} onClick={this.handleClear}>
         <CloseIcon/>
       </div>
     </form>

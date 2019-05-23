@@ -24,7 +24,10 @@ const styles = theme => ({
     color: '#ffffff'
   },
   link: {
-    color: "#ffffff"
+    color: "#ffffff",
+    '&:hover': {
+      color: 'aqua'
+    }
   },
   buttonReg: {
     marginLeft: 20,
@@ -42,16 +45,29 @@ class Header extends Component {
     super(props);
   }
 
+  state = {
+    query: ''
+  };
+
+  changeQuery = query => {
+    this.setState({query});
+  };
+
   render() {
-    const {classes} = this.props;
+    const {classes, onSubmit, handleClear} = this.props;
     const {isLogged} = this.props.AppStore;
 
     return <AppBar className={classes.appBar}>
       <Toolbar>
         <ALink href={'/'} className={classes.link}>
-          Cool service
+          Cool Confa
         </ALink>
-        <Search className={classes.search} {...{value: ''}}/>
+        <Search className={classes.search}
+                value={this.state.query}
+                onChange={this.changeQuery}
+                onSubmit={onSubmit}
+                handleClear={handleClear}
+        />
         {
           isLogged ?
             <React.Fragment>
@@ -64,7 +80,8 @@ class Header extends Component {
             </React.Fragment>
             :
             <React.Fragment>
-              <Button className={classes.buttonReg} variant='contained' component={Link} to='/register'>Register</Button>
+              <Button className={classes.buttonReg} variant='contained' component={Link}
+                      to='/register'>Register</Button>
               <Button className={classes.buttonLogin} variant='contained' component={Link} to='/login'>LogIn</Button>
             </React.Fragment>
         }

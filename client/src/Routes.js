@@ -35,7 +35,6 @@ class Routes extends Component {
     return (
       <Router>
         <CssBaseline/>
-        <Header/>
         <Switch>
           <Route exact path='/' render={props => <LandingContainer {...props} />}/>
           <Route exact path='/login' render={props => <LoginContainer {...props} />}/>

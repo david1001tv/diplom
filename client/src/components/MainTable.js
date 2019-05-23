@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import Conference from "./Conference";
 import ReactPaginate from 'react-paginate';
+import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   root: {
@@ -9,6 +10,10 @@ const styles = theme => ({
   },
   pagination: {
     margin: '30px 150px'
+  },
+  noResults: {
+    fontSize: 30,
+    padding: '100px 50px 0 50px'
   }
 });
 
@@ -19,16 +24,25 @@ class MainTable extends Component {
 
   state = {
     data: [],
-    perPage: 1,
+    perPage: 5,
     page: 1,
     pageCount: 1
   };
 
   componentDidMount() {
-    this.load([
+    this.load([...this.props.params,
       {limit: this.state.perPage},
       {page: this.state.page}
     ]);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.params !== this.props.params) {
+      this.load([...this.props.params,
+        {limit: this.state.perPage},
+        {page: this.state.page}
+      ]);
+    }
   }
 
   load(params = []) {
@@ -53,29 +67,36 @@ class MainTable extends Component {
   };
 
   render() {
-    const {classes, loadData} = this.props;
+    const {classes} = this.props;
 
     return <React.Fragment>
       {
-        this.state.data.map((conference, index) => {
-          return <Conference
-            conference={conference}
-          />
-        })
+        this.state.data.length !== 0 ?
+          <React.Fragment>
+            {
+              this.state.data.map((conference, index) => {
+                return <Conference key={index}
+                                   conference={conference}
+                />
+              })
+            }
+            <ReactPaginate
+              previousLabel={'<<'}
+              nextLabel={'>>'}
+              breakLabel={'...'}
+              breakClassName={'break-me'}
+              pageCount={this.state.pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={'pagination'}
+              subContainerClassName={'pages pagination'}
+              activeClassName={'active'}
+            /> </React.Fragment> :
+          <Typography className={classes.noResults} align={"center"}>
+            Sorry, we have no results :(
+          </Typography>
       }
-      <ReactPaginate
-        previousLabel={'<<'}
-        nextLabel={'>>'}
-        breakLabel={'...'}
-        breakClassName={'break-me'}
-        pageCount={this.state.pageCount}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={this.handlePageClick}
-        containerClassName={'pagination'}
-        subContainerClassName={'pages pagination'}
-        activeClassName={'active'}
-      />
     </React.Fragment>
   }
 }
