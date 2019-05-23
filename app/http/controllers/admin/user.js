@@ -61,7 +61,7 @@ router.get('/users', async function (req, res) {
   const search = await querySearch(query, filter);
   let users = await User.find(search, null, {
     skip: (+page - 1) * +limit,
-    limit: limit,
+    limit: +limit,
     sort: sort
   }).populate({
     path: 'attributes',

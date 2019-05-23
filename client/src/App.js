@@ -6,6 +6,8 @@ import blue from '@material-ui/core/colors/blue';
 
 import ApplicationStore from './stores/AppStore';
 import UsersStore from "./stores/UsersStore";
+import AdminContainersStore from './stores/AdminContainersStore';
+import TableStore from './stores/TableStore';
 
 const theme = createMuiTheme({
   palette: {
@@ -24,7 +26,11 @@ const AppStore = new ApplicationStore();
 
 const stores = {
   AppStore,
-  UsersStore: new UsersStore()
+  UsersStore: new UsersStore(),
+  AdminContainersStore: new AdminContainersStore(AppStore),
+  ConferencesStore: new TableStore('conferences', AppStore),
+  SpeakersStore: new TableStore('speakers', AppStore),
+  TalksStore: new TableStore('talks', AppStore),
 };
 
 class App extends Component {

@@ -70,8 +70,8 @@ class TableStore {
     }
   })
 
-  deleteItems = flow(function* (ids = []) {
-    yield Api.delete(`${this.url}`, JSON.stringify({ids}));
+  deleteItems = flow(function* (id) {
+    yield Api.delete(`${this.url}/` + id);
     this.loadData();
   })
 
