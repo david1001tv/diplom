@@ -46,6 +46,11 @@ class TableStore {
     this.cities = data;
   })
 
+  getCountries = flow(function* () {
+    const {data} = yield Api.get(`countries`);
+    this.countries = data;
+  })
+
   loadData = flow(function* () {
     this.isLoading = true;
     console.log(this.url)

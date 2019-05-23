@@ -7,7 +7,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import UsersTable from '../components/UsersTable';
 import ConferencesTable from '../components/ConferencesTable';
-// import SpeakersTable from '../components/SpeakersTable';
+import SpeakersTable from '../components/SpeakersTable';
 // import TalksTable from '../components/TalksTable';
 
 const styles = theme => ({
@@ -53,7 +53,7 @@ class AdminContainer extends Component {
 
         {activeTab === 0 && <UsersTable />}
         {activeTab === 1 && <ConferencesTable />}
-        {/*{activeTab === 2 && <SpeakersTable />}*/}
+        {activeTab === 2 && <SpeakersTable />}
         {/*{activeTab === 3 && <TalksTable />}*/}
 
       </Grid>
