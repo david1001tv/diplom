@@ -27,6 +27,9 @@ const ConferenceSchema = new Schema({
     type: Date,
     default: Date.now,
     required: true
+  },
+  talks: {
+    type: Array
   }
 }, {
   timestamps: true

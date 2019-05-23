@@ -46,7 +46,7 @@ class Header extends Component {
   }
 
   state = {
-    query: ''
+    query: this.props.AppStore.globalQuery || ''
   };
 
   changeQuery = query => {

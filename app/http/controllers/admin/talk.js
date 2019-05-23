@@ -35,7 +35,7 @@ router.get('/talks', async function (req, res) {
   const {limit = 10, page = 1, query, sort = {'name': 1}, filter} = req.query;
 
   const search = await querySearch(query, filter);
-  let talks = await Talk.find(search, {
+  let talks = await Talk.find(search, null, {
     skip: (+page - 1) * +limit,
     limit: limit,
     sort: sort

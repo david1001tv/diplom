@@ -20,6 +20,10 @@ class AppStore {
 
   isSnackOpen = false;
 
+  globalParams = null;
+
+  globalQuery = '';
+
   snackMessage = '';
 
   username = '';
@@ -59,6 +63,8 @@ class AppStore {
 }
 
 export default decorate(AppStore, {
+  globalQuery: observable,
+  globalParams: observable,
   isLogged: observable,
   isSnackOpen: observable,
   handleOpenSnack: action,

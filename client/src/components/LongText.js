@@ -4,7 +4,10 @@ import {withStyles} from "@material-ui/core";
 const styles = theme => ({
   contentText: {
     fontSize: 16,
-    padding: '15px 0px'
+    padding: '15px 0px',
+    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+    lineHeight: 1.43,
+    color: '#333'
   },
   linkSpoiler: {
     cursor: 'pointer'

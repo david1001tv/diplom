@@ -44,12 +44,12 @@ router.get('/conferences', async function (req, res) {
   let total = await Conference.find(search).count();
 
   for (let i in conferences) {
-    conferences[i].talks = await Talk.find({
-      conference_id: conferences[i]._id
+    conferences[i].talks.push(await Talk.find({
+      conference: conferences[i]._id
     }).populate({
       path: 'speaker',
-      model: 'speaker'
-    });
+      model: 'speakers'
+    }));
   }
 
   return res.json({

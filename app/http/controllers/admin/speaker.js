@@ -9,7 +9,7 @@ const UserAttributes = require(base_dir + '/app/models/userAttributes');
 router.post('/speakers', async function (req, res) {
   const {firstName, lastName, email, github, country, interests, account} = req.body;
 
-  let countryFromDB = Country.findOne({_id: country});
+  let countryFromDB = await Country.findOne({_id: country});
 
   let speaker = await Speaker.create({
     first_name: firstName,
@@ -50,7 +50,7 @@ router.get('/speakers', async function (req, res) {
   const {limit = 10, page = 1, query, sort = {'first_name': 1}, filter} = req.query;
 
   const search = await querySearch(query, filter);
-  let speakers = await Speaker.find(search, {
+  let speakers = await Speaker.find(search, null, {
     skip: (+page - 1) * +limit,
     limit: limit,
     sort: sort

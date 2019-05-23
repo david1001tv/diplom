@@ -6,14 +6,13 @@ import {
   Redirect,
   Route
 } from 'react-router-dom';
-import classNames from 'classnames';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {withStyles} from '@material-ui/core/styles';
 import NotFound from './containers/NotFound';
 import LoginContainer from './containers/LoginContainer'
 import LandingContainer from './containers/LandingContainer';
 import RegisterContainer from './containers/RegisterContainer';
-import Header from './components/Header'
+import ConferenceContainer from './containers/ConferenceContainer';
 
 const styles = theme => ({
   section: {
@@ -39,6 +38,7 @@ class Routes extends Component {
           <Route exact path='/' render={props => <LandingContainer {...props} />}/>
           <Route exact path='/login' render={props => <LoginContainer {...props} />}/>
           <Route exact path='/register' render={props => <RegisterContainer {...props} />}/>
+          <Route exact path='/conferences/:id' render={props => <ConferenceContainer {...props}/>} />
 
           <Route path='/' component={NotFound}/>
         </Switch>

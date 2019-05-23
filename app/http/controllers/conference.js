@@ -16,10 +16,14 @@ router.get('/', async function (req, res) {
 
   for (let i in conferences) {
     conferences[i].talks = await Talk.find({
-      conference_id: conferences[i]._id
+      conference: conferences[i]._id
     }).populate({
       path: 'speaker',
-      model: 'speakers'
+      model: 'speakers',
+      populate: {
+        path: 'country',
+        model: 'countries'
+      }
     });
   }
 
@@ -38,10 +42,14 @@ router.get('/:id', async function (req, res) {
     });
   }
   conference.talks = await Talk.find({
-    conference_id: conference._id
+    conference: conference._id
   }).populate({
     path: 'speaker',
-    model: 'speaker'
+    model: 'speakers',
+    populate: {
+      path: 'country',
+      model: 'countries'
+    }
   });
 
   return res.json(conference);

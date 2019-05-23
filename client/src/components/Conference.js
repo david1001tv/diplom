@@ -14,7 +14,8 @@ const styles = theme => ({
     paddingLeft: '25px'
   },
   title: {
-    fontSize: '24px',
+    fontSize: 26,
+    fontFamily: '\'Montaga\', serif;',
     fontWeight: '600',
     cursor: 'pointer',
     margin: '30px 0px'
@@ -25,10 +26,6 @@ const styles = theme => ({
   date: {
     fontSize: '13px'
   },
-  // content: {
-  //   fontSize: '18px',
-  //   padding: '15px 0px'
-  // },
   visitButton: {
     fontSize: '15px',
     backgroundColor: 'deepskyblue'
@@ -70,7 +67,7 @@ class Conference extends Component {
           {this.formatDate(new Date(Date.parse(conference.date)))}
         </Typography>
         <LongText
-          content={"Ut et nulla ac velit vestibulum rhoncus nec eu leo. Nunc ullamcorper augue a eros blandit, ac molestie neque posuere. Sed posuere ut massa ac tempus. Nullam non porttitor dui. Mauris et mattis quam. Morbi aliquam ultricies suscipit. Sed at nisl commodo, vehicula metus nec, vulputate justo. Phasellus vulputate tempus fringilla. Fusce bibendum ante est, ut imperdiet leo facilisis ac. Sed tincidunt egestas dolor, eu pellentesque odio viverra ac. Nunc dignissim dolor justo, auctor aliquam nunc fringilla facilisis. Ut et nulla ac velit vestibulum rhoncus nec eu leo. Nunc ullamcorper augue a eros blandit, ac molestie neque posuere. Sed posuere ut massa ac tempus. Nullam non porttitor dui. Mauris et mattis quam. Morbi aliquam ultricies suscipit. Sed at nisl commodo, vehicula metus nec, vulputate justo. Phasellus vulputate tempus fringilla. Fusce bibendum ante est, ut imperdiet leo facilisis ac. Sed tincidunt egestas dolor, eu pellentesque odio viverra ac. Nunc dignissim dolor justo, auctor aliquam nunc fringilla facilisis."}
+          content={conference.description}
           limit={600}
           link={'/conferences/' + conference._id}
         />

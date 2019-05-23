@@ -7,9 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Api from "../Api";
 import MainTable from "../components/MainTable";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Header from "../components/Header";
-import {BrowserRouter as Router} from "react-router-dom";
 
 
 const styles = theme => ({
@@ -41,7 +39,7 @@ class LandingContainer extends Component {
   }
 
   state = {
-    params: [],
+    params: this.props.AppStore.globalParams || [],
     height: 1500
   };
 
@@ -54,7 +52,7 @@ class LandingContainer extends Component {
     });
     Api.get('conferences' + requestParams).then(res => {
       this.setState({
-        height: 220 + (res.total === 0 ? 230 : res.total * 220)
+        height: 270 + (res.total === 0 ? 230 : res.total * 220)
       })
     });
     return Api.get('conferences' + requestParams);
