@@ -23,7 +23,7 @@ router.post('/talks', async function (req, res) {
     });
   }
 
-  talk = await Talk.findOne({_id: talk._id}).populate('speaker');
+  talk = await Talk.findOne({_id: talk._id}).populate('conference').populate('speaker');
 
   return res.json({
     success: true,
@@ -87,7 +87,7 @@ router.put('/talks/:id', async function (req, res) {
     });
   }
 
-  talk = await Talk.findOne({_id: talk._id}).populate('speaker');
+  talk = await Talk.findOne({_id: talk._id}).populate('conference').populate('speaker');
 
   return res.json({
     success: true,

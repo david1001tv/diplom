@@ -51,6 +51,16 @@ class TableStore {
     this.countries = data;
   })
 
+  getConferences= flow(function* () {
+    const {data} = yield Api.get(`conferences`);
+    this.conferences = data;
+  })
+
+  getSpeakers= flow(function* () {
+    const {data} = yield Api.get(`speakers`);
+    this.speakers = data;
+  })
+
   loadData = flow(function* () {
     this.isLoading = true;
     console.log(this.url)
