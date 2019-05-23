@@ -13,6 +13,7 @@ import LoginContainer from './containers/LoginContainer'
 import LandingContainer from './containers/LandingContainer';
 import RegisterContainer from './containers/RegisterContainer';
 import ConferenceContainer from './containers/ConferenceContainer';
+import ProfileContainer from './containers/ProfileContainer'
 
 const styles = theme => ({
   section: {
@@ -38,6 +39,7 @@ class Routes extends Component {
           <Route exact path='/' render={props => <LandingContainer {...props} />}/>
           <Route exact path='/login' render={props => <LoginContainer {...props} />}/>
           <Route exact path='/register' render={props => <RegisterContainer {...props} />}/>
+          <Route exact path='/profile' render={props => <ProfileContainer {...props} />}/>
           <Route exact path='/conferences/:id' render={props => <ConferenceContainer {...props}/>} />
 
           <Route path='/' component={NotFound}/>

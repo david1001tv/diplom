@@ -71,6 +71,7 @@ class LoginContainer extends Component {
                 label='Username'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <TextField
@@ -79,6 +80,7 @@ class LoginContainer extends Component {
                 type='password'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <Button type='submit' variant='contained' color='primary' className={classes.button}>

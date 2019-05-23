@@ -20,7 +20,6 @@ const styles = theme => ({
     color: '#ffffff'
   },
   accountIcon: {
-    marginLeft: 20,
     color: '#ffffff'
   },
   link: {
@@ -54,7 +53,7 @@ class Header extends Component {
   };
 
   render() {
-    const {classes, onSubmit, handleClear} = this.props;
+    const {classes, onSubmit, handleClear, isSearch} = this.props;
     const {isLogged} = this.props.AppStore;
 
     return <AppBar className={classes.appBar}>
@@ -62,16 +61,18 @@ class Header extends Component {
         <ALink href={'/'} className={classes.link}>
           Cool Confa
         </ALink>
-        <Search className={classes.search}
-                value={this.state.query}
-                onChange={this.changeQuery}
-                onSubmit={onSubmit}
-                handleClear={handleClear}
-        />
+        {
+          isSearch ? <Search className={classes.search}
+                  value={this.state.query}
+                  onChange={this.changeQuery}
+                  onSubmit={onSubmit}
+                  handleClear={handleClear}
+          /> : null
+        }
         {
           isLogged ?
             <React.Fragment>
-              <IconButton className={classes.accountIcon} component={Link} to='/profile'>
+              <IconButton className={classes.accountIcon} style={{marginLeft: isSearch ? 20 : 'auto'}} component={Link} to='/profile'>
                 <AccountCircle/>
               </IconButton>
               <IconButton className={classes.exitIcon} onClick={() => Api.logOut()}>

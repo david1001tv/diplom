@@ -87,6 +87,10 @@ export default class API {
     return this._request(url, 'POST', data)
   }
 
+  static put(url, data) {
+    return this._request(url, 'PUT', data)
+  }
+
   static patch(url, data) {
     return this._request(url, 'PATCH', data)
   }

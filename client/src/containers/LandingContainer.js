@@ -79,6 +79,7 @@ class LandingContainer extends Component {
       <Header
         onSubmit={this.onSubmit}
         handleClear={this.handleClear}
+        isSearch={true}
       />
       <Grid container className={classes.mainGrid} justify="center">
         <Grid key={0} item>

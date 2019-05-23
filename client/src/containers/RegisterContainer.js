@@ -100,6 +100,7 @@ class RegisterContainer extends Component {
                 label='Username'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <TextField
@@ -107,6 +108,7 @@ class RegisterContainer extends Component {
                 label='Email'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <TextField
@@ -114,6 +116,7 @@ class RegisterContainer extends Component {
                 label='First Name'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <TextField
@@ -121,6 +124,7 @@ class RegisterContainer extends Component {
                 label='Last Name'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <TextField
@@ -128,6 +132,7 @@ class RegisterContainer extends Component {
                 label='Phone'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <TextField
@@ -135,6 +140,7 @@ class RegisterContainer extends Component {
                 label='City'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <TextField
@@ -142,6 +148,7 @@ class RegisterContainer extends Component {
                 label='Country'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <TextField
@@ -150,6 +157,7 @@ class RegisterContainer extends Component {
                 type='password'
                 className={classes.textField}
                 margin='normal'
+                required={true}
               />
 
               <Button type='submit' variant='contained' color='primary' className={classes.button}>
