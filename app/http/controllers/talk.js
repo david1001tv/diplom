@@ -8,7 +8,7 @@ router.get('/', async function (req, res) {
   const search = await querySearch(query, filter);
   let talks = await Talk.find(search, null, {
     skip: (+page - 1) * +limit,
-    limit: limit,
+    limit: +limit,
     sort: sort
   }).populate('conference').populate('speaker');
   let total = await Talk.find(search).count();

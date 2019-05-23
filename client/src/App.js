@@ -38,9 +38,9 @@ const stores = {
   AppStore,
   UsersStore: new UsersStore(),
   AdminContainersStore: new AdminContainersStore(AppStore),
-  ConferencesStore: new TableStore('conferences', AppStore),
-  SpeakersStore: new TableStore('speakers', AppStore),
-  TalksStore: new TableStore('talks', AppStore),
+  ConferencesStore: new TableStore('admin/conferences', AppStore),
+  SpeakersStore: new TableStore('admin/speakers', AppStore),
+  TalksStore: new TableStore('admin/talks', AppStore),
 };
 
 class App extends Component {

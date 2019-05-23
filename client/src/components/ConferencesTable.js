@@ -15,11 +15,10 @@ import DeleteForever from '@material-ui/icons/DeleteForever';
 import Add from '@material-ui/icons/Add';
 import Clear from '@material-ui/icons/Clear';
 import Refresh from '@material-ui/icons/Refresh';
-import UserForm from './UserForm';
+import ConferenceForm from './ConrefenceForm';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TableSearch from './TableSearch';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogConfirm from './DialogConfirm';
 import Select from '@material-ui/core/Select';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -29,30 +28,24 @@ import { Typography } from '@material-ui/core';
 const Transition = props => <Slide direction="up" {...props} />
 
 const clearFields = () => ({
-  userId: null,
-  title: 'User creation',
-  userFormFields: {
-    email: '',
-    policy: [],
-    firstName: '',
-    lastName: '',
-    phone: '',
-    country: '',
+  conferenceId: null,
+  title: 'Conference creation',
+  conferenceFormFields: {
+    name: '',
+    description: '',
     city: '',
-    address: ''
+    address: '',
+    date: ''
   }
 })
 
-const getUserDataWithFallback = user => ({
-  userFormFields: {
-    email: get(user, 'email', ''),
-    policy: get(user, 'policy', []),
-    firstName: get(user, 'attributes.first_name', ''),
-    lastName: get(user, 'attributes.last_name', ''),
-    phone: get(user, 'attributes.phone', ''),
-    country: get(user, 'attributes.country', ''),
-    city: get(user, 'attributes.city', ''),
-    address: get(user, 'attributes.address', '')
+const getConferenceDataWithFallback = conference => ({
+  conferenceFormFields: {
+    name: get(conference, 'name', ''),
+    description: get(conference, 'description', ''),
+    city: get(conference, 'city._id', ''),
+    address: get(conference, 'address', ''),
+    date: Date.parse(get(conference, 'date', ''))
   }
 })
 
@@ -102,7 +95,7 @@ const styles = theme => ({
   }
 });
 
-class UsersTable extends Component {
+class ConferencesTable extends Component {
 
   state = {
     isOpen: false,
@@ -113,13 +106,8 @@ class UsersTable extends Component {
   }
 
   componentDidMount() {
-    this.props.UsersStore.initialLoad();
-    // this.props.UsersStore.getCountries();
-    // this.props.PoliciesStore.fetchAllItems().then(res => {
-    //   this.setState({
-    //     policies: res.data
-    //   })
-    // }).catch(err => console.log(err))
+    this.props.ConferencesStore.initialLoad();
+    this.props.ConferencesStore.getCities();
   }
 
   controlTableRow = (deleted, id) => {
@@ -141,27 +129,21 @@ class UsersTable extends Component {
   }
 
   handleChange = name => e => {
-    const { userFormFields } = this.state;
+    console.log(e.target.value)
+    const { conferenceFormFields } = this.state;
     this.setState({
-      userFormFields: {
-        ...userFormFields,
+      conferenceFormFields: {
+        ...conferenceFormFields,
         [name]: e.target.value
       }
     })
   }
 
-  handleResetPasswort = () => {
-    const { userId } = this.state;
-
-    this.props.UsersStore.resetPassword(userId)
-      .then(() => this.setState({isConfirmOpen: false}))
-      .catch(err => console.log(err))
-  }
-
-  saveUser = () => {
-    this.props.UsersStore.saveItem(
-      this.state.userFormFields,
-      this.state.userId
+  saveConference = () => {
+    console.log(this.state.conferenceFormFields)
+    this.props.ConferencesStore.saveItem(
+      this.state.conferenceFormFields,
+      this.state.conferenceId
     ).then(this.closeDialog)
       .catch(err => {
         const { errors = {} } = err;
@@ -182,36 +164,36 @@ class UsersTable extends Component {
   })
 
   buildRows = (data) => {
-    return data.map(user => ({
-      name: `${user.attributes.first_name} ${user.attributes.last_name}`,
-      email: user.email,
-      username: user.login,
-      phone: user.attributes.phone,
-      control: this.controlTableRow(user.deleted, user._id)
+    return data.map(conference => ({
+      name: conference.name,
+      city: conference.city.name,
+      date: this.props.ConferencesStore.formatDate(new Date(Date.parse(conference.date))),
+      address: conference.address,
+      control: this.controlTableRow(conference.deleted, conference._id)
     }))
   }
 
-  deleteUsers = id => () => this.props.UsersStore.deleteItems(id);
+  deleteUsers = ids => () => this.props.ConferencesStore.deleteItems(ids);
 
-  restoreUsers = ids => () => this.props.UsersStore.restoreItems(ids);
+  restoreUsers = ids => () => this.props.ConferencesStore.restoreItems(ids);
 
   onRowClick = (e, index) => {
-    const user = this.props.UsersStore.tableData[index];
+    const conference = this.props.ConferencesStore.tableData[index];
     this.setState({
       isOpen: true,
       errors: {},
-      title: `Edit user ${user.username}`,
-      userId: user._id,
-      ...getUserDataWithFallback(user)
+      title: `Edit conference ${conference.name}`,
+      conferenceId: conference._id,
+      ...getConferenceDataWithFallback(conference)
     });
   }
 
-  handleChangePage = (_, page)  => this.props.UsersStore.handleChangePage(page);
+  handleChangePage = (_, page)  => this.props.ConferencesStore.handleChangePage(page);
 
-  handleChangeRowsPerPage = e => this.props.UsersStore.handleChangeRowsPerPage(e.target.value);
+  handleChangeRowsPerPage = e => this.props.ConferencesStore.handleChangeRowsPerPage(e.target.value);
 
   render() {
-    const { title, isOpen, isConfirmOpen, errors, policies, userFormFields, userId } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, conferenceFormFields, conferenceId } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -223,9 +205,9 @@ class UsersTable extends Component {
       clearQuery,
       query,
       clearFilters,
-      countries,
+      cities,
       loadData
-    } = this.props.UsersStore;
+    } = this.props.ConferencesStore;
 
     return <React.Fragment>
       <Grid item sm={6} className={classNames(classes.flexItem, classes.justifyEnd)}>
@@ -256,9 +238,9 @@ class UsersTable extends Component {
             rows={this.buildRows(tableData)}
             columns={[
               'Name',
-              'Email',
-              'Username',
-              'Phone',
+              'City',
+              'Date',
+              'Address',
               'Control'
             ]}
             onRowClick={this.onRowClick}
@@ -277,43 +259,27 @@ class UsersTable extends Component {
         >
           <DialogTitle id="form-dialog-title">{title}</DialogTitle>
 
-          <UserForm
-            isEditing={userId}
-            fields={userFormFields}
+          <ConferenceForm
+            isEditing={conferenceId}
+            fields={conferenceFormFields}
             errors={errors}
             handleChange={this.handleChange}
-            countries={countries}
-            policies={policies}
+            cities={cities}
           />
 
           <DialogActions>
-            {userId &&
-            <Button
-              variant='contained'
-              color='primary'
-              className={classes.restoreBtn}
-              onClick={() => this.setState({isConfirmOpen: true})}
-            >
-              Reset password
-            </Button>
             }
             <Button onClick={this.closeDialog} color="primary">
               Close
             </Button>
-            <Button onClick={this.saveUser} color="primary" disabled={isLoading}>
-              {userId ? 'Save' : 'Create'}
+            <Button onClick={this.saveConference} color="primary" disabled={isLoading}>
+              {conferenceId ? 'Save' : 'Create'}
             </Button>
           </DialogActions>
         </Dialog>
-
-        <DialogConfirm
-          isOpen={isConfirmOpen}
-          onClose={() => this.setState({isConfirmOpen: false})}
-          onConfirm={this.handleResetPasswort}
-        />
       </Grid>
     </React.Fragment>
   }
 }
 
-export default withStyles(styles)(inject('UsersStore')(observer(UsersTable)));
+export default withStyles(styles)(inject('AppStore', 'ConferencesStore')(observer(ConferencesTable)));

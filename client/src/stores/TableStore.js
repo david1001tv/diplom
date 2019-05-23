@@ -26,8 +26,29 @@ class TableStore {
     if (this.tableData.length === 0) this.loadData();
   }
 
+  formatDate = (date) => {
+    const monthNames = [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
+    ];
+
+    let day = date.getDate();
+    let monthIndex = date.getMonth();
+    let year = date.getFullYear();
+
+    return day + ' ' + monthNames[monthIndex] + ' ' + year;
+  };
+
+  getCities = flow(function* () {
+    const {data} = yield Api.get(`cities`);
+    this.cities = data;
+  })
+
   loadData = flow(function* () {
     this.isLoading = true;
+    console.log(this.url)
     const res = yield Api.get(`${this.url}?limit=${this.limit}&page=${this.page}&query=${this.query}${this.additionalQuery}`)
     this.tableData = res.data || [];
     this.total = res.total;
@@ -104,6 +125,11 @@ class TableStore {
 
     this.tableData = [item, ...this.tableData]
   }
+
+  parseDate = date => {
+    date = new Date(date);
+    return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay();
+  }
 }
 
 export default decorate(TableStore, {
@@ -117,5 +143,7 @@ export default decorate(TableStore, {
   handleChangeRowsPerPage: action,
   handleChangePage: action,
   changeQuery: action,
-  clearQuery: action
+  clearQuery: action,
+  formatDate: action,
+  parseDate: action
 });

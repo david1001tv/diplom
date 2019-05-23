@@ -38,7 +38,7 @@ router.get('/conferences', async function (req, res) {
   const search = await querySearch(query, startDate, finishDate, filter);
   let conferences = await Conference.find(search, null, {
     skip: (+page - 1) * +limit,
-    limit: limit,
+    limit: +limit,
     sort: sort,
   }).populate('city');
   let total = await Conference.find(search).count();
