@@ -145,6 +145,10 @@ class TableStore {
     date = new Date(date);
     return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay();
   }
+
+  makeReport = flow(function *() {
+    window.print();
+  })
 }
 
 export default decorate(TableStore, {

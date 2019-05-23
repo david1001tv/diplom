@@ -39,6 +39,10 @@ class UsersStore extends TableStore {
     const {data} = yield Api.get(`countries`);
     this.countries = data;
   })
+
+  makeReport = flow(function *() {
+    window.print();
+  })
 }
 
 export default decorate(UsersStore, {

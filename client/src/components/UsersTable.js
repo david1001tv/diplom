@@ -20,10 +20,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TableSearch from './TableSearch';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogConfirm from './DialogConfirm';
-import Select from '@material-ui/core/Select';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import { Typography } from '@material-ui/core';
+import ArrowDownward from '@material-ui/icons/ArrowDownward'
 
 
 const Transition = props => <Slide direction="up" {...props} />
@@ -251,6 +248,10 @@ class UsersTable extends Component {
           <Button className={classes.controlBtn} onClick={this.openDialog}>
             <Add />
             Create user
+          </Button>
+          <Button className={classes.controlBtn} onClick={this.props.UsersStore.makeReport}>
+            <ArrowDownward/>
+            Make report
           </Button>
           <TableDefault
             rows={this.buildRows(tableData)}
