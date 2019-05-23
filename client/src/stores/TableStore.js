@@ -49,7 +49,7 @@ class TableStore {
 
   editItem = flow(function* (itemData, itemId = null) {
     try {
-      const res = yield Api.patch(`${this.url}/${itemId}`, JSON.stringify(itemData))
+      const res = yield Api.put(`${this.url}/${itemId}`, JSON.stringify(itemData))
       this.tableData = this.tableData.map(row => row._id === itemId ? res.data : row)
     } catch (err) {
       // this.appStore.handleOpenSnack('Some error');

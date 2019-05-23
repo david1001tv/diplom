@@ -18,6 +18,7 @@ const styles = theme => ({
 
   section: {
     ...theme.mixins.gutters(),
+    backgroundColor: 'grey'
   },
 
 });

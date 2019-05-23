@@ -61,7 +61,7 @@ class UserForm extends PureComponent {
           />
 
           <TextField
-            label="Name"
+            label="First Name"
             className={classes.field}
             value={fields.firstName}
             onChange={handleChange('firstName')}

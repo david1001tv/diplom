@@ -34,8 +34,8 @@ const clearFields = () => ({
   userFormFields: {
     email: '',
     policy: [],
-    fname: '',
-    lname: '',
+    firstName: '',
+    lastName: '',
     phone: '',
     country: '',
     city: '',
@@ -47,8 +47,8 @@ const getUserDataWithFallback = user => ({
   userFormFields: {
     email: get(user, 'email', ''),
     policy: get(user, 'policy', []),
-    fname: get(user, 'attributes.fname', ''),
-    lname: get(user, 'attributes.lname', ''),
+    firstName: get(user, 'attributes.first_name', ''),
+    lastName: get(user, 'attributes.last_name', ''),
     phone: get(user, 'attributes.phone', ''),
     country: get(user, 'country._id', ''),
     city: get(user, 'attributes.city', ''),
@@ -114,7 +114,7 @@ class UsersTable extends Component {
 
   componentDidMount() {
     this.props.UsersStore.initialLoad();
-    this.props.UsersStore.getCountries();
+    // this.props.UsersStore.getCountries();
     // this.props.PoliciesStore.fetchAllItems().then(res => {
     //   this.setState({
     //     policies: res.data
