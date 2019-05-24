@@ -20,7 +20,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TableSearch from './TableSearch';
 import DialogActions from '@material-ui/core/DialogActions';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
-
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import { Typography } from '@material-ui/core';
 
 const Transition = props => <Slide direction="up" {...props} />
 
@@ -99,12 +102,18 @@ class ConferencesTable extends Component {
     isConfirmOpen: false,
     errors: {},
     policies: [],
-    ...clearFields()
+    ...clearFields(),
+    cities: []
   }
 
   componentDidMount() {
     this.props.ConferencesStore.initialLoad();
     this.props.ConferencesStore.getCities();
+    this.props.ConferencesStore.fetchAllItems('cities').then(res => {
+      this.setState({
+        cities: res.data
+      })
+    });
   }
 
   controlTableRow = (deleted, id) => {
@@ -190,7 +199,7 @@ class ConferencesTable extends Component {
   handleChangeRowsPerPage = e => this.props.ConferencesStore.handleChangeRowsPerPage(e.target.value);
 
   render() {
-    const { title, isOpen, isConfirmOpen, errors, conferenceFormFields, conferenceId } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, conferenceFormFields, conferenceId, cities } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -202,12 +211,29 @@ class ConferencesTable extends Component {
       clearQuery,
       query,
       clearFilters,
-      cities,
-      loadData
+      loadData,
+      cityQuery,
+      changeCityQuery
     } = this.props.ConferencesStore;
 
     return <React.Fragment>
       <Grid item sm={6} className={classNames(classes.flexItem, classes.justifyEnd)}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+          <Typography>City:</Typography>
+          <Select
+            multiple
+            value={cityQuery}
+            className={classes.field}
+            onChange={changeCityQuery}
+            input={<Input placeholder='Filter by city'/>}
+          >
+            {cities.map(city => <MenuItem key={city._id} value={city._id}>
+              {city.name}
+            </MenuItem>)}
+          </Select>
+        </Grid>
+
+
         <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
           <TableSearch
             onChange={changeQuery}

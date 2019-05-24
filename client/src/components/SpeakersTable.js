@@ -20,6 +20,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TableSearch from './TableSearch';
 import DialogActions from '@material-ui/core/DialogActions';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import {Typography} from "@material-ui/core";
+import Select from "@material-ui/core/Select";
+import Input from "@material-ui/core/Input";
+import MenuItem from "@material-ui/core/MenuItem";
 
 
 const Transition = props => <Slide direction="up" {...props} />
@@ -103,17 +107,18 @@ class SpeakersTable extends Component {
     isConfirmOpen: false,
     errors: {},
     policies: [],
-    ...clearFields()
+    ...clearFields(),
+    countries: []
   }
 
   componentDidMount() {
     this.props.SpeakersStore.initialLoad();
     this.props.SpeakersStore.getCountries();
-    // this.props.PoliciesStore.fetchAllItems().then(res => {
-    //   this.setState({
-    //     policies: res.data
-    //   })
-    // }).catch(err => console.log(err))
+    this.props.SpeakersStore.fetchAllItems('countries').then(res => {
+      this.setState({
+        countries: res.data
+      })
+    });
   }
 
   controlTableRow = (deleted, id) => {
@@ -205,7 +210,7 @@ class SpeakersTable extends Component {
   handleChangeRowsPerPage = e => this.props.SpeakersStore.handleChangeRowsPerPage(e.target.value);
 
   render() {
-    const { title, isOpen, isConfirmOpen, errors, policies, speakerFormFields, speakerId } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, policies, speakerFormFields, speakerId, countries } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -217,12 +222,28 @@ class SpeakersTable extends Component {
       clearQuery,
       query,
       clearFilters,
-      countries,
-      loadData
+      loadData,
+      countryQuery,
+      changeCountryQuery
     } = this.props.SpeakersStore;
 
     return <React.Fragment>
       <Grid item sm={6} className={classNames(classes.flexItem, classes.justifyEnd)}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+          <Typography>Country:</Typography>
+          <Select
+            multiple
+            value={countryQuery}
+            className={classes.field}
+            onChange={changeCountryQuery}
+            input={<Input placeholder='Filter by country'/>}
+          >
+            {countries.map(country => <MenuItem key={country._id} value={country._id}>
+              {country.country_name}
+            </MenuItem>)}
+          </Select>
+        </Grid>
+
         <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
           <TableSearch
             onChange={changeQuery}

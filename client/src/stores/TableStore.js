@@ -16,6 +16,14 @@ class TableStore {
 
   tableData = [];
 
+  cityQuery = [];
+
+  countryQuery = [];
+
+  conferenceQuery = [];
+
+  speakerQuery = []
+
   limit = 10;
 
   total = 10;
@@ -70,8 +78,8 @@ class TableStore {
     this.isLoading = false;
   }).bind(this)
 
-  fetchAllItems = flow(function* () {
-    return yield Api.get(this.url);
+  fetchAllItems = flow(function* (url) {
+    return yield Api.get(url);
   })
 
   saveItem = (itemData, itemId = null) => {
@@ -149,6 +157,60 @@ class TableStore {
   makeReport = flow(function *() {
     window.print();
   })
+
+  changeCityQuery = e => {
+    this.cityQuery = e.target.value;
+
+    const cityString = this.cityQuery.reduce((acc, curCity, i) => {
+      return acc += `&filter[city][]=${curCity}`
+    }, '')
+
+    this.additionalQuery = cityString;
+    this.loadData();
+  }
+
+  changeCountryQuery = e => {
+    this.countryQuery = e.target.value;
+
+    const countryString = this.countryQuery.reduce((acc, curCountry, i) => {
+      return acc += `&filter[country][]=${curCountry}`
+    }, '')
+
+    this.additionalQuery = countryString;
+    this.loadData();
+  }
+
+  changeConferenceQuery = e => {
+    this.conferenceQuery = e.target.value;
+
+    const conferenceString = this.conferenceQuery.reduce((acc, curConference, i) => {
+      return acc += `&filter[conference][]=${curConference}`
+    }, '')
+
+    this.additionalQuery = conferenceString;
+    this.loadData();
+  }
+
+  changeSpeakerQuery = e => {
+    this.speakerQuery = e.target.value;
+
+    const countryString = this.speakerQuery.reduce((acc, curSpeaker, i) => {
+      return acc += `&filter[speaker][]=${curSpeaker}`
+    }, '')
+
+    this.additionalQuery = countryString;
+    this.loadData();
+  }
+
+  clearFilters = e => {
+    this.cityQuery = [];
+    this.countryQuery = [];
+    this.conferenceQuery = [];
+    this.speakerQuery = [];
+    this.additionalQuery = '';
+    this.query = '';
+    this.loadData();
+  }
 }
 
 export default decorate(TableStore, {
@@ -164,5 +226,9 @@ export default decorate(TableStore, {
   changeQuery: action,
   clearQuery: action,
   formatDate: action,
-  parseDate: action
+  parseDate: action,
+  clearFilters: action,
+  changeCountryQuery: action,
+  changeSpeakerQuery: action,
+  changeConferenceQuery: action
 });

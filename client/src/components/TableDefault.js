@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import TableHeader from './TableHeader';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
@@ -6,14 +6,18 @@ import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class DefaultTable extends Component {
 
   static defaultProps = {
     page: 1,
     limit: 10,
-    handleChangePage: () => {},
-    handleChangeRowsPerPage: () => {}
+    handleChangePage: () => {
+    },
+    handleChangeRowsPerPage: () => {
+    }
   };
 
   onRowClick = index => e => {
@@ -27,12 +31,12 @@ class DefaultTable extends Component {
   };
 
   render() {
-    const { rows=[], columns, onRowClick = null, limit, page, total } = this.props;
+    const {rows = [], columns, onRowClick = null, limit, page, total, order, orderBy} = this.props;
 
     return <Table>
-      <TableHeader columns={columns}/>
+      <TableHeader columns={columns} />
       <TableBody>
-        {rows.map((row, i) => <TableRow key={i} hover {...onRowClick ? { onClick: this.onRowClick(i) } : {}}>
+        {rows.map((row, i) => <TableRow key={i} hover {...onRowClick ? {onClick: this.onRowClick(i)} : {}}>
             {
               Object.keys(row).map((cell, cellIndex) => {
                 return <TableCell key={cellIndex}>

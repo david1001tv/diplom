@@ -20,6 +20,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TableSearch from './TableSearch';
 import DialogActions from '@material-ui/core/DialogActions';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import {Typography} from "@material-ui/core";
+import Select from "@material-ui/core/Select";
+import Input from "@material-ui/core/Input";
+import MenuItem from "@material-ui/core/MenuItem";
 
 
 const Transition = props => <Slide direction="up" {...props} />
@@ -99,13 +103,25 @@ class TalksTable extends Component {
     isConfirmOpen: false,
     errors: {},
     policies: [],
-    ...clearFields()
+    ...clearFields(),
+    conferences: [],
+    speakers: []
   }
 
   componentDidMount() {
     this.props.TalksStore.initialLoad();
     this.props.TalksStore.getConferences();
     this.props.TalksStore.getSpeakers();
+    this.props.TalksStore.fetchAllItems('conferences').then(res => {
+      this.setState({
+        conferences: res.data
+      })
+    });
+    this.props.TalksStore.fetchAllItems('speakers').then(res => {
+      this.setState({
+        speakers: res.data
+      })
+    });
   }
 
   controlTableRow = (deleted, id) => {
@@ -196,7 +212,7 @@ class TalksTable extends Component {
   handleChangeRowsPerPage = e => this.props.TalksStore.handleChangeRowsPerPage(e.target.value);
 
   render() {
-    const { title, isOpen, isConfirmOpen, errors, policies, talkFormFiled, talkId } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, policies, talkFormFiled, talkId, conferences, speakers } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -208,13 +224,45 @@ class TalksTable extends Component {
       clearQuery,
       query,
       clearFilters,
-      conferences,
-      speakers,
-      loadData
+      loadData,
+      conferenceQuery,
+      changeConferenceQuery,
+      speakerQuery,
+      changeSpeakerQuery
     } = this.props.TalksStore;
 
     return <React.Fragment>
       <Grid item sm={6} className={classNames(classes.flexItem, classes.justifyEnd)}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+          <Typography>Conferences:</Typography>
+          <Select
+            multiple
+            value={conferenceQuery}
+            className={classes.field}
+            onChange={changeConferenceQuery}
+            input={<Input placeholder='Filter by conference'/>}
+          >
+            {conferences.map(conference => <MenuItem key={conference._id} value={conference._id}>
+              {conference.name}
+            </MenuItem>)}
+          </Select>
+        </Grid>
+
+        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+          <Typography>Speakers:</Typography>
+          <Select
+            multiple
+            value={speakerQuery}
+            className={classes.field}
+            onChange={changeSpeakerQuery}
+            input={<Input placeholder='Filter by speaker'/>}
+          >
+            {speakers.map(speaker => <MenuItem key={speaker._id} value={speaker._id}>
+              {speaker.first_name} {speaker.last_name}
+            </MenuItem>)}
+          </Select>
+        </Grid>
+
         <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
           <TableSearch
             onChange={changeQuery}
