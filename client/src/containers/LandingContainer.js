@@ -52,7 +52,7 @@ class LandingContainer extends Component {
     });
     Api.get('conferences' + requestParams).then(res => {
       this.setState({
-        height: 230 + (res.data.length <= 1 ? 250 : res.data.length * 205)
+        height: 230 + (res.data.length <= 1 ? 250 : res.data.length * 210)
       })
     });
     return Api.get('conferences' + requestParams);

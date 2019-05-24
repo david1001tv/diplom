@@ -42,13 +42,13 @@ const styles = theme => ({
   },
   talkCard: {
     width: 550,
-    height: 310,
+    height: 330,
     marginTop: 50,
     marginLeft: 100,
     display: 'inline-block'
   },
   talkName: {
-    fontSize: 28,
+    fontSize: 23,
     fontFamily: 'Pangolin'
   },
   speaker: {
@@ -80,6 +80,9 @@ class Talk extends Component {
 
     return <Card key={index} className={classes.talkCard}>
       <CardContent>
+        <Typography className={classes.talkName} align={"left"}>
+          Conference: <a href={'conferences/' + talk.conference._id}>{talk.conference.name}</a>
+        </Typography>
         <Typography className={classes.talkName} align={"center"}>
           {talk.name}
         </Typography>

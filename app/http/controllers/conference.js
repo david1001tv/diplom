@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const Conference = require(base_dir + '/app/models/conference');
 const Talk = require(base_dir + '/app/models/talk');
+const Speaker = require(base_dir + '/app/models/speaker');
 
 router.get('/', async function (req, res) {
   const {limit = 10, page = 1, query, startDate, finishDate, sort = {'date': 1}, filter} = req.query;
@@ -35,15 +36,22 @@ router.get('/', async function (req, res) {
 
 router.get('/:id', async function (req, res) {
   let conference = await Conference.findOne({_id: req.params.id}).populate('city');
+  const {query} = req.query;
+  let search = await querySearch(query);
+
   if (!conference) {
     return res.status(404).json({
       success: false,
       message: 'Conference not found'
     });
   }
-  conference.talks = await Talk.find({
+
+  query ? search.$and.push({
     conference: conference._id
-  }).populate({
+  }) : search.conference = conference._id;
+  console.log(search.$and);
+
+  const talks = await Talk.find(search).populate({
     path: 'speaker',
     model: 'speakers',
     populate: {
@@ -52,8 +60,54 @@ router.get('/:id', async function (req, res) {
     }
   });
 
-  return res.json(conference);
+  const talksIds = await Talk.find({conference: conference._id}).select('speaker');
+  const searchTalksIds = [];
+  await talksIds.forEach(talk => {
+    searchTalksIds.push(talk.speaker);
+  });
+
+  search = makeSearch(query, searchTalksIds);
+
+  const speakers = await Speaker.find(search).populate({
+    path: 'country',
+    model: 'countries'
+  });
+
+  return res.json({
+    conference,
+    talks,
+    speakers
+  });
 });
+
+function makeSearch(query, searchTalksIds) {
+  let search = {};
+  let searchOr = [];
+  if (query) {
+    query = query.split(' ');
+    for (let i = 0; i < query.length; i++) {
+      searchOr = [...searchOr,
+        {name: new RegExp(query[i], 'i')},
+        {description: new RegExp(query[i], 'i')},
+        {first_name: new RegExp(query[i], 'i')},
+        {last_name: new RegExp(query[i], 'i')},
+        {interests: new RegExp(query[i], 'i')},
+      ];
+    }
+  }
+  if (searchTalksIds) {
+    search.$and = [{
+      _id: {
+        $in: searchTalksIds
+      }
+    }];
+  }
+  if (searchOr.length) {
+    search.$and = search.$and ? [...search.$and, {$or: searchOr}] : search.$and = [{$od:searchOr}];
+  }
+
+  return search;
+}
 
 function querySearch(query, startDate, finishDate, filter) {
   let search = {};
@@ -63,9 +117,13 @@ function querySearch(query, startDate, finishDate, filter) {
   if (query) {
     query = query.split(' ');
     for (let i = 0; i < query.length; i++) {
-      queryOr = [
+      queryOr = [...queryOr,
         {name: new RegExp(query[i], 'i')},
         {description: new RegExp(query[i], 'i')},
+        {info: new RegExp(query[i], 'i')},
+        {first_name: new RegExp(query[i], 'i')},
+        {last_name: new RegExp(query[i], 'i')},
+        {interests: new RegExp(query[i], 'i')},
       ];
     }
   }

@@ -52,7 +52,7 @@ class TalksContainer extends Component {
     });
     Api.get('talks' + requestParams).then(res => {
       this.setState({
-        height: 230 + (res.data.length <= 2 ? 350 : (res.data.length / 2) * 350)
+        height: 230 + (res.data.length <= 2 ? 350 : (res.data.length / 2) * 380)
       })
     });
     return Api.get('talks' + requestParams);

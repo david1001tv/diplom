@@ -47,6 +47,7 @@ const styles = theme => ({
     padding: '0 10px'
   },
   talkCard: {
+    height: 310,
     width: 550,
     marginTop: 50,
     marginLeft: 100,
@@ -86,7 +87,7 @@ class ConferenceContainer extends Component {
 
   state = {
     height: 1500,
-    conference: {},
+    data: {},
     redirect: false
   };
 
@@ -119,9 +120,10 @@ class ConferenceContainer extends Component {
 
   componentDidMount() {
     Api.get('conferences/' + this.id).then(res => {
+      let count = Math.ceil((res.talks.length+res.speakers.length) / 2);
       this.setState({
-        conference: res,
-        height: res.talks.length ? (200 + Math.ceil(res.talks.length / 2) * 400) : 400
+        data: res,
+        height: count > 0 ? (count > 1 ? (count * 400) + 250 : 750) : 480
       })
     });
   }
@@ -131,17 +133,24 @@ class ConferenceContainer extends Component {
   };
 
   onSubmit = (params) => {
-    this.props.AppStore.globalParams = params;
-    this.props.AppStore.globalQuery = params[0].query;
-    this.setRedirect();
+    Api.get('conferences/' + this.id + '?query=' + params[0].query).then(res => {
+      let count = Math.ceil((res.talks.length+res.speakers.length) / 2);
+      console.log(count)
+      this.setState({
+        data: res,
+        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 750) : 480
+      })
+    })
   };
 
   handleClear = () => {
-    this.setState({
-      params: [
-        {query: ''}
-      ]
-    });
+    Api.get('conferences/' + this.id).then(res => {
+      let count = Math.ceil((res.talks.length+res.speakers.length) / 2);
+      this.setState({
+        data: res,
+        height: count > 0 ? (count > 1 ? (count * 400) + 250 : 750) : 480
+      })
+    })
   };
 
   render() {
@@ -153,58 +162,85 @@ class ConferenceContainer extends Component {
         handleClear={this.handleClear}
         isSearch={true}
       />
-      {this.renderRedirect()}
-      <Grid container className={classes.mainGrid} justify="center">
-        <Grid key={0} item>
-          <Paper className={classes.paper} style={{height: this.state.height}}>
-            <Typography className={classes.title} align={"center"}>
-              {this.state.conference.name}
-            </Typography>
-            <Typography className={classes.date} align={"center"}>
-              {this.formatDate(new Date(Date.parse(this.state.conference.date)))}
-            </Typography>
-            {
-              this.state.conference.city ?
+      {
+        Object.keys(this.state.data).length ?
+          <Grid container className={classes.mainGrid} justify="center">
+            <Grid key={0} item>
+              <Paper className={classes.paper} style={{height: this.state.height}}>
+                <Typography className={classes.title} align={"center"}>
+                  {this.state.data.conference.name}
+                </Typography>
+                <Typography className={classes.date} align={"center"}>
+                  {this.formatDate(new Date(Date.parse(this.state.data.conference.date)))}
+                </Typography>
+                {
+                  this.state.data.conference.city ?
+                    <Typography className={classes.address} align={"center"}>
+                      in {this.state.data.conference.city.name}
+                    </Typography> :
+                    null
+                }
                 <Typography className={classes.address} align={"center"}>
-                  in {this.state.conference.city.name}
-                </Typography> :
-                null
-            }
-            <Typography className={classes.address} align={"center"}>
-              at {this.state.conference.address}
-            </Typography>
-            <Typography className={classes.text} align={"justify"}>
-              {this.state.conference.description}
-            </Typography>
-            {
-              this.state.conference.talks && this.state.conference.talks.length !== 0 ? this.state.conference.talks.map((talk, index) => {
-                return <Card key={index} className={classes.talkCard}>
-                  <CardContent>
-                    <Typography className={classes.talkName} align={"center"}>
-                      {talk.name}
-                    </Typography>
-                    <Typography className={classes.speaker} align={"left"}>
-                      <Face className={classes.icon}/> {talk.speaker.first_name + ' ' + talk.speaker.last_name} <span
-                      className={classes.from}>from</span> {talk.speaker.country.country_name}
-                    </Typography>
-                    <Typography className={classes.textCard} align={"left"}>
-                      <span className={classes.git}>GitHub</span>: <a
-                      href={talk.speaker.github}>{talk.speaker.github}</a>
-                    </Typography>
-                    <Typography className={classes.textCard} align={"left"}>
-                      {talk.info}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              }) : <Typography className={classes.text} align={"center"}>
-                Sorry... We have no information about talks :(
-              </Typography>
-            }
-          </Paper>
-        </Grid>
-      </Grid>
+                  at {this.state.data.conference.address}
+                </Typography>
+                <Typography className={classes.text} align={"justify"}>
+                  {this.state.data.conference.description}
+                </Typography>
+                {
+                  this.state.data.talks && this.state.data.talks.length !== 0 ? this.state.data.talks.map((talk, index) => {
+                    return <Card key={index} className={classes.talkCard}>
+                      <CardContent>
+                        <Typography className={classes.talkName} align={"center"}>
+                          {talk.name}
+                        </Typography>
+                        <Typography className={classes.speaker} align={"left"}>
+                          <Face className={classes.icon}/> {talk.speaker.first_name + ' ' + talk.speaker.last_name} <span
+                          className={classes.from}>from</span> {talk.speaker.country.country_name}
+                        </Typography>
+                        <Typography className={classes.textCard} align={"left"}>
+                          <span className={classes.git}>GitHub</span>: <a
+                          href={talk.speaker.github}>{talk.speaker.github}</a>
+                        </Typography>
+                        <Typography className={classes.textCard} align={"left"}>
+                          {talk.info}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  }) : <Typography className={classes.text} align={"center"}>
+                    Sorry... We have no information about talks :(
+                  </Typography>
+                }
+                {
+                  this.state.data.speakers && this.state.data.speakers.length !== 0 ? this.state.data.speakers.map((speaker, index) => {
+                    return <Card key={index} className={classes.talkCard}>
+                      <CardContent>
+                        <Typography className={classes.talkName} align={"center"}>
+                          Speaker {index+1}
+                        </Typography>
+                        <Typography className={classes.speaker} align={"left"}>
+                          <Face className={classes.icon}/> {speaker.first_name + ' ' + speaker.last_name} <span
+                          className={classes.from}>from</span> {speaker.country.country_name}
+                        </Typography>
+                        <Typography className={classes.textCard} align={"left"}>
+                          <span className={classes.git}>GitHub</span>: <a
+                          href={speaker.github}>{speaker.github}</a>
+                        </Typography>
+                        <Typography className={classes.textCard} align={"left"}>
+                          {speaker.interests}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  }) : <Typography className={classes.text} align={"center"}>
+                    Sorry... We have no information about speakers :(
+                  </Typography>
+                }
+              </Paper>
+            </Grid>
+          </Grid> :
+          null
+      }
     </React.Fragment>
   }
 }
 
-export default withStyles(styles)(inject('AppStore')(observer(ConferenceContainer)));
+export default withStyles(styles)(inject('AppStore', 'ConferencesStore')(observer(ConferenceContainer)));
