@@ -15,6 +15,8 @@ import RegisterContainer from './containers/RegisterContainer';
 import ConferenceContainer from './containers/ConferenceContainer';
 import ProfileContainer from './containers/ProfileContainer';
 import AdminContainer from './containers/AdminContainer';
+import TalksContainer from './containers/TalksContainer';
+import SpeakersContainer from './containers/SpeakersContainer';
 
 const styles = theme => ({
   section: {
@@ -38,6 +40,8 @@ class Routes extends Component {
         <CssBaseline/>
         <Switch>
           <Route exact path='/' render={props => <LandingContainer {...props} />}/>
+          <Route exact path='/talks' render={props => <TalksContainer {...props} />}/>
+          <Route exact path='/speakers' render={props => <SpeakersContainer {...props} />}/>
           <Route exact path='/login' render={props => <LoginContainer {...props} />}/>
           <Route exact path='/register' render={props => <RegisterContainer {...props} />}/>
           <Route exact path='/profile' render={props => <ProfileContainer {...props} />}/>

@@ -3,6 +3,8 @@ import {withStyles} from '@material-ui/core/styles';
 import Conference from "./Conference";
 import ReactPaginate from 'react-paginate';
 import Typography from '@material-ui/core/Typography'
+import Talk from './Talk';
+import Speaker from './Speaker';
 
 const styles = theme => ({
   root: {
@@ -24,7 +26,7 @@ class MainTable extends Component {
 
   state = {
     data: [],
-    perPage: 5,
+    perPage: 6,
     page: 1,
     pageCount: 1
   };
@@ -67,18 +69,30 @@ class MainTable extends Component {
   };
 
   render() {
-    const {classes} = this.props;
+    const {classes, content} = this.props;
 
     return <React.Fragment>
       {
         this.state.data.length !== 0 ?
           <React.Fragment>
             {
-              this.state.data.map((conference, index) => {
+              content === 'conferences' ? this.state.data.map((item, index) => {
                 return <Conference key={index}
-                                   conference={conference}
+                                   conference={item}
                 />
-              })
+              }) : content === 'talks' ? (this.state.data.map((item, index) => {
+                  return <Talk key={index}
+                               talk={item}
+                               index={index}
+                  />
+                }))
+                : (content === 'speakers' ? (this.state.data.map((item, index) => {
+                    return <Speaker key={index}
+                                    speaker={item}
+                                    index={index}
+                    />
+                  }))
+                  : null)
             }
             <ReactPaginate
               previousLabel={'<<'}

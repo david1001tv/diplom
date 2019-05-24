@@ -33,7 +33,7 @@ const styles = theme => ({
   }
 });
 
-class LandingContainer extends Component {
+class SpeakersContainer extends Component {
   constructor(props) {
     super(props);
   }
@@ -50,12 +50,12 @@ class LandingContainer extends Component {
       let value = param[Object.keys(param)[0]];
       requestParams += (key + '=' + value + '&');
     });
-    Api.get('conferences' + requestParams).then(res => {
+    Api.get('speakers' + requestParams).then(res => {
       this.setState({
-        height: 230 + (res.data.length <= 1 ? 250 : res.data.length * 205)
+        height: 230 + (res.data.length <= 2 ? 350 : (res.data.length / 2) * 350)
       })
     });
-    return Api.get('conferences' + requestParams);
+    return Api.get('speakers' + requestParams);
   };
 
   onSubmit = (params) => {
@@ -74,7 +74,7 @@ class LandingContainer extends Component {
 
   render() {
     const {classes} = this.props;
-    const content = 'conferences';
+    const content = 'speakers';
 
     return <React.Fragment>
       <Header
@@ -86,12 +86,7 @@ class LandingContainer extends Component {
         <Grid key={0} item>
           <Paper className={classes.paper} style={{height:this.state.height}}>
             <Typography className={classes.header} variant="h3" component="h3" align="center">
-              Welcome to COOL CONFA!
-            </Typography>
-            <Typography className={classes.text} align="center">
-              Hello! You have come to the coolest portal with conferences in our country. On our portal you can get
-              acquainted with the list of all the nearest conferences, see all the prepared talks and see all the
-              speakers.
+              Our Speakers!
             </Typography>
             <MainTable
               clasess={classes}
@@ -106,4 +101,4 @@ class LandingContainer extends Component {
   }
 }
 
-export default withStyles(styles)(inject('AppStore')(observer(LandingContainer)));
+export default withStyles(styles)(inject('AppStore')(observer(SpeakersContainer)));

@@ -12,6 +12,7 @@ const countryRouter = require(base_dir + '/app/http/controllers/country');
 const conferencesRouter = require(base_dir + '/app/http/controllers/conference');
 const talkRouter = require(base_dir + '/app/http/controllers/talk');
 const speakerRouter = require(base_dir + '/app/http/controllers/speaker');
+const userOnConfRouter = require(base_dir + '/app/http/controllers/userOnConference');
 
 const authMiddleware = require(base_dir + '/app/http/middleware/authMiddleware');
 
@@ -23,6 +24,7 @@ router.use('/conferences', conferencesRouter);
 router.use('/talks', talkRouter);
 router.use('/speakers', speakerRouter);
 router.use('/account', authMiddleware, accountRouter);
+router.use('/user-confs', authMiddleware, userOnConfRouter);
 router.use('/admin', authMiddleware, adminConferencesRouter);
 router.use('/admin', authMiddleware, adminTalksRouter);
 router.use('/admin', authMiddleware, adminSpeakerRouter);

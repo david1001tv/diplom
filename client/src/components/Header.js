@@ -26,7 +26,8 @@ const styles = theme => ({
     color: "#ffffff",
     '&:hover': {
       color: 'aqua'
-    }
+    },
+    marginLeft: 30
   },
   buttonReg: {
     marginLeft: 20,
@@ -60,6 +61,12 @@ class Header extends Component {
       <Toolbar>
         <ALink href={'/'} className={classes.link}>
           Cool Confa
+        </ALink>
+        <ALink href={'/talks'} className={classes.link}>
+          Our Talks
+        </ALink>
+        <ALink href={'/speakers'} className={classes.link}>
+          Our Speakers
         </ALink>
         {
           isSearch ? <Search className={classes.search}
