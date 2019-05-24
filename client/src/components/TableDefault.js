@@ -6,8 +6,6 @@ import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Tooltip from '@material-ui/core/Tooltip';
 
 class DefaultTable extends Component {
 
@@ -31,10 +29,15 @@ class DefaultTable extends Component {
   };
 
   render() {
-    const {rows = [], columns, onRowClick = null, limit, page, total, order, orderBy} = this.props;
+    const {rows = [], columns, onRowClick = null, limit, page, total, order, orderBy, createSortHandler } = this.props;
 
     return <Table>
-      <TableHeader columns={columns} />
+      <TableHeader
+        columns={columns}
+        orderBy={orderBy}
+        order={order}
+        createSortHandler={createSortHandler}
+      />
       <TableBody>
         {rows.map((row, i) => <TableRow key={i} hover {...onRowClick ? {onClick: this.onRowClick(i)} : {}}>
             {

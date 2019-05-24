@@ -108,7 +108,9 @@ class SpeakersTable extends Component {
     errors: {},
     policies: [],
     ...clearFields(),
-    countries: []
+    countries: [],
+    order: 'asc',
+    orderBy: 'Name',
   }
 
   componentDidMount() {
@@ -209,8 +211,29 @@ class SpeakersTable extends Component {
 
   handleChangeRowsPerPage = e => this.props.SpeakersStore.handleChangeRowsPerPage(e.target.value);
 
+  createSortHandler = (orderBy, order) => {
+    order = order === 'asc' ? 'desc' : 'asc';
+    if (orderBy === 'Name') {
+      this.props.SpeakersStore.additionalQuery = `&sort[first_name]=${order}`;
+    } else {
+      this.props.SpeakersStore.additionalQuery = `&sort[${orderBy.toLowerCase()}]=${order}`;
+    }
+    this.props.SpeakersStore.loadData();
+    console.log(order);
+    if (this.state.orderBy === orderBy) {
+      this.setState({
+        order: order
+      })
+    } else {
+      this.setState({
+        orderBy: orderBy,
+        order: order
+      })
+    }
+  }
+
   render() {
-    const { title, isOpen, isConfirmOpen, errors, policies, speakerFormFields, speakerId, countries } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, policies, speakerFormFields, speakerId, countries, order, orderBy } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -274,10 +297,22 @@ class SpeakersTable extends Component {
           <TableDefault
             rows={this.buildRows(tableData)}
             columns={[
-              'Name',
-              'Email',
-              'GitHub',
-              'Country',
+              {
+                name: 'Name',
+                sort: true,
+              },
+              {
+                name: 'Email',
+                sort: true
+              },
+              {
+                name: 'GitHub',
+                sort: true
+              },
+              {
+                name: 'Country',
+                sort: false
+              },
               'Control'
             ]}
             onRowClick={this.onRowClick}
@@ -286,6 +321,9 @@ class SpeakersTable extends Component {
             total={total}
             handleChangePage={this.handleChangePage}
             handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+            order={order}
+            orderBy={orderBy}
+            createSortHandler={this.createSortHandler}
           />
         </Paper>
 

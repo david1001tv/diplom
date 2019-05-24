@@ -106,17 +106,13 @@ class UsersTable extends Component {
     isConfirmOpen: false,
     errors: {},
     policies: [],
-    ...clearFields()
+    ...clearFields(),
+    order: 'asc',
+    orderBy: 'Email',
   }
 
   componentDidMount() {
     this.props.UsersStore.initialLoad();
-    // this.props.UsersStore.getCountries();
-    // this.props.PoliciesStore.fetchAllItems().then(res => {
-    //   this.setState({
-    //     policies: res.data
-    //   })
-    // }).catch(err => console.log(err))
   }
 
   controlTableRow = (deleted, id) => {
@@ -207,8 +203,28 @@ class UsersTable extends Component {
 
   handleChangeRowsPerPage = e => this.props.UsersStore.handleChangeRowsPerPage(e.target.value);
 
+  createSortHandler = (orderBy, order) => {
+    order = order === 'asc' ? 'desc' : 'asc';
+    if (orderBy === 'Username') {
+      this.props.UsersStore.additionalQuery = `&sort[login]=${order}`;
+    } else {
+      this.props.UsersStore.additionalQuery = `&sort[${orderBy.toLowerCase()}]=${order}`;
+    }
+    this.props.UsersStore.loadData();
+    if (this.state.orderBy === orderBy) {
+      this.setState({
+        order: order
+      })
+    } else {
+      this.setState({
+        orderBy: orderBy,
+        order: order
+      })
+    }
+  }
+
   render() {
-    const { title, isOpen, isConfirmOpen, errors, policies, userFormFields, userId } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, policies, userFormFields, userId, order, orderBy } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -256,11 +272,26 @@ class UsersTable extends Component {
           <TableDefault
             rows={this.buildRows(tableData)}
             columns={[
-              'Name',
-              'Email',
-              'Username',
-              'Phone',
-              'Control'
+              {
+                name: 'Name',
+                sort: false
+              },
+              {
+                name: 'Email',
+                sort: true
+              },
+              {
+                name: 'Username',
+                sort: true
+              },
+              {
+                name: 'Phone',
+                sort: false
+              },
+              {
+                name: 'Control',
+                sort: false
+              }
             ]}
             onRowClick={this.onRowClick}
             page={page}
@@ -268,6 +299,9 @@ class UsersTable extends Component {
             total={total}
             handleChangePage={this.handleChangePage}
             handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+            order={order}
+            orderBy={orderBy}
+            createSortHandler={this.createSortHandler}
           />
         </Paper>
 

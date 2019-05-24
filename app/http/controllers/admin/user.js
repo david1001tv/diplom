@@ -56,7 +56,7 @@ router.post('/users', async function (req, res) {
 });
 
 router.get('/users', async function (req, res) {
-  const {limit = 10, page = 1, query, sort = {'name': 1}, filter} = req.query;
+  const {limit = 10, page = 1, query, sort = {'email': 1}, filter} = req.query;
 
   const search = await querySearch(query, filter);
   let users = await User.find(search, null, {

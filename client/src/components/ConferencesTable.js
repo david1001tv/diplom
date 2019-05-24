@@ -103,7 +103,9 @@ class ConferencesTable extends Component {
     errors: {},
     policies: [],
     ...clearFields(),
-    cities: []
+    cities: [],
+    order: 'asc',
+    orderBy: 'Name',
   }
 
   componentDidMount() {
@@ -194,12 +196,22 @@ class ConferencesTable extends Component {
     });
   }
 
+  createSortHandler = (orderBy, order) => {
+    order = order === 'asc' ? 'desc' : 'asc';
+    this.props.ConferencesStore.additionalQuery = `&sort[${orderBy.toLowerCase()}]=${order}`;
+    this.props.ConferencesStore.loadData();
+    this.setState({
+      orderBy,
+      order
+    })
+  }
+
   handleChangePage = (_, page)  => this.props.ConferencesStore.handleChangePage(page);
 
   handleChangeRowsPerPage = e => this.props.ConferencesStore.handleChangeRowsPerPage(e.target.value);
 
   render() {
-    const { title, isOpen, isConfirmOpen, errors, conferenceFormFields, conferenceId, cities } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, conferenceFormFields, conferenceId, cities, order, orderBy } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -264,11 +276,26 @@ class ConferencesTable extends Component {
           <TableDefault
             rows={this.buildRows(tableData)}
             columns={[
-              'Name',
-              'City',
-              'Date',
-              'Address',
-              'Control'
+              {
+                name: 'Name',
+                sort: true
+              },
+              {
+                name: 'City',
+                sort: false
+              },
+              {
+                name: 'Date',
+                sort: true
+              },
+              {
+                name: 'Address',
+                sort: true
+              },
+              {
+                name: 'Control',
+                sort: false
+              }
             ]}
             onRowClick={this.onRowClick}
             page={page}
@@ -276,6 +303,9 @@ class ConferencesTable extends Component {
             total={total}
             handleChangePage={this.handleChangePage}
             handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+            order={order}
+            orderBy={orderBy}
+            createSortHandler={this.createSortHandler}
           />
         </Paper>
 

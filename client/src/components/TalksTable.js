@@ -105,7 +105,9 @@ class TalksTable extends Component {
     policies: [],
     ...clearFields(),
     conferences: [],
-    speakers: []
+    speakers: [],
+    order: 'asc',
+    orderBy: 'Name'
   }
 
   componentDidMount() {
@@ -211,8 +213,24 @@ class TalksTable extends Component {
 
   handleChangeRowsPerPage = e => this.props.TalksStore.handleChangeRowsPerPage(e.target.value);
 
+  createSortHandler = (orderBy, order) => {
+    order = order === 'asc' ? 'desc' : 'asc';
+    this.props.TalksStore.additionalQuery = `&sort[${orderBy.toLowerCase()}]=${order}`;
+    this.props.TalksStore.loadData();
+    if (this.state.orderBy === orderBy) {
+      this.setState({
+        order: order
+      })
+    } else {
+      this.setState({
+        orderBy: orderBy,
+        order: order
+      })
+    }
+  }
+
   render() {
-    const { title, isOpen, isConfirmOpen, errors, policies, talkFormFiled, talkId, conferences, speakers } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, policies, talkFormFiled, talkId, conferences, speakers, order, orderBy } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -293,9 +311,18 @@ class TalksTable extends Component {
           <TableDefault
             rows={this.buildRows(tableData)}
             columns={[
-              'Name',
-              'Conference',
-              'Speaker',
+              {
+                name: 'Name',
+                sort: true
+              },
+              {
+                name: 'Conference',
+                sort: false
+              },
+              {
+                name: 'Speaker',
+                sort: false
+              },
               'Control'
             ]}
             onRowClick={this.onRowClick}
@@ -304,6 +331,9 @@ class TalksTable extends Component {
             total={total}
             handleChangePage={this.handleChangePage}
             handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+            order={order}
+            orderBy={orderBy}
+            createSortHandler={this.createSortHandler}
           />
         </Paper>
 
