@@ -64,7 +64,7 @@ class Conference extends Component {
           {conference.name}
         </ALink>
         <Typography className={classes.date}>
-          {this.formatDate(new Date(Date.parse(conference.date)))}
+          {this.formatDate(new Date(Date.parse(conference.date)))} in {conference.city.name}
         </Typography>
         <LongText
           content={conference.description}
