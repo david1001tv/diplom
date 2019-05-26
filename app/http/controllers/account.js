@@ -62,10 +62,8 @@ router.put('/', async function (req, res) {
 
 router.patch('/password-reset', async function (req, res) {
   const {userId, oldPwd, newPwd} = req.body;
-  console.log(req.body);
 
   const user = await User.findOne({_id: userId}).select('+password');
-  console.log(user)
 
   if (!user) {
     return res.status(404).json({
@@ -81,8 +79,6 @@ router.patch('/password-reset', async function (req, res) {
       message: 'Weak password'
     });
   }
-
-  console.log('norm pass');
 
   if (await user.comparePassword(oldPwd)) {
     user.password = newPwd;

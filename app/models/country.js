@@ -1,8 +1,7 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const uniqueValidator = require('mongoose-unique-validator')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const uniqueValidator = require('mongoose-unique-validator');
 
-// set up a mongoose model
 module.exports = mongoose.model('countries', new Schema({
   country_key: {
     type: String,
@@ -16,4 +15,4 @@ module.exports = mongoose.model('countries', new Schema({
   }
 }, {
   timestamps: true
-}).plugin(uniqueValidator, {message: 'Field `{PATH}` must be unique'}))
+}).plugin(uniqueValidator, {message: 'Field `{PATH}` must be unique'}));

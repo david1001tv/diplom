@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const randtoken = require('rand-token');
+const sendMail = require('./../../helpers/sendMail');
 
 const User = require(base_dir + '/app/models/user');
 const UserAttributes = require(base_dir + '/app/models/userAttributes');
@@ -47,7 +48,7 @@ router.post('/users', async function (req, res) {
     model: 'user_attributes'
   });
 
-  //todo send mail with login & password
+  await sendMail(user, password);
 
   return res.json({
     success: true,

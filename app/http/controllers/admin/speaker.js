@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const randtoken = require('rand-token');
+const sendMail = require('./../../helpers/sendMail');
 
 const Country = require(base_dir + '/app/models/country');
 const Speaker = require(base_dir + '/app/models/speaker');
@@ -35,7 +36,8 @@ router.post('/speakers', async function (req, res) {
       password: password,
       attributes
     });
-    //todo send mail
+
+    await sendMail(user, password);
   }
 
   speaker = await Speaker.findOne({_id: speaker._id}).populate('country');

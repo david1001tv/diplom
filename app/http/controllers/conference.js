@@ -95,7 +95,6 @@ router.get('/:id', async function (req, res) {
       $in: usersAttrIds
     }
   });
-  console.log(search);
 
   const users = await User.find(search).populate('attributes');
 

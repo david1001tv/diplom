@@ -97,7 +97,7 @@ class ProfileContainer extends Component {
         me: res.data
       })
     });
-    Api.get('user-confs?filet[user][]=' + payload.id).then(res => {
+    Api.get('user-confs?filter[user][]=' + payload.id).then(res => {
       this.setState({
         myConfs: res.data
       })

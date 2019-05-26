@@ -1,7 +1,6 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-// set up a mongoose model
 module.exports = mongoose.model('access_token', new Schema({
   token: {
     type: String,
@@ -17,4 +16,4 @@ module.exports = mongoose.model('access_token', new Schema({
   }
 }, {
   timestamps: true
-}))
+}));

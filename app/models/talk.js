@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
-// set up a mongoose model
 const TalkSchema = new Schema({
   name: {
     type: String,
