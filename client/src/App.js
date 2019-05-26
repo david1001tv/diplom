@@ -13,8 +13,6 @@ import ProfileStore from './stores/ProfileStore';
 
 const theme = createMuiTheme({
   palette: {
-    // type: 'light',
-    // main: blue[900],
     primary: {
       main: blue[900],
     },
