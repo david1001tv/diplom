@@ -12,6 +12,13 @@ import Button from "@material-ui/core/Button";
 import {
   Redirect,
 } from 'react-router-dom';
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
+import {parseJwt} from "../helpers/parseJWT";
+import CardContent from "@material-ui/core/CardContent";
+import ALink from "@material-ui/core/Link/Link";
+import LongText from "../components/LongText";
+import Card from "@material-ui/core/Card";
 
 const styles = theme => ({
   mainGrid: {
@@ -56,6 +63,19 @@ const styles = theme => ({
     padding: '0 300px',
     fontFamily: '\'Stylish\', sans-serif',
     fontSize: 25
+  },
+  conferenceContainer: {
+    margin: '30px 100px'
+  },
+  date: {
+    fontSize: '13px'
+  },
+  visitButton: {
+    fontSize: '15px',
+    backgroundColor: 'deepskyblue'
+  },
+  actions: {
+    float: 'right',
   }
 });
 
@@ -66,13 +86,20 @@ class ProfileContainer extends Component {
 
   state = {
     me: {},
+    myConfs: [],
     errorMessage: ''
   };
 
   componentDidMount() {
+    const payload = parseJwt(Api.token);
     Api.get('account').then(res => {
       this.setState({
         me: res.data
+      })
+    });
+    Api.get('user-confs?filet[user][]=' + payload.id).then(res => {
+      this.setState({
+        myConfs: res.data
       })
     })
   }
@@ -101,6 +128,21 @@ class ProfileContainer extends Component {
     }).catch(err => this.setState({errorMessage: err.message}))
   };
 
+  formatDate = (date) => {
+    const monthNames = [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
+    ];
+
+    let day = date.getDate();
+    let monthIndex = date.getMonth();
+    let year = date.getFullYear();
+
+    return day + ' ' + monthNames[monthIndex] + ' ' + year;
+  };
+
   submitResetPassword = e => {
     e.preventDefault();
     const {oldPassword, newPassword} = this.formPass.elements;
@@ -119,8 +161,9 @@ class ProfileContainer extends Component {
 
   render() {
     const {classes} = this.props;
-    const {errorMessage, me} = this.state;
+    const {errorMessage, me, myConfs} = this.state;
     const {isLogged} = this.props.AppStore;
+    const {activeTab, changeTab} = this.props.ProfileStore;
 
     return <React.Fragment>
       {isLogged ? <React.Fragment>
@@ -132,93 +175,126 @@ class ProfileContainer extends Component {
         <Grid container className={classes.mainGrid} justify="center">
           <Grid key={0} item>
             <Paper className={classes.paper}>
-              <Typography className={classes.header} align={"center"}>
-                My info
-              </Typography>
+              <Tabs
+                value={activeTab}
+                onChange={(e, tabIndex) => changeTab(tabIndex)}
+              >
+                <Tab label="My Info"/>
+                <Tab label="My Conferences"/>
+              </Tabs>
               {
-                me !== {} && me.attributes ? <React.Fragment>
-                    <Typography className={classes.myInfo} align={"left"}>
-                      My Email: {me.email}
-                    </Typography>
-                    <form ref={node => this.formMe = node} onSubmit={this.submitForm} className={classes.formMe}>
+                activeTab === 0 && <React.Fragment>
+                  <Typography className={classes.header} align={"center"}>
+                    My info
+                  </Typography>
+                  {
+                    me !== {} && me.attributes ? <React.Fragment>
+                        <Typography className={classes.myInfo} align={"left"}>
+                          My Email: {me.email}
+                        </Typography>
+                        <form ref={node => this.formMe = node} onSubmit={this.submitForm} className={classes.formMe}>
+                          {errorMessage && <Typography color='error'>{errorMessage}</Typography>}
+                          <TextField
+                            id='firstName'
+                            label='First Name'
+                            className={classes.textField}
+                            margin='normal'
+                            defaultValue={me.attributes.first_name}
+                          />
+
+                          <TextField
+                            id='lastName'
+                            label='Last Name'
+                            className={classes.textField}
+                            margin='normal'
+                            defaultValue={me.attributes.last_name}
+                          />
+
+                          <TextField
+                            id='phone'
+                            label='Phone'
+                            className={classes.textField}
+                            margin='normal'
+                            defaultValue={me.attributes.phone}
+                          />
+
+                          <TextField
+                            id='city'
+                            label='City'
+                            className={classes.textField}
+                            margin='normal'
+                            defaultValue={me.attributes.city}
+                          />
+
+                          <TextField
+                            id='country'
+                            label='Country'
+                            className={classes.textField}
+                            margin='normal'
+                            defaultValue={me.attributes.country}
+                          />
+
+                          <TextField
+                            id='interests'
+                            label='Interests'
+                            className={classes.textArea}
+                            margin='normal'
+                            defaultValue={me.attributes.interests}
+                          />
+
+                          <Button type='submit' variant='contained' color='primary' className={classes.button}>
+                            Save
+                          </Button>
+                        </form>
+                      </React.Fragment>
+                      : null
+                  }
+                  <React.Fragment>
+                    <form ref={node => this.formPass = node} onSubmit={this.submitResetPassword}
+                          className={classes.formMe}>
                       {errorMessage && <Typography color='error'>{errorMessage}</Typography>}
                       <TextField
-                        id='firstName'
-                        label='First Name'
+                        id='oldPassword'
+                        label='Old Password'
+                        type='password'
                         className={classes.textField}
                         margin='normal'
-                        defaultValue={me.attributes.first_name}
                       />
-
                       <TextField
-                        id='lastName'
-                        label='Last Name'
+                        id='newPassword'
+                        label='New Password'
+                        type='password'
                         className={classes.textField}
                         margin='normal'
-                        defaultValue={me.attributes.last_name}
                       />
-
-                      <TextField
-                        id='phone'
-                        label='Phone'
-                        className={classes.textField}
-                        margin='normal'
-                        defaultValue={me.attributes.phone}
-                      />
-
-                      <TextField
-                        id='city'
-                        label='City'
-                        className={classes.textField}
-                        margin='normal'
-                        defaultValue={me.attributes.city}
-                      />
-
-                      <TextField
-                        id='country'
-                        label='Country'
-                        className={classes.textField}
-                        margin='normal'
-                        defaultValue={me.attributes.country}
-                      />
-
-                      <TextField
-                        id='interests'
-                        label='Interests'
-                        className={classes.textArea}
-                        margin='normal'
-                        defaultValue={me.attributes.interests}
-                      />
-
                       <Button type='submit' variant='contained' color='primary' className={classes.button}>
-                        Save
+                        Update password
                       </Button>
                     </form>
                   </React.Fragment>
-                  : null
+                </React.Fragment>
               }
-              <React.Fragment>
-                <form ref={node => this.formPass = node} onSubmit={this.submitResetPassword} className={classes.formMe}>
-                  {errorMessage && <Typography color='error'>{errorMessage}</Typography>}
-                  <TextField
-                    id='oldPassword'
-                    label='Old Password'
-                    type='password'
-                    className={classes.textField}
-                    margin='normal'
-                  />
-                  <TextField
-                    id='newPassword'
-                    label='New Password'
-                    type='password'
-                    className={classes.textField}
-                    margin='normal'
-                  />
-                  <Button type='submit' variant='contained' color='primary' className={classes.button}>
-                    Update password
-                  </Button>
-                </form>
-              </React.Fragment>
+              {
+                activeTab === 1 && <React.Fragment>
+                  <Typography className={classes.header} align={"center"}>
+                    My Conferences
+                  </Typography>
+                  {
+                    myConfs.map((item, index) => {
+                      return <Card key={index} className={classes.conferenceContainer}>
+                        <CardContent>
+                          <ALink className={classes.title} href={'/conferences/' + item.conference._id}>
+                            {item.conference.name}
+                          </ALink>
+                          <Typography className={classes.date}>
+                            {this.formatDate(new Date(Date.parse(item.conference.date)))} in {item.conference.city.name}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    })
+                  }
+                </React.Fragment>
+              }
             </Paper>
           </Grid>
         </Grid>
@@ -228,4 +304,4 @@ class ProfileContainer extends Component {
   }
 }
 
-export default withStyles(styles)(inject('AppStore')(observer(ProfileContainer)));
+export default withStyles(styles)(inject('AppStore', 'ProfileStore')(observer(ProfileContainer)));

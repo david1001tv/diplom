@@ -9,6 +9,7 @@ import ApplicationStore from './stores/AppStore';
 import UsersStore from "./stores/UsersStore";
 import AdminContainersStore from './stores/AdminContainersStore';
 import TableStore from './stores/TableStore';
+import ProfileStore from './stores/ProfileStore';
 
 const theme = createMuiTheme({
   palette: {
@@ -41,6 +42,7 @@ const stores = {
   ConferencesStore: new TableStore('admin/conferences', AppStore),
   SpeakersStore: new TableStore('admin/speakers', AppStore),
   TalksStore: new TableStore('admin/talks', AppStore),
+  ProfileStore: new ProfileStore(AppStore)
 };
 
 class App extends Component {

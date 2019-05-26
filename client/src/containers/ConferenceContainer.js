@@ -14,6 +14,7 @@ import {Redirect} from 'react-router-dom';
 import IconButton from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
+import {parseJwt} from "../helpers/parseJWT";
 
 const styles = theme => ({
   mainGrid: {
@@ -81,8 +82,7 @@ const styles = theme => ({
     color: '#453434',
   },
   rightIcon: {
-    marginLeft: 5,
-    display: 'none'
+    marginLeft: 5
   },
   iconSmall: {
     fontSize: 20,
@@ -102,19 +102,7 @@ class ConferenceContainer extends Component {
   state = {
     height: 1500,
     data: {},
-    redirect: false
-  };
-
-  setRedirect = () => {
-    this.setState({
-      redirect: true
-    })
-  };
-
-  renderRedirect = () => {
-    if (this.state.redirect) {
-      return <Redirect to='/'/>
-    }
+    isVisited: false
   };
 
   formatDate = (date) => {
@@ -133,6 +121,7 @@ class ConferenceContainer extends Component {
   };
 
   componentDidMount() {
+    const payload = parseJwt(Api.token);
     Api.get('conferences/' + this.id).then(res => {
       let count = Math.ceil((res.talks.length + res.speakers.length) / 2);
       this.setState({
@@ -140,6 +129,14 @@ class ConferenceContainer extends Component {
         height: count > 0 ? (count > 1 ? (count * 400) + 250 : 750) : 520
       })
     });
+    Api.get('user-confs?filter[user][]=' + payload.id).then(res => {
+      let isVisit = res.data.find(el => {
+        return el.conference._id === this.id
+      });
+      this.setState({
+        isVisited: !!isVisit
+      })
+    })
   }
 
   loadData = () => {
@@ -147,7 +144,13 @@ class ConferenceContainer extends Component {
   };
 
   visitHandler = e => {
-    console.log(this.refs.visit.props.value)
+    Api.post('user-confs', JSON.stringify({
+      conference: this.id
+    })).then(res => {
+      this.setState({
+        isVisited: !this.state.isVisited
+      })
+    })
   };
 
   onSubmit = (params) => {
@@ -256,10 +259,11 @@ class ConferenceContainer extends Component {
                 }
                 {
                   isLogged ? <Typography align={"right"} className={classes.button}>
-                    <IconButton id='visit' ref='visit' variant="contained" value={false} color="primary" onClick={this.visitHandler}>
+                    <IconButton id='visit' ref='visit' variant="contained" color="primary" onClick={this.visitHandler}>
                       Want to visit
-                      <AddIcon className={classes.rightIcon}>visit</AddIcon>
-                      <CheckIcon className={classes.rightIcon}>unvisit</CheckIcon>
+                      {
+                        this.state.isVisited ? <CheckIcon className={classes.rightIcon}>-</CheckIcon> : <AddIcon className={classes.rightIcon}>+</AddIcon>
+                      }
                     </IconButton>
                   </Typography> : null
                 }
