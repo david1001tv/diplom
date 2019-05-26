@@ -33,13 +33,13 @@ const clearFields = () => ({
   title: 'User creation',
   speakerFormFields: {
     email: '',
-    policy: [],
     firstName: '',
     lastName: '',
     phone: '',
     country: '',
     city: '',
-    address: ''
+    address: '',
+    account: false
   }
 })
 
@@ -50,7 +50,8 @@ const getSpeakerDataWithFallback = speaker => ({
     lastName: get(speaker, 'last_name', ''),
     country: get(speaker, 'country._id', ''),
     github: get(speaker, 'github', ''),
-    interests: get(speaker, 'interests', '')
+    interests: get(speaker, 'interests', ''),
+    account: false
   }
 })
 
@@ -141,12 +142,14 @@ class SpeakersTable extends Component {
     </div>
   }
 
+  checkIsSwitcher = e => e.target.type === 'checkbox' ? true : false;
+
   handleChange = name => e => {
     const { speakerFormFields } = this.state;
     this.setState({
       speakerFormFields: {
         ...speakerFormFields,
-        [name]: e.target.value
+        [name]: this.checkIsSwitcher(e) ? e.target.checked : e.target.value
       }
     })
   }

@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {PureComponent} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
@@ -8,7 +8,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
-import { numberInput } from '../helpers/validation';
+import {numberInput} from '../helpers/validation';
+import Switch from "@material-ui/core/Switch";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const styles = theme => ({
   userFields: {
@@ -40,7 +42,8 @@ const styles = theme => ({
 class SpeakersForm extends PureComponent {
 
   render() {
-    const { classes, fields, errors, isEditing, handleChange, countries } = this.props;
+    const {classes, fields, errors, isEditing, handleChange, countries} = this.props;
+    console.log(fields);
 
     return <React.Fragment>
       <div className={classes.errors}>
@@ -73,6 +76,19 @@ class SpeakersForm extends PureComponent {
             onChange={handleChange('lastName')}
           />
 
+          {
+            !isEditing ? <Tooltip title='Is create account'>
+              <label className={classes.field}>
+                Is create account
+                <Switch
+                  checked={!!fields.account}
+                  onChange={handleChange('account')}
+                  color='primary'
+                />
+              </label>
+            </Tooltip> : null
+          }
+
         </Grid>
 
         <Grid item xs={12} sm={6} className={classes.item}>
@@ -89,7 +105,7 @@ class SpeakersForm extends PureComponent {
             <Select
               value={fields.country}
               onChange={handleChange('country')}
-              input={<Input />}
+              input={<Input/>}
             >
               {countries.map(country => <MenuItem key={country._id} value={country._id}>
                 {country.country_name}

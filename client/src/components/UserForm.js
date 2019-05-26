@@ -1,14 +1,16 @@
-import React, { PureComponent } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {PureComponent} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
+import Switch from '@material-ui/core/Switch';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
-import { numberInput } from '../helpers/validation';
+import {numberInput} from '../helpers/validation';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 const styles = theme => ({
   userFields: {
@@ -40,7 +42,7 @@ const styles = theme => ({
 class UserForm extends PureComponent {
 
   render() {
-    const { classes, fields, errors, isEditing, handleChange } = this.props;
+    const {classes, fields, errors, isEditing, handleChange} = this.props;
     console.log(fields)
 
     return <React.Fragment>
@@ -75,6 +77,17 @@ class UserForm extends PureComponent {
             onChange={handleChange('lastName')}
           />
 
+          <Tooltip title='Is admin'>
+            <label className={classes.field}>
+              Is Admin
+
+              <Switch
+                checked={!!fields.isAdmin}
+                onChange={handleChange('isAdmin')}
+                color='primary'
+              />
+            </label>
+          </Tooltip>
         </Grid>
 
         <Grid item xs={12} sm={6} className={classes.item}>

@@ -36,7 +36,8 @@ const clearFields = () => ({
     phone: '',
     country: '',
     city: '',
-    address: ''
+    address: '',
+    isAdmin: false
   }
 })
 
@@ -49,7 +50,8 @@ const getUserDataWithFallback = user => ({
     phone: get(user, 'attributes.phone', ''),
     country: get(user, 'attributes.country', ''),
     city: get(user, 'attributes.city', ''),
-    address: get(user, 'attributes.address', '')
+    address: get(user, 'attributes.address', ''),
+    isAdmin: get(user, 'is_admin', false)
   }
 })
 
@@ -133,12 +135,14 @@ class UsersTable extends Component {
     </div>
   }
 
+  checkIsSwitcher = e => e.target.type === 'checkbox' ? true : false;
+
   handleChange = name => e => {
     const { userFormFields } = this.state;
     this.setState({
       userFormFields: {
         ...userFormFields,
-        [name]: e.target.value
+        [name]: this.checkIsSwitcher(e) ? e.target.checked : e.target.value
       }
     })
   }

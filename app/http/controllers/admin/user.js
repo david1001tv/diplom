@@ -6,7 +6,7 @@ const UserAttributes = require(base_dir + '/app/models/userAttributes');
 const City = require(base_dir + '/app/models/city');
 
 router.post('/users', async function (req, res) {
-  const {email, is_admin, firstName, lastName, city, country, phone, interests} = req.body;
+  const {email, isAdmin, firstName, lastName, city, country, phone, interests} = req.body;
 
   if (!firstName || !lastName) {
     return res.status(422).json({
@@ -32,7 +32,7 @@ router.post('/users', async function (req, res) {
       email: email,
       password: password,
       attributes,
-      is_admin: is_admin
+      is_admin: isAdmin
     });
   } catch (e) {
     const status = e.name === 'ValidationError' ? 422 : 400;
@@ -91,7 +91,7 @@ router.get('/users/:id', async function (req, res) {
 });
 
 router.put('/users/:id', async function (req, res) {
-  const {firstName, lastName, city, country, phone, interests} = req.body;
+  const {firstName, lastName, city, country, phone, interests, isAdmin} = req.body;
 
   let user = await User.findOne({_id: req.params.id}).populate(['attributes']);
   if (!user) {
@@ -101,12 +101,10 @@ router.put('/users/:id', async function (req, res) {
     });
   }
 
-  let cityFromDB = await City.findOne({id: city});
-
   const newAttr = {
     first_name: firstName,
     last_name: lastName,
-    city: cityFromDB,
+    city: city,
     country: country,
     phone: phone,
     interests: interests
@@ -119,6 +117,9 @@ router.put('/users/:id', async function (req, res) {
   }
 
   await UserAttributes.update({_id: user.attributes.id}, newAttr);
+  await user.update({
+    is_admin: isAdmin
+  });
   user = await User.findOne({_id: req.params.id}).populate({
     path: 'attributes',
     model: 'user_attributes'
