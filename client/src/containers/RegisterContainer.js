@@ -14,6 +14,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Api from '../Api';
+import Header from "../components/Header";
 
 const styles = theme => ({
   registerPaper: {
@@ -87,6 +88,11 @@ class RegisterContainer extends Component {
     const {isLogged} = this.props.AppStore;
 
     return <div>
+      <Header
+        onSubmit={() => {}}
+        handleClear={() => {}}
+        isSearch={false}
+      />
       {
         isLogged && <Redirect to='/'/>
       }

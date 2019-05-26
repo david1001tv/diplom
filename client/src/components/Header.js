@@ -11,6 +11,7 @@ import ALink from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import {Link} from 'react-router-dom';
 import Search from "./Search";
+import {parseJwt} from "../helpers/parseJWT";
 
 const styles = theme => ({
   appBar: {
@@ -56,6 +57,7 @@ class Header extends Component {
   render() {
     const {classes, onSubmit, handleClear, isSearch} = this.props;
     const {isLogged} = this.props.AppStore;
+    const payload = parseJwt(Api.token);
 
     return <AppBar className={classes.appBar}>
       <Toolbar>
@@ -68,6 +70,13 @@ class Header extends Component {
         <ALink href={'/speakers'} className={classes.link}>
           Our Speakers
         </ALink>
+        {
+          payload.isAdmin ?
+            <ALink href={'/admin'} className={classes.link}>
+              Admin Panel
+            </ALink> :
+            null
+        }
         {
           isSearch ? <Search className={classes.search}
                   value={this.state.query}
@@ -88,7 +97,7 @@ class Header extends Component {
             </React.Fragment>
             :
             <React.Fragment>
-              <Button className={classes.buttonReg} variant='contained' component={Link}
+              <Button className={classes.buttonReg} style={{marginLeft: isSearch ? 20 : 'auto'}} variant='contained' component={Link}
                       to='/register'>Register</Button>
               <Button className={classes.buttonLogin} variant='contained' component={Link} to='/login'>LogIn</Button>
             </React.Fragment>
