@@ -10,11 +10,13 @@ import Header from "../components/Header";
 import Card from "@material-ui/core/Card";
 import CardContent from '@material-ui/core/CardContent';
 import Face from '@material-ui/icons/Face';
-import {Redirect} from 'react-router-dom';
 import IconButton from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
 import {parseJwt} from "../helpers/parseJWT";
+
+import jsPDF from 'jspdf';
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
 
 const styles = theme => ({
   mainGrid: {
@@ -90,6 +92,9 @@ const styles = theme => ({
   button: {
     paddingRight: 100,
     paddingTop: 50
+  },
+  controlBtn: {
+    marginRight: 10
   }
 });
 
@@ -173,6 +178,38 @@ class ConferenceContainer extends Component {
         height: count > 0 ? (count > 1 ? (count * 400) + 300 : 900) : 620
       })
     })
+  };
+
+  makeReport = () => {
+    let str = 'Conference\n\n';
+    str += ('Name: ' + this.state.data.conference.name) + '\n';
+    str += ('Date: ' + this.formatDate(new Date(Date.parse(this.state.data.conference.date)))) + '\n';
+    str += ('City: ' + this.state.data.conference.city.name) + '\n';
+    str += ('Address: ' + this.state.data.conference.address) + '\n';
+    str += ('Description: ' + this.state.data.conference.description) + '\n\n';
+
+    str += 'Talks\n';
+    this.state.data.talks.forEach((talk, index) => {
+      str += '\n' + ('#' + index) + '\n';
+      str += ('Name: ' + talk.name) + '\n';
+      str += ('Info: ' + talk.info) + '\n';
+      str += ('Speaker name: ' + talk.speaker.first_name + ' ' + talk.speaker.last_name) + '\n';
+      str += ('Speaker GitHub: ' + talk.speaker.github) + '\n';
+      str += ('Interests: ' + talk.speaker.interests) + '\n';
+    });
+
+    str += '\n\nVisitors\n';
+    this.state.data.users.forEach((visitor, index) => {
+      str += '\n' + ('#' + index) + '\n';
+      str += ('Name: ' + visitor.attributes.first_name + ' ' + visitor.attributes.last_name) + '\n';
+      str += ('Email: ' + visitor.email) + '\n';
+      str += ('Interests: ' + visitor.attributes.interests) + '\n';
+    });
+
+    const doc = new jsPDF();
+
+    doc.text(str, 10, 10);
+    doc.save('conference_' + this.id + '.pdf');
   };
 
   render() {
@@ -266,8 +303,10 @@ class ConferenceContainer extends Component {
                           Visitor {index + 1}
                         </Typography>
                         <Typography className={classes.speaker} align={"left"}>
-                          <Face className={classes.icon}/> {user.attributes.first_name + ' ' + user.attributes.last_name} <span
-                          className={classes.from}>from</span> {user.country}
+                          <Face
+                            className={classes.icon}/> {user.attributes.first_name + ' ' + user.attributes.last_name}
+                          <span
+                            className={classes.from}>from</span> {user.country}
                         </Typography>
                         <Typography className={classes.textCard} align={"left"}>
                           <span className={classes.git}>Email</span>: <a
@@ -279,19 +318,25 @@ class ConferenceContainer extends Component {
                       </CardContent>
                     </Card>
                   }) : <Typography className={classes.text} align={"center"}>
-                    Sorry... We have no information about users :(
+                    Sorry... We have no information about visitors :(
                   </Typography>
                 }
-                {
-                  isLogged ? <Typography align={"right"} className={classes.button}>
+                <Typography align={"right"} className={classes.button}>
+                  <IconButton className={classes.controlBtn} variant="contained" color={"primary"} onClick={this.makeReport}>
+                    <ArrowDownward/>
+                    Make report
+                  </IconButton>
+                  {
+                    isLogged ?
                     <IconButton id='visit' ref='visit' variant="contained" color="primary" onClick={this.visitHandler}>
                       Want to visit
                       {
-                        this.state.isVisited ? <CheckIcon className={classes.rightIcon}>-</CheckIcon> : <AddIcon className={classes.rightIcon}>+</AddIcon>
+                        this.state.isVisited ? <CheckIcon className={classes.rightIcon}>-</CheckIcon> :
+                          <AddIcon className={classes.rightIcon}>+</AddIcon>
                       }
-                    </IconButton>
-                  </Typography> : null
-                }
+                    </IconButton> : null
+                  }
+                </Typography>
               </Paper>
             </Grid>
           </Grid> :
