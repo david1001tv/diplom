@@ -3,6 +3,9 @@ const router = require('express').Router();
 const Conference = require(base_dir + '/app/models/conference');
 const Talk = require(base_dir + '/app/models/talk');
 const Speaker = require(base_dir + '/app/models/speaker');
+const UsersOnConferences = require(base_dir + '/app/models/usersOnConferences');
+const User = require(base_dir + '/app/models/user');
+const UserAttributes = require(base_dir + '/app/models/userAttributes');
 
 router.get('/', async function (req, res) {
   const {limit = 10, page = 1, query, startDate, finishDate, sort = {'date': 1}, filter} = req.query;
@@ -49,7 +52,6 @@ router.get('/:id', async function (req, res) {
   query ? search.$and.push({
     conference: conference._id
   }) : search.conference = conference._id;
-  console.log(search.$and);
 
   const talks = await Talk.find(search).populate({
     path: 'speaker',
@@ -60,27 +62,52 @@ router.get('/:id', async function (req, res) {
     }
   });
 
-  const talksIds = await Talk.find({conference: conference._id}).select('speaker');
-  const searchTalksIds = [];
-  await talksIds.forEach(talk => {
-    searchTalksIds.push(talk.speaker);
+  const talksOnConfa = await Talk.find({conference: conference._id}).select('speaker');
+  const talksIds = [];
+  await talksOnConfa.forEach(talk => {
+    talksIds.push(talk.speaker);
   });
 
-  search = makeSearch(query, searchTalksIds);
+  search = makeSearch(query, talksIds);
 
   const speakers = await Speaker.find(search).populate({
     path: 'country',
     model: 'countries'
   });
 
+  const userOnConfa = await UsersOnConferences.find({conference: conference._id}).select('user');
+  const usersIds = [];
+  await userOnConfa.forEach(item => {
+    usersIds.push(item.user);
+  });
+
+  search = await querySearch(query);
+  const usersAttr = await UserAttributes.find(search).select('_id');
+  const usersAttrIds = [];
+  await usersAttr.forEach(item => {
+    usersAttrIds.push(item._id);
+  });
+
+  search = makeSearch(query, usersIds);
+  search.$and.splice(1,1);
+  search.$and.push({
+    attributes: {
+      $in: usersAttrIds
+    }
+  });
+  console.log(search);
+
+  const users = await User.find(search).populate('attributes');
+
   return res.json({
     conference,
     talks,
-    speakers
+    speakers,
+    users
   });
 });
 
-function makeSearch(query, searchTalksIds) {
+function makeSearch(query, searchIds) {
   let search = {};
   let searchOr = [];
   if (query) {
@@ -95,10 +122,10 @@ function makeSearch(query, searchTalksIds) {
       ];
     }
   }
-  if (searchTalksIds) {
+  if (searchIds) {
     search.$and = [{
       _id: {
-        $in: searchTalksIds
+        $in: searchIds
       }
     }];
   }

@@ -123,10 +123,11 @@ class ConferenceContainer extends Component {
   componentDidMount() {
     const payload = parseJwt(Api.token);
     Api.get('conferences/' + this.id).then(res => {
-      let count = Math.ceil((res.talks.length + res.speakers.length) / 2);
+      let count = Math.ceil((res.talks.length + res.speakers.length + res.users.length) / 2);
+      console.log(count);
       this.setState({
         data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 250 : 750) : 520
+        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 900) : 620
       })
     });
     Api.get('user-confs?filter[user][]=' + payload.id).then(res => {
@@ -159,7 +160,7 @@ class ConferenceContainer extends Component {
       console.log(count)
       this.setState({
         data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 750) : 520
+        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 900) : 620
       })
     })
   };
@@ -169,7 +170,7 @@ class ConferenceContainer extends Component {
       let count = Math.ceil((res.talks.length + res.speakers.length) / 2);
       this.setState({
         data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 250 : 750) : 520
+        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 900) : 620
       })
     })
   };
@@ -255,6 +256,30 @@ class ConferenceContainer extends Component {
                     </Card>
                   }) : <Typography className={classes.text} align={"center"}>
                     Sorry... We have no information about speakers :(
+                  </Typography>
+                }
+                {
+                  this.state.data.users && this.state.data.users.length !== 0 ? this.state.data.users.map((user, index) => {
+                    return <Card key={index} className={classes.talkCard}>
+                      <CardContent>
+                        <Typography className={classes.talkName} align={"center"}>
+                          Visitor {index + 1}
+                        </Typography>
+                        <Typography className={classes.speaker} align={"left"}>
+                          <Face className={classes.icon}/> {user.attributes.first_name + ' ' + user.attributes.last_name} <span
+                          className={classes.from}>from</span> {user.country}
+                        </Typography>
+                        <Typography className={classes.textCard} align={"left"}>
+                          <span className={classes.git}>Email</span>: <a
+                          href={'mailto:' + user.email}>{user.email}</a>
+                        </Typography>
+                        <Typography className={classes.textCard} align={"left"}>
+                          Visitor interests: {user.attributes.interests}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  }) : <Typography className={classes.text} align={"center"}>
+                    Sorry... We have no information about users :(
                   </Typography>
                 }
                 {
