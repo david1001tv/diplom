@@ -4,7 +4,6 @@ const sendMail = require('./../../helpers/sendMail');
 
 const User = require(base_dir + '/app/models/user');
 const UserAttributes = require(base_dir + '/app/models/userAttributes');
-const City = require(base_dir + '/app/models/city');
 
 router.post('/users', async function (req, res) {
   const {email, isAdmin, firstName, lastName, city, country, phone, interests} = req.body;

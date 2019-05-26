@@ -51,7 +51,7 @@ class LoginContainer extends Component {
       .then(res => {
       })
       .catch(err => this.setState({errorMessage: err.message}))
-  }
+  };
 
   render() {
     const {errorMessage} = this.state;

@@ -1,11 +1,12 @@
 const nodemailer = require('nodemailer');
+const config =require('./../../../config');
 
 function sendMail (user = {}, password = '') {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'pogl787898@gmail.com',
-      pass: 'Wader787898'
+      user: config.mail.login,
+      pass: config.mail.pass
     }
   });
 
