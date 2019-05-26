@@ -161,7 +161,7 @@ class ConferenceContainer extends Component {
 
   onSubmit = (params) => {
     Api.get('conferences/' + this.id + '?query=' + params[0].query).then(res => {
-      let count = Math.ceil((res.talks.length + res.speakers.length) / 2);
+      let count = Math.ceil((res.talks.length + res.speakers.length + res.users.length) / 2);
       console.log(count)
       this.setState({
         data: res,
@@ -172,7 +172,7 @@ class ConferenceContainer extends Component {
 
   handleClear = () => {
     Api.get('conferences/' + this.id).then(res => {
-      let count = Math.ceil((res.talks.length + res.speakers.length) / 2);
+      let count = Math.ceil((res.talks.length + res.speakers.length + res.users.length) / 2);
       this.setState({
         data: res,
         height: count > 0 ? (count > 1 ? (count * 400) + 300 : 900) : 620
