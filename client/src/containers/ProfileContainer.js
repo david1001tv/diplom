@@ -9,6 +9,9 @@ import Api from "../Api";
 import Header from "../components/Header";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import {
+  Redirect,
+} from 'react-router-dom';
 
 const styles = theme => ({
   mainGrid: {
@@ -117,106 +120,110 @@ class ProfileContainer extends Component {
   render() {
     const {classes} = this.props;
     const {errorMessage, me} = this.state;
+    const {isLogged} = this.props.AppStore;
 
     return <React.Fragment>
-      <Header
-        onSubmit={this.onSubmit}
-        handleClear={this.handleClear}
-        isSearch={false}
-      />
-      <Grid container className={classes.mainGrid} justify="center">
-        <Grid key={0} item>
-          <Paper className={classes.paper}>
-            <Typography className={classes.header} align={"center"}>
-              My info
-            </Typography>
-            {
-              me !== {} && me.attributes ? <React.Fragment>
-                  <Typography className={classes.myInfo} align={"left"}>
-                    My Email: {me.email}
-                  </Typography>
-                  <form ref={node => this.formMe = node} onSubmit={this.submitForm} className={classes.formMe}>
-                    {errorMessage && <Typography color='error'>{errorMessage}</Typography>}
-                    <TextField
-                      id='firstName'
-                      label='First Name'
-                      className={classes.textField}
-                      margin='normal'
-                      defaultValue={me.attributes.first_name}
-                    />
+      {isLogged ? <React.Fragment>
+        <Header
+          onSubmit={this.onSubmit}
+          handleClear={this.handleClear}
+          isSearch={false}
+        />
+        <Grid container className={classes.mainGrid} justify="center">
+          <Grid key={0} item>
+            <Paper className={classes.paper}>
+              <Typography className={classes.header} align={"center"}>
+                My info
+              </Typography>
+              {
+                me !== {} && me.attributes ? <React.Fragment>
+                    <Typography className={classes.myInfo} align={"left"}>
+                      My Email: {me.email}
+                    </Typography>
+                    <form ref={node => this.formMe = node} onSubmit={this.submitForm} className={classes.formMe}>
+                      {errorMessage && <Typography color='error'>{errorMessage}</Typography>}
+                      <TextField
+                        id='firstName'
+                        label='First Name'
+                        className={classes.textField}
+                        margin='normal'
+                        defaultValue={me.attributes.first_name}
+                      />
 
-                    <TextField
-                      id='lastName'
-                      label='Last Name'
-                      className={classes.textField}
-                      margin='normal'
-                      defaultValue={me.attributes.last_name}
-                    />
+                      <TextField
+                        id='lastName'
+                        label='Last Name'
+                        className={classes.textField}
+                        margin='normal'
+                        defaultValue={me.attributes.last_name}
+                      />
 
-                    <TextField
-                      id='phone'
-                      label='Phone'
-                      className={classes.textField}
-                      margin='normal'
-                      defaultValue={me.attributes.phone}
-                    />
+                      <TextField
+                        id='phone'
+                        label='Phone'
+                        className={classes.textField}
+                        margin='normal'
+                        defaultValue={me.attributes.phone}
+                      />
 
-                    <TextField
-                      id='city'
-                      label='City'
-                      className={classes.textField}
-                      margin='normal'
-                      defaultValue={me.attributes.city}
-                    />
+                      <TextField
+                        id='city'
+                        label='City'
+                        className={classes.textField}
+                        margin='normal'
+                        defaultValue={me.attributes.city}
+                      />
 
-                    <TextField
-                      id='country'
-                      label='Country'
-                      className={classes.textField}
-                      margin='normal'
-                      defaultValue={me.attributes.country}
-                    />
+                      <TextField
+                        id='country'
+                        label='Country'
+                        className={classes.textField}
+                        margin='normal'
+                        defaultValue={me.attributes.country}
+                      />
 
-                    <TextField
-                      id='interests'
-                      label='Interests'
-                      className={classes.textArea}
-                      margin='normal'
-                      defaultValue={me.attributes.interests}
-                    />
+                      <TextField
+                        id='interests'
+                        label='Interests'
+                        className={classes.textArea}
+                        margin='normal'
+                        defaultValue={me.attributes.interests}
+                      />
 
-                    <Button type='submit' variant='contained' color='primary' className={classes.button}>
-                      Save
-                    </Button>
-                  </form>
-                </React.Fragment>
-                : null
-            }
-            <React.Fragment>
-              <form ref={node => this.formPass = node} onSubmit={this.submitResetPassword} className={classes.formMe}>
-                {errorMessage && <Typography color='error'>{errorMessage}</Typography>}
-                <TextField
-                  id='oldPassword'
-                  label='Old Password'
-                  type='password'
-                  className={classes.textField}
-                  margin='normal'
-                />
-                <TextField
-                  id='newPassword'
-                  label='New Password'
-                  type='password'
-                  className={classes.textField}
-                  margin='normal'
-                />
-                <Button type='submit' variant='contained' color='primary' className={classes.button}>
-                  Update password
-                </Button>
-              </form>
-            </React.Fragment>
-          </Paper>
+                      <Button type='submit' variant='contained' color='primary' className={classes.button}>
+                        Save
+                      </Button>
+                    </form>
+                  </React.Fragment>
+                  : null
+              }
+              <React.Fragment>
+                <form ref={node => this.formPass = node} onSubmit={this.submitResetPassword} className={classes.formMe}>
+                  {errorMessage && <Typography color='error'>{errorMessage}</Typography>}
+                  <TextField
+                    id='oldPassword'
+                    label='Old Password'
+                    type='password'
+                    className={classes.textField}
+                    margin='normal'
+                  />
+                  <TextField
+                    id='newPassword'
+                    label='New Password'
+                    type='password'
+                    className={classes.textField}
+                    margin='normal'
+                  />
+                  <Button type='submit' variant='contained' color='primary' className={classes.button}>
+                    Update password
+                  </Button>
+                </form>
+              </React.Fragment>
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
+      </React.Fragment> : <Redirect to='/login'/>
+      }
     </React.Fragment>
   }
 }

@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const Conference = require(base_dir + '/app/models/conference');
 const Talk = require(base_dir + '/app/models/talk');
-const City = require(base_dir + '/app/models/city');
+const UsersOnConferences = require(base_dir + '/app/models/usersOnConferences');
 
 router.post('/conferences', async function (req, res) {
   const {name, description, address, city, date} = req.body;
@@ -116,6 +116,21 @@ router.delete('/conferences/:id', async function (req, res) {
 
   try {
     conference = await Conference.deleteOne({_id: req.params.id});
+  } catch (e) {
+    return res.status(400).json({
+      success: false,
+      message: e.message
+    });
+  }
+
+  try {
+    await Talk.deleteMany({
+      conference: req.params.id
+    });
+
+    await UsersOnConferences.deleteMany({
+      conference: req.params.id
+    })
   } catch (e) {
     return res.status(400).json({
       success: false,

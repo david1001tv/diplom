@@ -11,6 +11,9 @@ import Card from "@material-ui/core/Card";
 import CardContent from '@material-ui/core/CardContent';
 import Face from '@material-ui/icons/Face';
 import {Redirect} from 'react-router-dom';
+import IconButton from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
 
 const styles = theme => ({
   mainGrid: {
@@ -77,6 +80,17 @@ const styles = theme => ({
     fontSize: 16,
     color: '#453434',
   },
+  rightIcon: {
+    marginLeft: 5,
+    display: 'none'
+  },
+  iconSmall: {
+    fontSize: 20,
+  },
+  button: {
+    paddingRight: 100,
+    paddingTop: 50
+  }
 });
 
 class ConferenceContainer extends Component {
@@ -99,7 +113,7 @@ class ConferenceContainer extends Component {
 
   renderRedirect = () => {
     if (this.state.redirect) {
-      return <Redirect to='/' />
+      return <Redirect to='/'/>
     }
   };
 
@@ -120,10 +134,10 @@ class ConferenceContainer extends Component {
 
   componentDidMount() {
     Api.get('conferences/' + this.id).then(res => {
-      let count = Math.ceil((res.talks.length+res.speakers.length) / 2);
+      let count = Math.ceil((res.talks.length + res.speakers.length) / 2);
       this.setState({
         data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 250 : 750) : 480
+        height: count > 0 ? (count > 1 ? (count * 400) + 250 : 750) : 520
       })
     });
   }
@@ -132,29 +146,34 @@ class ConferenceContainer extends Component {
     return Api.get('conferences/' + +this.id);
   };
 
+  visitHandler = e => {
+    console.log(this.refs.visit.props.value)
+  };
+
   onSubmit = (params) => {
     Api.get('conferences/' + this.id + '?query=' + params[0].query).then(res => {
-      let count = Math.ceil((res.talks.length+res.speakers.length) / 2);
+      let count = Math.ceil((res.talks.length + res.speakers.length) / 2);
       console.log(count)
       this.setState({
         data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 750) : 480
+        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 750) : 520
       })
     })
   };
 
   handleClear = () => {
     Api.get('conferences/' + this.id).then(res => {
-      let count = Math.ceil((res.talks.length+res.speakers.length) / 2);
+      let count = Math.ceil((res.talks.length + res.speakers.length) / 2);
       this.setState({
         data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 250 : 750) : 480
+        height: count > 0 ? (count > 1 ? (count * 400) + 250 : 750) : 520
       })
     })
   };
 
   render() {
     const {classes} = this.props;
+    const {isLogged} = this.props.AppStore;
 
     return <React.Fragment>
       <Header
@@ -194,8 +213,9 @@ class ConferenceContainer extends Component {
                           {talk.name}
                         </Typography>
                         <Typography className={classes.speaker} align={"left"}>
-                          <Face className={classes.icon}/> {talk.speaker.first_name + ' ' + talk.speaker.last_name} <span
-                          className={classes.from}>from</span> {talk.speaker.country.country_name}
+                          <Face className={classes.icon}/> {talk.speaker.first_name + ' ' + talk.speaker.last_name}
+                          <span
+                            className={classes.from}>from</span> {talk.speaker.country.country_name}
                         </Typography>
                         <Typography className={classes.textCard} align={"left"}>
                           <span className={classes.git}>GitHub</span>: <a
@@ -215,7 +235,7 @@ class ConferenceContainer extends Component {
                     return <Card key={index} className={classes.talkCard}>
                       <CardContent>
                         <Typography className={classes.talkName} align={"center"}>
-                          Speaker {index+1}
+                          Speaker {index + 1}
                         </Typography>
                         <Typography className={classes.speaker} align={"left"}>
                           <Face className={classes.icon}/> {speaker.first_name + ' ' + speaker.last_name} <span
@@ -233,6 +253,15 @@ class ConferenceContainer extends Component {
                   }) : <Typography className={classes.text} align={"center"}>
                     Sorry... We have no information about speakers :(
                   </Typography>
+                }
+                {
+                  isLogged ? <Typography align={"right"} className={classes.button}>
+                    <IconButton id='visit' ref='visit' variant="contained" value={false} color="primary" onClick={this.visitHandler}>
+                      Want to visit
+                      <AddIcon className={classes.rightIcon}>visit</AddIcon>
+                      <CheckIcon className={classes.rightIcon}>unvisit</CheckIcon>
+                    </IconButton>
+                  </Typography> : null
                 }
               </Paper>
             </Grid>
