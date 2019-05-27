@@ -74,8 +74,8 @@ class Conference extends Component {
           limit={600}
           link={'/conferences/' + conference._id}
         />
-    </CardContent>
-  </Card>
+      </CardContent>
+    </Card>
   }
 }
 
