@@ -15,20 +15,28 @@ const styles = theme => ({
     margin: 'auto'
   },
   mainTable: {
-    margin: '0 100px'
+    margin: '0 10%'
   },
   paper: {
-    width: 1400,
+    width: '70%',
     marginTop: 150,
-    marginBottom: 100
+    marginBottom: 100,
+    marginLeft: '15%',
   },
   header: {
-    paddingTop: 50
+    paddingTop: 50,
+    '@media (max-width: 1024px)': {
+      fontSize: 30
+    }
   },
   text: {
-    padding: '50px 100px 0 100px',
+    padding: '50px 10% 0 10%',
     fontSize: 20,
-    fontFamily: 'Pangolin'
+    fontFamily: 'Pangolin',
+    width: '100%',
+    '@media (max-width: 1024px)': {
+      fontSize: 15
+    }
   }
 });
 

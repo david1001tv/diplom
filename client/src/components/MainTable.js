@@ -16,6 +16,10 @@ const styles = theme => ({
   noResults: {
     fontSize: 30,
     padding: '100px 50px 0 50px'
+  },
+  card: {
+    margin: '0 10%',
+    width: '80%'
   }
 });
 
@@ -77,7 +81,8 @@ class MainTable extends Component {
           <React.Fragment>
             {
               content === 'conferences' ? this.state.data.map((item, index) => {
-                return <Conference key={index}
+                return <Conference className={classes.card}
+                                   key={index}
                                    conference={item}
                 />
               }) : content === 'talks' ? (this.state.data.map((item, index) => {

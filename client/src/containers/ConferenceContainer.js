@@ -21,12 +21,17 @@ import ArrowDownward from "@material-ui/icons/ArrowDownward";
 const styles = theme => ({
   mainGrid: {
     flexGrow: 1,
-    margin: 'auto'
+    margin: 'auto',
+    width: '70%',
+    marginLeft: '15%',
+  },
+  grid: {
+    width: '100%',
   },
   paper: {
-    width: 1400,
+    width: '100%',
     marginTop: 150,
-    marginBottom: 100
+    marginBottom: 100,
   },
   title: {
     paddingTop: 50,
@@ -36,7 +41,11 @@ const styles = theme => ({
   date: {
     fontSize: 17,
     float: 'left',
-    paddingLeft: '100px'
+    paddingLeft: '100px',
+    '@media (max-width: 1024px)': {
+      paddingLeft: '5%',
+      paddingRight: '5%'
+    }
   },
   address: {
     fontSize: 17,
@@ -54,10 +63,14 @@ const styles = theme => ({
   },
   talkCard: {
     height: 310,
-    width: 550,
+    width: '40%',
     marginTop: 50,
-    marginLeft: 100,
-    display: 'inline-block'
+    marginLeft: '7%',
+    display: 'inline-block',
+    '@media (max-width: 1024px)': {
+      width: '90%',
+      marginLeft: '5%',
+    }
   },
   talkName: {
     fontSize: 28,
@@ -77,7 +90,11 @@ const styles = theme => ({
   text: {
     padding: '50px 100px 0 100px',
     fontSize: 20,
-    fontFamily: 'Pangolin'
+    fontFamily: 'Pangolin',
+    '@media (max-width: 1024px)': {
+      paddingLeft: '5%',
+      paddingRight: '5%'
+    }
   },
   git: {
     fontSize: 16,
@@ -90,7 +107,7 @@ const styles = theme => ({
     fontSize: 20,
   },
   button: {
-    paddingRight: 100,
+    paddingRight: '5%',
     paddingTop: 50
   },
   controlBtn: {
@@ -126,13 +143,14 @@ class ConferenceContainer extends Component {
   };
 
   componentDidMount() {
+    let addHeight = window.innerWidth <= 1024 ? 700 : 0;
     const payload = parseJwt(Api.token);
     Api.get('conferences/' + this.id).then(res => {
       let count = Math.ceil((res.talks.length + res.speakers.length + res.users.length) / 2);
       console.log(count);
       this.setState({
         data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 900) : 620
+        height: count > 0 ? (count > 1 ? (count * 400) + 300 + addHeight : 900) : 620
       })
     });
     Api.get('user-confs?filter[user][]=' + payload.id).then(res => {
@@ -225,7 +243,7 @@ class ConferenceContainer extends Component {
       {
         Object.keys(this.state.data).length ?
           <Grid container className={classes.mainGrid} justify="center">
-            <Grid key={0} item>
+            <Grid key={0} item className={classes.grid}>
               <Paper className={classes.paper} style={{height: this.state.height}}>
                 <Typography className={classes.title} align={"center"}>
                   {this.state.data.conference.name}
@@ -322,19 +340,21 @@ class ConferenceContainer extends Component {
                   </Typography>
                 }
                 <Typography align={"right"} className={classes.button}>
-                  <IconButton className={classes.controlBtn} variant="contained" color={"primary"} onClick={this.makeReport}>
+                  <IconButton className={classes.controlBtn} variant="contained" color={"primary"}
+                              onClick={this.makeReport}>
                     <ArrowDownward/>
                     Make report
                   </IconButton>
                   {
                     isLogged ?
-                    <IconButton id='visit' ref='visit' variant="contained" color="primary" onClick={this.visitHandler}>
-                      Want to visit
-                      {
-                        this.state.isVisited ? <CheckIcon className={classes.rightIcon}>-</CheckIcon> :
-                          <AddIcon className={classes.rightIcon}>+</AddIcon>
-                      }
-                    </IconButton> : null
+                      <IconButton id='visit' ref='visit' variant="contained" color="primary"
+                                  onClick={this.visitHandler}>
+                        Want to visit
+                        {
+                          this.state.isVisited ? <CheckIcon className={classes.rightIcon}>-</CheckIcon> :
+                            <AddIcon className={classes.rightIcon}>+</AddIcon>
+                        }
+                      </IconButton> : null
                   }
                 </Typography>
               </Paper>

@@ -21,7 +21,10 @@ const styles = theme => ({
     margin: '30px 0px'
   },
   conferenceContainer: {
-    margin: '30px 100px'
+    margin: '30px 100px',
+    '@media (max-width: 1024px)': {
+      margin: '30px 10%',
+    }
   },
   date: {
     fontSize: '13px'
