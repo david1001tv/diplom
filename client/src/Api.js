@@ -2,7 +2,7 @@ import {
   parseJwt
 } from './helpers/parseJWT';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:3001/';
+const API_URL = process.env.REACT_APP_API_URL || `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_API_PORT}/api/`;
 
 export default class API {
 
