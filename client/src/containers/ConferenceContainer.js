@@ -241,80 +241,79 @@ class ConferenceContainer extends Component {
         isSearch={true}
       />
       {
-        Object.keys(this.state.data).length ?
-          <Grid container className={classes.mainGrid} justify="center">
-            <Grid key={0} item className={classes.grid}>
-              <Paper className={classes.paper} style={{height: this.state.height}}>
-                <Typography className={classes.title} align={"center"}>
-                  {this.state.data.conference.name}
+        Object.keys(this.state.data).length &&
+        <Grid container className={classes.mainGrid} justify="center">
+          <Grid key={0} item className={classes.grid}>
+            <Paper className={classes.paper} style={{height: this.state.height}}>
+              <Typography className={classes.title} align={"center"}>
+                {this.state.data.conference.name}
+              </Typography>
+              <Typography className={classes.date} align={"center"}>
+                {this.formatDate(new Date(Date.parse(this.state.data.conference.date)))}
+              </Typography>
+              {
+                this.state.data.conference.city && <Typography className={classes.address} align={"center"}>
+                  in {this.state.data.conference.city.name}
                 </Typography>
-                <Typography className={classes.date} align={"center"}>
-                  {this.formatDate(new Date(Date.parse(this.state.data.conference.date)))}
+              }
+              <Typography className={classes.address} align={"center"}>
+                at {this.state.data.conference.address}
+              </Typography>
+              <Typography className={classes.text} align={"justify"}>
+                {this.state.data.conference.description}
+              </Typography>
+              {
+                this.state.data.talks && this.state.data.talks.length !== 0 ? this.state.data.talks.map((talk, index) => {
+                  return <Card key={index} className={classes.talkCard}>
+                    <CardContent>
+                      <Typography className={classes.talkName} align={"center"}>
+                        {talk.name}
+                      </Typography>
+                      <Typography className={classes.speaker} align={"left"}>
+                        <Face className={classes.icon}/> {talk.speaker.first_name + ' ' + talk.speaker.last_name}
+                        <span
+                          className={classes.from}>from</span> {talk.speaker.country.country_name}
+                      </Typography>
+                      <Typography className={classes.textCard} align={"left"}>
+                        <span className={classes.git}>GitHub</span>: <a
+                        href={talk.speaker.github}>{talk.speaker.github}</a>
+                      </Typography>
+                      <Typography className={classes.textCard} align={"left"}>
+                        {talk.info}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                }) : <Typography className={classes.text} align={"center"}>
+                  Sorry... We have no information about talks :(
                 </Typography>
-                {
-                  this.state.data.conference.city ?
-                    <Typography className={classes.address} align={"center"}>
-                      in {this.state.data.conference.city.name}
-                    </Typography> :
-                    null
-                }
-                <Typography className={classes.address} align={"center"}>
-                  at {this.state.data.conference.address}
+              }
+              {
+                this.state.data.speakers && this.state.data.speakers.length !== 0 ? this.state.data.speakers.map((speaker, index) => {
+                  return <Card key={index} className={classes.talkCard}>
+                    <CardContent>
+                      <Typography className={classes.talkName} align={"center"}>
+                        Speaker {index + 1}
+                      </Typography>
+                      <Typography className={classes.speaker} align={"left"}>
+                        <Face className={classes.icon}/> {speaker.first_name + ' ' + speaker.last_name} <span
+                        className={classes.from}>from</span> {speaker.country.country_name}
+                      </Typography>
+                      <Typography className={classes.textCard} align={"left"}>
+                        <span className={classes.git}>GitHub</span>: <a
+                        href={speaker.github}>{speaker.github}</a>
+                      </Typography>
+                      <Typography className={classes.textCard} align={"left"}>
+                        {speaker.interests}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                }) : <Typography className={classes.text} align={"center"}>
+                  Sorry... We have no information about speakers :(
                 </Typography>
-                <Typography className={classes.text} align={"justify"}>
-                  {this.state.data.conference.description}
-                </Typography>
-                {
-                  this.state.data.talks && this.state.data.talks.length !== 0 ? this.state.data.talks.map((talk, index) => {
-                    return <Card key={index} className={classes.talkCard}>
-                      <CardContent>
-                        <Typography className={classes.talkName} align={"center"}>
-                          {talk.name}
-                        </Typography>
-                        <Typography className={classes.speaker} align={"left"}>
-                          <Face className={classes.icon}/> {talk.speaker.first_name + ' ' + talk.speaker.last_name}
-                          <span
-                            className={classes.from}>from</span> {talk.speaker.country.country_name}
-                        </Typography>
-                        <Typography className={classes.textCard} align={"left"}>
-                          <span className={classes.git}>GitHub</span>: <a
-                          href={talk.speaker.github}>{talk.speaker.github}</a>
-                        </Typography>
-                        <Typography className={classes.textCard} align={"left"}>
-                          {talk.info}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  }) : <Typography className={classes.text} align={"center"}>
-                    Sorry... We have no information about talks :(
-                  </Typography>
-                }
-                {
-                  this.state.data.speakers && this.state.data.speakers.length !== 0 ? this.state.data.speakers.map((speaker, index) => {
-                    return <Card key={index} className={classes.talkCard}>
-                      <CardContent>
-                        <Typography className={classes.talkName} align={"center"}>
-                          Speaker {index + 1}
-                        </Typography>
-                        <Typography className={classes.speaker} align={"left"}>
-                          <Face className={classes.icon}/> {speaker.first_name + ' ' + speaker.last_name} <span
-                          className={classes.from}>from</span> {speaker.country.country_name}
-                        </Typography>
-                        <Typography className={classes.textCard} align={"left"}>
-                          <span className={classes.git}>GitHub</span>: <a
-                          href={speaker.github}>{speaker.github}</a>
-                        </Typography>
-                        <Typography className={classes.textCard} align={"left"}>
-                          {speaker.interests}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  }) : <Typography className={classes.text} align={"center"}>
-                    Sorry... We have no information about speakers :(
-                  </Typography>
-                }
-                {
-                  this.state.data.users && this.state.data.users.length !== 0 ? this.state.data.users.map((user, index) => {
+              }
+              {
+                isLogged && this.state.data.users && <React.Fragment> {
+                  this.state.data.users.length !== 0 ? this.state.data.users.map((user, index) => {
                     return <Card key={index} className={classes.talkCard}>
                       <CardContent>
                         <Typography className={classes.talkName} align={"center"}>
@@ -339,28 +338,30 @@ class ConferenceContainer extends Component {
                     Sorry... We have no information about visitors :(
                   </Typography>
                 }
-                <Typography align={"right"} className={classes.button}>
-                  <IconButton className={classes.controlBtn} variant="contained" color={"primary"}
-                              onClick={this.makeReport}>
+                </React.Fragment>
+              }
+              <Typography align={"right"} className={classes.button}>
+                {
+                  isLogged && <IconButton className={classes.controlBtn} variant="contained" color={"primary"}
+                                          onClick={this.makeReport}>
                     <ArrowDownward/>
                     Make report
                   </IconButton>
-                  {
-                    isLogged ?
-                      <IconButton id='visit' ref='visit' variant="contained" color="primary"
-                                  onClick={this.visitHandler}>
-                        Want to visit
-                        {
-                          this.state.isVisited ? <CheckIcon className={classes.rightIcon}>-</CheckIcon> :
-                            <AddIcon className={classes.rightIcon}>+</AddIcon>
-                        }
-                      </IconButton> : null
-                  }
-                </Typography>
-              </Paper>
-            </Grid>
-          </Grid> :
-          null
+                }
+                {
+                  isLogged && <IconButton id='visit' ref='visit' variant="contained" color="primary"
+                                          onClick={this.visitHandler}>
+                    Want to visit
+                    {
+                      this.state.isVisited ? <CheckIcon className={classes.rightIcon}>-</CheckIcon> :
+                        <AddIcon className={classes.rightIcon}>+</AddIcon>
+                    }
+                  </IconButton>
+                }
+              </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
       }
     </React.Fragment>
   }

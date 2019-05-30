@@ -77,7 +77,7 @@ class SpeakersForm extends PureComponent {
           />
 
           {
-            !isEditing ? <Tooltip title='Is create account'>
+            !isEditing && <Tooltip title='Is create account'>
               <label className={classes.field}>
                 Is create account
                 <Switch
@@ -86,7 +86,7 @@ class SpeakersForm extends PureComponent {
                   color='primary'
                 />
               </label>
-            </Tooltip> : null
+            </Tooltip>
           }
 
         </Grid>

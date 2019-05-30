@@ -188,7 +188,7 @@ class ProfileContainer extends Component {
                     My info
                   </Typography>
                   {
-                    me !== {} && me.attributes ? <React.Fragment>
+                    me !== {} && me.attributes && <React.Fragment>
                         <Typography className={classes.myInfo} align={"left"}>
                           My Email: {me.email}
                         </Typography>
@@ -247,7 +247,6 @@ class ProfileContainer extends Component {
                           </Button>
                         </form>
                       </React.Fragment>
-                      : null
                   }
                   <React.Fragment>
                     <form ref={node => this.formPass = node} onSubmit={this.submitResetPassword}

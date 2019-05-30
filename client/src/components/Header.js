@@ -71,19 +71,17 @@ class Header extends Component {
           Our Speakers
         </ALink>
         {
-          payload.isAdmin ?
-            <ALink href={'/admin'} className={classes.link}>
+          payload.isAdmin && <ALink href={'/admin'} className={classes.link}>
               Admin Panel
-            </ALink> :
-            null
+            </ALink>
         }
         {
-          isSearch ? <Search className={classes.search}
+          isSearch && <Search className={classes.search}
                   value={this.state.query}
                   onChange={this.changeQuery}
                   onSubmit={onSubmit}
                   handleClear={handleClear}
-          /> : null
+          />
         }
         {
           isLogged ?
