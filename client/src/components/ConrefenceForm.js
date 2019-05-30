@@ -46,8 +46,8 @@ class ConferenceForm extends PureComponent {
 
   render() {
     const { classes, cities, fields, errors, isEditing, handleChange } = this.props;
-    fields.date = Number.isInteger(fields.date) ? this.parseDate(fields.date) : fields.date
-    console.log(fields);
+    fields.date = Number.isInteger(fields.date) ? this.parseDate(fields.date) : this.parseDate(new Date());
+    console.log(fields.date)
 
     return <React.Fragment>
       <div className={classes.errors}>
@@ -63,7 +63,7 @@ class ConferenceForm extends PureComponent {
             className={classes.field}
             value={fields.name}
             onChange={handleChange('name')}
-            error={!!errors['name']}
+            required={true}
           />
 
           <FormControl className={classes.field}>
@@ -72,6 +72,7 @@ class ConferenceForm extends PureComponent {
               value={fields.city}
               onChange={handleChange('city')}
               input={<Input />}
+              required={true}
             >
               {cities.map(city => <MenuItem key={city._id} value={city._id}>
                 {city.name}
@@ -84,6 +85,16 @@ class ConferenceForm extends PureComponent {
             className={classes.field}
             value={fields.address}
             onChange={handleChange('address')}
+            required={true}
+          />
+
+          <TextField
+            label="Date"
+            className={classes.field}
+            defaultValue={fields.date || new Date()}
+            type="date"
+            onChange={handleChange('date')}
+            InputLabelProps={{ shrink: true }}
           />
 
         </Grid>
@@ -95,13 +106,9 @@ class ConferenceForm extends PureComponent {
             className={classes.field}
             value={fields.description}
             onChange={handleChange('description')}
-          />
-
-          <TextField
-            className={classes.field}
-            defaultValue={fields.date}
-            type="date"
-            onChange={handleChange('date')}
+            multiline={true}
+            rows={8}
+            rowsMax={10}
           />
         </Grid>
       </Grid>
