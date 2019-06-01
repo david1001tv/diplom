@@ -7,9 +7,6 @@ import Talk from './Talk';
 import Speaker from './Speaker';
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
   pagination: {
     margin: '30px 150px'
   },
@@ -17,37 +14,14 @@ const styles = theme => ({
     fontSize: 30,
     padding: '100px 50px 0 50px'
   },
-  card: {
-    margin: '0 10%',
-    width: '80%'
-  }
 });
 
 class MainTable extends Component {
   constructor(props) {
     super(props);
-  }
 
-  state = {
-    data: [],
-    perPage: 6,
-    page: 1,
-    pageCount: 1
-  };
-
-  componentDidMount() {
-    this.load([...this.props.params,
-      {limit: this.state.perPage},
-      {page: this.state.page}
-    ]);
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.params !== this.props.params) {
-      this.load([...this.props.params,
-        {limit: this.state.perPage},
-        {page: this.state.page}
-      ]);
+    this.state = {
+      data: props.data
     }
   }
 
@@ -61,37 +35,25 @@ class MainTable extends Component {
     });
   }
 
-  handlePageClick = data => {
-    let selected = data.selected;
-
-    this.setState({page: selected + 1}, () => {
-      this.load([
-        {limit: this.state.perPage},
-        {page: this.state.page}
-      ]);
-    });
-  };
-
   render() {
-    const {classes, content} = this.props;
+    const {classes, content, data, handlePageClick, pageCount} = this.props;
 
     return <React.Fragment>
       {
-        this.state.data.length !== 0 ?
+        data.length !== 0 ?
           <React.Fragment>
             {
-              content === 'conferences' ? this.state.data.map((item, index) => {
-                return <Conference className={classes.card}
-                                   key={index}
+              content === 'conferences' ? data.map((item, index) => {
+                return <Conference key={index}
                                    conference={item}
                 />
-              }) : content === 'talks' ? (this.state.data.map((item, index) => {
+              }) : content === 'talks' ? (data.map((item, index) => {
                   return <Talk key={index}
                                talk={item}
                                index={index}
                   />
                 }))
-                : (content === 'speakers' ? (this.state.data.map((item, index) => {
+                : (content === 'speakers' ? (data.map((item, index) => {
                     return <Speaker key={index}
                                     speaker={item}
                                     index={index}
@@ -104,14 +66,15 @@ class MainTable extends Component {
               nextLabel={'>>'}
               breakLabel={'...'}
               breakClassName={'break-me'}
-              pageCount={this.state.pageCount}
+              pageCount={pageCount}
               marginPagesDisplayed={2}
               pageRangeDisplayed={5}
-              onPageChange={this.handlePageClick}
+              onPageChange={handlePageClick}
               containerClassName={'pagination'}
               subContainerClassName={'pages pagination'}
               activeClassName={'active'}
-            /> </React.Fragment> :
+            />
+          </React.Fragment> :
           <Typography className={classes.noResults} align={"center"}>
             Sorry, we have no results :(
           </Typography>

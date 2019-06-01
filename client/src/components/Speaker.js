@@ -3,35 +3,10 @@ import Typography from "@material-ui/core/Typography";
 import Face from '@material-ui/icons/Face';
 import Card from "@material-ui/core/Card";
 import React, {Component} from "react";
-import Api from "../Api";
 import {withStyles} from "@material-ui/core";
 import ALink from "@material-ui/core/Link";
 
 const styles = theme => ({
-  mainGrid: {
-    flexGrow: 1,
-    margin: 'auto'
-  },
-  paper: {
-    width: 1400,
-    marginTop: 150,
-    marginBottom: 100
-  },
-  title: {
-    paddingTop: 50,
-    fontSize: 35,
-    fontFamily: 'Pangolin'
-  },
-  date: {
-    fontSize: 17,
-    float: 'left',
-    paddingLeft: '100px'
-  },
-  address: {
-    fontSize: 17,
-    float: 'left',
-    paddingLeft: '20px'
-  },
   textCard: {
     fontSize: 16,
     paddingLeft: 20,
@@ -42,11 +17,15 @@ const styles = theme => ({
     padding: '0 10px'
   },
   speakerCard: {
-    width: 550,
+    width: '41%',
     height: 310,
     marginTop: 50,
-    marginLeft: 100,
-    display: 'inline-block'
+    marginLeft: '6%',
+    display: 'inline-block',
+    '@media (max-width: 1024px)': {
+      width: '90%',
+      marginLeft: '5%',
+    }
   },
   speakerName: {
     fontSize: 28,

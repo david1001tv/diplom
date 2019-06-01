@@ -12,7 +12,11 @@ import Header from "../components/Header";
 const styles = theme => ({
   mainGrid: {
     flexGrow: 1,
-    margin: 'auto'
+    margin: 'auto',
+    width: '100%'
+  },
+  insideGrid: {
+    width: '100%'
   },
   mainTable: {
     margin: '0 10%'
@@ -22,6 +26,7 @@ const styles = theme => ({
     marginTop: 150,
     marginBottom: 100,
     marginLeft: '15%',
+    paddingBottom: 1
   },
   header: {
     paddingTop: 50,
@@ -43,45 +48,73 @@ const styles = theme => ({
 class LandingContainer extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      data: [],
+      perPage: 4,
+      page: 1,
+      pageCount: 1
+    };
+
+    this.dataLengthLimit = props.dataLengthLimit;
+    this.defaultHeight = props.defaultHeight;
+    this.componentHeight = props.componentHeight;
   }
 
-  state = {
-    params: this.props.AppStore.globalParams || [],
-    height: 1500
+  componentDidMount() {
+    let {content} = this.props;
+    let requestParams = this.makeParamsString([
+      {limit: this.state.perPage},
+      {page: this.state.page}
+    ]);
+    this.loadData(content, requestParams);
+  }
+
+  loadData = (url, params = '') => {
+    Api.get(`${url}?${params}`).then(res => {
+      let length = url !== 'conferences' ? Math.ceil(res.data.length / 2) : res.data.length;
+      this.setState({
+        data: res.data,
+        pageCount: Math.ceil(res.total / this.state.perPage)
+      });
+    });
+  }
+
+  handlePageClick = data => {
+    let selected = data.selected;
+    let {content} = this.props;
+
+    this.setState({page: selected + 1}, () => {
+      let requestParams = this.makeParamsString([
+        {limit: this.state.perPage},
+        {page: this.state.page}
+      ]);
+      this.loadData(content, requestParams);
+    });
   };
 
-  loadData = (params) => {
-    let requestParams = '?';
+  makeParamsString = (params = []) => {
+    let requestParams = '';
     params.forEach(param => {
       let key = Object.keys(param)[0];
       let value = param[Object.keys(param)[0]];
       requestParams += (key + '=' + value + '&');
     });
-    Api.get('conferences' + requestParams).then(res => {
-      this.setState({
-        height: 230 + (res.data.length <= 1 ? 250 : res.data.length * 210)
-      })
-    });
-    return Api.get('conferences' + requestParams);
+    return requestParams;
   };
 
   onSubmit = (params) => {
-    this.setState({
-      params: params
-    });
+    let {content} = this.props;
+    let requestParams = this.makeParamsString(params);
+    this.loadData(content, requestParams);
   };
 
   handleClear = () => {
-    this.setState({
-      params: [
-        {query: ''}
-      ]
-    });
+    let {content} = this.props;
+    this.loadData(content);
   };
 
   render() {
-    const {classes} = this.props;
-    const content = 'conferences';
+    const {classes, content, text} = this.props;
 
     return <React.Fragment>
       <Header
@@ -90,21 +123,30 @@ class LandingContainer extends Component {
         isSearch={true}
       />
       <Grid container className={classes.mainGrid} justify="center">
-        <Grid key={0} item>
-          <Paper className={classes.paper} style={{height:this.state.height}}>
-            <Typography className={classes.header} variant="h3" component="h3" align="center">
-              Welcome to COOL CONFA!
-            </Typography>
-            <Typography className={classes.text} align="center">
-              Hello! You have come to the coolest portal with conferences in our country. On our portal you can get
-              acquainted with the list of all the nearest conferences, see all the prepared talks and see all the
-              speakers.
-            </Typography>
+        <Grid className={classes.insideGrid}>
+          <Paper className={classes.paper}>
+            {
+              !text ? <React.Fragment>
+                <Typography className={classes.header} variant="h3" component="h3" align="center">
+                  Welcome to COOL CONFA!
+                </Typography>
+                <Typography className={classes.text} align="center">
+                  Hello! You have come to the coolest portal with conferences in our country. On our portal you can get
+                  acquainted with the list of all the nearest conferences, see all the prepared talks and see all the
+                  speakers.
+                </Typography>
+              </React.Fragment> : <React.Fragment>
+                <Typography className={classes.header} variant="h3" component="h3" align="center">
+                  {text}
+                </Typography>
+              </React.Fragment>
+            }
             <MainTable
               clasess={classes}
-              loadData={this.loadData}
-              params={this.state.params}
+              data={this.state.data}
               content={content}
+              handlePageClick={this.handlePageClick}
+              pageCount={this.state.pageCount}
             />
           </Paper>
         </Grid>

@@ -3,19 +3,9 @@ import Typography from "@material-ui/core/Typography";
 import Face from '@material-ui/icons/Face';
 import Card from "@material-ui/core/Card";
 import React, {Component} from "react";
-import Api from "../Api";
 import {withStyles} from "@material-ui/core";
 
 const styles = theme => ({
-  mainGrid: {
-    flexGrow: 1,
-    margin: 'auto'
-  },
-  paper: {
-    width: 1400,
-    marginTop: 150,
-    marginBottom: 100
-  },
   title: {
     paddingTop: 50,
     fontSize: 35,
@@ -41,11 +31,15 @@ const styles = theme => ({
     padding: '0 10px'
   },
   talkCard: {
-    width: 550,
+    width: '41%',
     height: 330,
     marginTop: 50,
-    marginLeft: 100,
-    display: 'inline-block'
+    marginLeft: '6%',
+    display: 'inline-block',
+    '@media (max-width: 1024px)': {
+      width: '90%',
+      marginLeft: '5%',
+    }
   },
   talkName: {
     fontSize: 23,

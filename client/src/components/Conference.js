@@ -7,9 +7,6 @@ import {Typography} from "@material-ui/core";
 import LongText from "./LongText";
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
   card: {
     paddingLeft: '25px'
   },

@@ -32,6 +32,7 @@ const styles = theme => ({
     width: '100%',
     marginTop: 150,
     marginBottom: 100,
+    paddingBottom: 30
   },
   title: {
     paddingTop: 50,
@@ -122,7 +123,6 @@ class ConferenceContainer extends Component {
   }
 
   state = {
-    height: 1500,
     data: {},
     isVisited: false
   };
@@ -143,14 +143,10 @@ class ConferenceContainer extends Component {
   };
 
   componentDidMount() {
-    let addHeight = window.innerWidth <= 1024 ? 700 : 0;
     const payload = parseJwt(Api.token);
     Api.get('conferences/' + this.id).then(res => {
-      let count = Math.ceil((res.talks.length + res.speakers.length + res.users.length) / 2);
-      console.log(count);
       this.setState({
-        data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 300 + addHeight : 900) : 620
+        data: res
       })
     });
     Api.get('user-confs?filter[user][]=' + payload.id).then(res => {
@@ -179,21 +175,16 @@ class ConferenceContainer extends Component {
 
   onSubmit = (params) => {
     Api.get('conferences/' + this.id + '?query=' + params[0].query).then(res => {
-      let count = Math.ceil((res.talks.length + res.speakers.length + res.users.length) / 2);
-      console.log(count)
       this.setState({
-        data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 900) : 620
+        data: res
       })
     })
   };
 
   handleClear = () => {
     Api.get('conferences/' + this.id).then(res => {
-      let count = Math.ceil((res.talks.length + res.speakers.length + res.users.length) / 2);
       this.setState({
-        data: res,
-        height: count > 0 ? (count > 1 ? (count * 400) + 300 : 900) : 620
+        data: res
       })
     })
   };
@@ -244,7 +235,7 @@ class ConferenceContainer extends Component {
         Object.keys(this.state.data).length &&
         <Grid container className={classes.mainGrid} justify="center">
           <Grid key={0} item className={classes.grid}>
-            <Paper className={classes.paper} style={{height: this.state.height}}>
+            <Paper className={classes.paper}>
               <Typography className={classes.title} align={"center"}>
                 {this.state.data.conference.name}
               </Typography>

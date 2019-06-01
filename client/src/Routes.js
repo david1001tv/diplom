@@ -15,8 +15,6 @@ import RegisterContainer from './containers/RegisterContainer';
 import ConferenceContainer from './containers/ConferenceContainer';
 import ProfileContainer from './containers/ProfileContainer';
 import AdminContainer from './containers/AdminContainer';
-import TalksContainer from './containers/TalksContainer';
-import SpeakersContainer from './containers/SpeakersContainer';
 
 const styles = theme => ({
   section: {
@@ -39,13 +37,27 @@ class Routes extends Component {
       <Router>
         <CssBaseline/>
         <Switch>
-          <Route exact path='/' render={props => <LandingContainer {...props} />}/>
-          <Route exact path='/talks' render={props => <TalksContainer {...props} />}/>
-          <Route exact path='/speakers' render={props => <SpeakersContainer {...props} />}/>
+          <Route exact path='/' render={props => <LandingContainer {...props}
+                                                                   content={'conferences'}
+                                                                   dataLengthLimit={1}
+                                                                   defaultHeight={230}
+                                                                   componentHeight={180}/>}/>
+          <Route exact path='/talks' render={props => <LandingContainer {...props}
+                                                                        content={'talks'}
+                                                                        dataLengthLimit={2}
+                                                                        defaultHeight={480}
+                                                                        componentHeight={370}
+                                                                        text={'Our Talks'}/>}/>
+          <Route exact path='/speakers' render={props => <LandingContainer {...props}
+                                                                           content={'speakers'}
+                                                                           dataLengthLimit={2}
+                                                                           defaultHeight={350}
+                                                                           componentHeight={350}
+                                                                           text={'Our Speakers'}/>}/>
           <Route exact path='/login' render={props => <LoginContainer {...props} />}/>
           <Route exact path='/register' render={props => <RegisterContainer {...props} />}/>
           <Route exact path='/profile' render={props => <ProfileContainer {...props} />}/>
-          <Route exact path='/conferences/:id' render={props => <ConferenceContainer {...props}/>} />
+          <Route exact path='/conferences/:id' render={props => <ConferenceContainer {...props}/>}/>
           <Route exact path='/admin' render={props => <AdminContainer {...props} />}/>
 
           <Route path='/' component={NotFound}/>
