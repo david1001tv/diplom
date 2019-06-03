@@ -30,7 +30,7 @@ const Transition = props => <Slide direction="up" {...props} />
 
 const clearFields = () => ({
   speakerId: null,
-  title: 'User creation',
+  title: 'Speaker creation',
   speakerFormFields: {
     email: '',
     firstName: '',

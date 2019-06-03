@@ -30,7 +30,7 @@ const Transition = props => <Slide direction="up" {...props} />
 
 const clearFields = () => ({
   talkId: null,
-  title: 'User creation',
+  title: 'Talk creation',
   talkFormFiled: {
     name: '',
     description: '',
