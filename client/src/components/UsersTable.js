@@ -23,7 +23,7 @@ import DialogConfirm from './DialogConfirm';
 import ArrowDownward from '@material-ui/icons/ArrowDownward'
 
 
-const Transition = props => <Slide direction="up" {...props} />
+const Transition = props => <Slide direction="up" {...props} />;
 
 const clearFields = () => ({
   userId: null,
@@ -39,7 +39,7 @@ const clearFields = () => ({
     address: '',
     isAdmin: false
   }
-})
+});
 
 const getUserDataWithFallback = user => ({
   userFormFields: {
@@ -53,7 +53,7 @@ const getUserDataWithFallback = user => ({
     address: get(user, 'attributes.address', ''),
     isAdmin: get(user, 'is_admin', false)
   }
-})
+});
 
 const styles = theme => ({
   controlBtn: {
@@ -70,7 +70,7 @@ const styles = theme => ({
     margin: '0 10px'
   },
 
-  сontainer: {
+  container: {
     width: 'auto',
     margin: '0 5px'
   },
@@ -111,7 +111,7 @@ class UsersTable extends Component {
     ...clearFields(),
     order: 'asc',
     orderBy: 'Email',
-  }
+  };
 
   componentDidMount() {
     this.props.UsersStore.initialLoad();
@@ -133,9 +133,9 @@ class UsersTable extends Component {
           <Delete className={classes.icon} color='secondary'/>
         </IconButton>}
     </div>
-  }
+  };
 
-  checkIsSwitcher = e => e.target.type === 'checkbox' ? true : false;
+  checkIsSwitcher = e => (e.target.type === 'checkbox');
 
   handleChange = name => e => {
     const { userFormFields } = this.state;
@@ -145,15 +145,15 @@ class UsersTable extends Component {
         [name]: this.checkIsSwitcher(e) ? e.target.checked : e.target.value
       }
     })
-  }
+  };
 
-  handleResetPasswort = () => {
+  handleResetPassword = () => {
     const { userId } = this.state;
 
     this.props.UsersStore.resetPassword(userId)
       .then(() => this.setState({isConfirmOpen: false}))
       .catch(err => console.log(err))
-  }
+  };
 
   saveUser = () => {
     this.props.UsersStore.saveItem(
@@ -166,17 +166,17 @@ class UsersTable extends Component {
           errors
         })
       })
-  }
+  };
 
   openDialog = () => this.setState({
     isOpen: true,
     errors: {},
     ...clearFields()
-  })
+  });
 
   closeDialog = () => this.setState({
     isOpen: false,
-  })
+  });
 
   buildRows = (data) => {
     return data.map(user => ({
@@ -186,7 +186,7 @@ class UsersTable extends Component {
       phone: user.attributes.phone,
       control: this.controlTableRow(user.deleted, user._id)
     }))
-  }
+  };
 
   deleteUsers = id => () => this.props.UsersStore.deleteItems(id);
 
@@ -201,7 +201,7 @@ class UsersTable extends Component {
       userId: user._id,
       ...getUserDataWithFallback(user)
     });
-  }
+  };
 
   handleChangePage = (_, page)  => this.props.UsersStore.handleChangePage(page);
 
@@ -225,7 +225,7 @@ class UsersTable extends Component {
         order: order
       })
     }
-  }
+  };
 
   render() {
     const { title, isOpen, isConfirmOpen, errors, policies, userFormFields, userId, order, orderBy } = this.state;
@@ -246,7 +246,7 @@ class UsersTable extends Component {
 
     return <React.Fragment>
       <Grid item sm={6} className={classNames(classes.flexItem, classes.justifyEnd)}>
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <TableSearch
             onChange={changeQuery}
             handleClear={clearQuery}
@@ -255,7 +255,7 @@ class UsersTable extends Component {
           />
         </Grid>
 
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <Button onClick={clearFilters} className={classes.clearBtn}>
             Clear
             <Clear />
@@ -348,7 +348,7 @@ class UsersTable extends Component {
         <DialogConfirm
           isOpen={isConfirmOpen}
           onClose={() => this.setState({isConfirmOpen: false})}
-          onConfirm={this.handleResetPasswort}
+          onConfirm={this.handleResetPassword}
         />
       </Grid>
     </React.Fragment>

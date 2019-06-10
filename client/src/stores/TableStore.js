@@ -22,7 +22,7 @@ class TableStore {
 
   conferenceQuery = [];
 
-  speakerQuery = []
+  speakerQuery = [];
 
   limit = 10;
 
@@ -32,7 +32,7 @@ class TableStore {
 
   initialLoad = () => {
     if (this.tableData.length === 0) this.loadData();
-  }
+  };
 
   formatDate = (date) => {
     const monthNames = [
@@ -52,35 +52,35 @@ class TableStore {
   getCities = flow(function* () {
     const {data} = yield Api.get(`cities`);
     this.cities = data;
-  })
+  });
 
   getCountries = flow(function* () {
     const {data} = yield Api.get(`countries`);
     this.countries = data;
-  })
+  });
 
   getConferences= flow(function* () {
     const {data} = yield Api.get(`conferences`);
     this.conferences = data;
-  })
+  });
 
   getSpeakers= flow(function* () {
     const {data} = yield Api.get(`speakers`);
     this.speakers = data;
-  })
+  });
 
   loadData = flow(function* () {
     this.isLoading = true;
-    console.log(this.url)
-    const res = yield Api.get(`${this.url}?limit=${this.limit}&page=${this.page}&query=${this.query}${this.additionalQuery}`)
+    console.log(this.url);
+    const res = yield Api.get(`${this.url}?limit=${this.limit}&page=${this.page}&query=${this.query}${this.additionalQuery}`);
     this.tableData = res.data || [];
     this.total = res.total;
     this.isLoading = false;
-  }).bind(this)
+  }).bind(this);
 
   fetchAllItems = flow(function* (url) {
     return yield Api.get(url);
-  })
+  });
 
   saveItem = (itemData, itemId = null) => {
     this.isLoading = true;
@@ -89,11 +89,11 @@ class TableStore {
     } else {
       return this.createItem(itemData)
     }
-  }
+  };
 
   editItem = flow(function* (itemData, itemId = null) {
     try {
-      const res = yield Api.put(`${this.url}/${itemId}`, JSON.stringify(itemData))
+      const res = yield Api.put(`${this.url}/${itemId}`, JSON.stringify(itemData));
       this.tableData = this.tableData.map(row => row._id === itemId ? res.data : row)
     } catch (err) {
       // this.appStore.handleOpenSnack('Some error');
@@ -101,7 +101,7 @@ class TableStore {
     } finally {
       this.isLoading = false;
     }
-  })
+  });
 
   createItem = flow(function* (itemData) {
     try {
@@ -112,12 +112,12 @@ class TableStore {
     } finally {
       this.isLoading = false;
     }
-  })
+  });
 
   deleteItems = flow(function* (id) {
     yield Api.delete(`${this.url}/` + id);
     this.loadData();
-  })
+  });
 
   restoreItems = flow(function* (ids = []) {
     yield Api.patch(`${this.url}/restore`, JSON.stringify({ids}));
@@ -129,17 +129,17 @@ class TableStore {
   clearQuery = () => {
     this.query = '';
     this.loadData();
-  }
+  };
 
   handleChangeRowsPerPage = limit => {
     this.limit = limit;
     this.loadData();
-  }
+  };
 
   handleChangePage = page => {
     this.page = page + 1;
     this.loadData();
-  }
+  };
 
   addNewItem = item => {
     this.total++;
@@ -147,60 +147,60 @@ class TableStore {
       return this.tableData = [item, ...this.tableData].slice(0, -1)
 
     this.tableData = [item, ...this.tableData]
-  }
+  };
 
   parseDate = date => {
     date = new Date(date);
     return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay();
-  }
+  };
 
   makeReport = flow(function *() {
     window.print();
-  })
+  });
 
   changeCityQuery = e => {
     this.cityQuery = e.target.value;
 
     const cityString = this.cityQuery.reduce((acc, curCity, i) => {
       return acc += `&filter[city][]=${curCity}`
-    }, '')
+    }, '');
 
     this.additionalQuery = cityString;
     this.loadData();
-  }
+  };
 
   changeCountryQuery = e => {
     this.countryQuery = e.target.value;
 
     const countryString = this.countryQuery.reduce((acc, curCountry, i) => {
       return acc += `&filter[country][]=${curCountry}`
-    }, '')
+    }, '');
 
     this.additionalQuery = countryString;
     this.loadData();
-  }
+  };
 
   changeConferenceQuery = e => {
     this.conferenceQuery = e.target.value;
 
     const conferenceString = this.conferenceQuery.reduce((acc, curConference, i) => {
       return acc += `&filter[conference][]=${curConference}`
-    }, '')
+    }, '');
 
     this.additionalQuery = conferenceString;
     this.loadData();
-  }
+  };
 
   changeSpeakerQuery = e => {
     this.speakerQuery = e.target.value;
 
     const countryString = this.speakerQuery.reduce((acc, curSpeaker, i) => {
       return acc += `&filter[speaker][]=${curSpeaker}`
-    }, '')
+    }, '');
 
     this.additionalQuery = countryString;
     this.loadData();
-  }
+  };
 
   clearFilters = e => {
     this.cityQuery = [];

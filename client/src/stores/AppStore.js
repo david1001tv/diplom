@@ -31,7 +31,7 @@ class AppStore {
   handleOpenSnack = snackMessage => {
     this.snackMessage = snackMessage;
     this.isSnackOpen = true;
-  }
+  };
 
   checkToken = flow(function* () {
     const payload = parseJwt(Api.token);
@@ -45,7 +45,7 @@ class AppStore {
     } else {
       this.isLogged = !Api.isTokenExpired(payload);
     }
-  })
+  });
 
   logIn = flow(function* (login, password) {
     try {
@@ -57,7 +57,7 @@ class AppStore {
       throw err;
     }
 
-  })
+  });
 
   handleCloseSnack = () => this.isSnackOpen = false;
 }

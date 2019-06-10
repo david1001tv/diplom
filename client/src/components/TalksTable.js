@@ -26,7 +26,7 @@ import Input from "@material-ui/core/Input";
 import MenuItem from "@material-ui/core/MenuItem";
 
 
-const Transition = props => <Slide direction="up" {...props} />
+const Transition = props => <Slide direction="up" {...props} />;
 
 const clearFields = () => ({
   talkId: null,
@@ -38,7 +38,7 @@ const clearFields = () => ({
     conference: '',
     speaker: ''
   }
-})
+});
 
 const getTalkDataWithFallback = speaker => ({
   talkFormFiled: {
@@ -48,7 +48,7 @@ const getTalkDataWithFallback = speaker => ({
     conference: get(speaker, 'conference._id', ''),
     speaker: get(speaker, 'speaker._id', '')
   }
-})
+});
 
 const styles = theme => ({
   controlBtn: {
@@ -65,7 +65,7 @@ const styles = theme => ({
     margin: '0 10px'
   },
 
-  сontainer: {
+  container: {
     width: 'auto',
     margin: '0 5px'
   },
@@ -108,7 +108,7 @@ class TalksTable extends Component {
     speakers: [],
     order: 'asc',
     orderBy: 'Name'
-  }
+  };
 
   componentDidMount() {
     this.props.TalksStore.initialLoad();
@@ -142,7 +142,7 @@ class TalksTable extends Component {
           <Delete className={classes.icon} color='secondary'/>
         </IconButton>}
     </div>
-  }
+  };
 
   handleChange = name => e => {
     const { talkFormFiled } = this.state;
@@ -152,7 +152,7 @@ class TalksTable extends Component {
         [name]: e.target.value
       }
     })
-  }
+  };
 
   handleResetPasswort = () => {
     const { talkId } = this.state;
@@ -160,7 +160,7 @@ class TalksTable extends Component {
     this.props.TalksStore.resetPassword(talkId)
       .then(() => this.setState({isConfirmOpen: false}))
       .catch(err => console.log(err))
-  }
+  };
 
   saveTalk = () => {
     this.props.TalksStore.saveItem(
@@ -173,17 +173,17 @@ class TalksTable extends Component {
           errors
         })
       })
-  }
+  };
 
   openDialog = () => this.setState({
     isOpen: true,
     errors: {},
     ...clearFields()
-  })
+  });
 
   closeDialog = () => this.setState({
     isOpen: false,
-  })
+  });
 
   buildRows = (data) => {
     return data.map(talk => ({
@@ -192,7 +192,7 @@ class TalksTable extends Component {
       speaker: `${talk.speaker.first_name} ${talk.speaker.last_name}`,
       control: this.controlTableRow(talk.deleted, talk._id)
     }))
-  }
+  };
 
   deleteUsers = id => () => this.props.TalksStore.deleteItems(id);
 
@@ -207,7 +207,7 @@ class TalksTable extends Component {
       talkId: talk._id,
       ...getTalkDataWithFallback(talk)
     });
-  }
+  };
 
   handleChangePage = (_, page)  => this.props.TalksStore.handleChangePage(page);
 
@@ -227,10 +227,10 @@ class TalksTable extends Component {
         order: order
       })
     }
-  }
+  };
 
   render() {
-    const { title, isOpen, isConfirmOpen, errors, policies, talkFormFiled, talkId, conferences, speakers, order, orderBy } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, talkFormFiled, talkId, conferences, speakers, order, orderBy } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -251,7 +251,7 @@ class TalksTable extends Component {
 
     return <React.Fragment>
       <Grid item sm={6} className={classNames(classes.flexItem, classes.justifyEnd)}>
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <Typography>Conferences:</Typography>
           <Select
             multiple
@@ -266,7 +266,7 @@ class TalksTable extends Component {
           </Select>
         </Grid>
 
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <Typography>Speakers:</Typography>
           <Select
             multiple
@@ -281,7 +281,7 @@ class TalksTable extends Component {
           </Select>
         </Grid>
 
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <TableSearch
             onChange={changeQuery}
             handleClear={clearQuery}
@@ -290,7 +290,7 @@ class TalksTable extends Component {
           />
         </Grid>
 
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <Button onClick={clearFilters} className={classes.clearBtn}>
             Clear
             <Clear />

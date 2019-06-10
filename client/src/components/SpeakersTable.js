@@ -26,7 +26,7 @@ import Input from "@material-ui/core/Input";
 import MenuItem from "@material-ui/core/MenuItem";
 
 
-const Transition = props => <Slide direction="up" {...props} />
+const Transition = props => <Slide direction="up" {...props} />;
 
 const clearFields = () => ({
   speakerId: null,
@@ -41,7 +41,7 @@ const clearFields = () => ({
     address: '',
     account: false
   }
-})
+});
 
 const getSpeakerDataWithFallback = speaker => ({
   speakerFormFields: {
@@ -53,7 +53,7 @@ const getSpeakerDataWithFallback = speaker => ({
     interests: get(speaker, 'interests', ''),
     account: false
   }
-})
+});
 
 const styles = theme => ({
   controlBtn: {
@@ -70,7 +70,7 @@ const styles = theme => ({
     margin: '0 10px'
   },
 
-  сontainer: {
+  container: {
     width: 'auto',
     margin: '0 5px'
   },
@@ -112,7 +112,7 @@ class SpeakersTable extends Component {
     countries: [],
     order: 'asc',
     orderBy: 'Name',
-  }
+  };
 
   componentDidMount() {
     this.props.SpeakersStore.initialLoad();
@@ -140,9 +140,9 @@ class SpeakersTable extends Component {
           <Delete className={classes.icon} color='secondary'/>
         </IconButton>}
     </div>
-  }
+  };
 
-  checkIsSwitcher = e => e.target.type === 'checkbox' ? true : false;
+  checkIsSwitcher = e => (e.target.type === 'checkbox');
 
   handleChange = name => e => {
     const { speakerFormFields } = this.state;
@@ -152,15 +152,7 @@ class SpeakersTable extends Component {
         [name]: this.checkIsSwitcher(e) ? e.target.checked : e.target.value
       }
     })
-  }
-
-  handleResetPasswort = () => {
-    const { speakerId } = this.state;
-
-    this.props.SpeakersStore.resetPassword(speakerId)
-      .then(() => this.setState({isConfirmOpen: false}))
-      .catch(err => console.log(err))
-  }
+  };
 
   saveConference = () => {
     this.props.SpeakersStore.saveItem(
@@ -173,17 +165,17 @@ class SpeakersTable extends Component {
           errors
         })
       })
-  }
+  };
 
   openDialog = () => this.setState({
     isOpen: true,
     errors: {},
     ...clearFields()
-  })
+  });
 
   closeDialog = () => this.setState({
     isOpen: false,
-  })
+  });
 
   buildRows = (data) => {
     return data.map(speaker => ({
@@ -208,7 +200,7 @@ class SpeakersTable extends Component {
       speakerId: speaker._id,
       ...getSpeakerDataWithFallback(speaker)
     });
-  }
+  };
 
   handleChangePage = (_, page)  => this.props.SpeakersStore.handleChangePage(page);
 
@@ -233,10 +225,10 @@ class SpeakersTable extends Component {
         order: order
       })
     }
-  }
+  };
 
   render() {
-    const { title, isOpen, isConfirmOpen, errors, policies, speakerFormFields, speakerId, countries, order, orderBy } = this.state;
+    const { title, isOpen, isConfirmOpen, errors, speakerFormFields, speakerId, countries, order, orderBy } = this.state;
     const { classes } = this.props;
     const {
       tableData,
@@ -255,7 +247,7 @@ class SpeakersTable extends Component {
 
     return <React.Fragment>
       <Grid item sm={6} className={classNames(classes.flexItem, classes.justifyEnd)}>
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <Typography>Country:</Typography>
           <Select
             multiple
@@ -270,7 +262,7 @@ class SpeakersTable extends Component {
           </Select>
         </Grid>
 
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <TableSearch
             onChange={changeQuery}
             handleClear={clearQuery}
@@ -279,7 +271,7 @@ class SpeakersTable extends Component {
           />
         </Grid>
 
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <Button onClick={clearFilters} className={classes.clearBtn}>
             Clear
             <Clear />

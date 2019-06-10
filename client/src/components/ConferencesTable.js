@@ -64,7 +64,7 @@ const styles = theme => ({
     margin: '0 10px'
   },
 
-  сontainer: {
+  container: {
     width: 'auto',
     margin: '0 5px'
   },
@@ -230,7 +230,7 @@ class ConferencesTable extends Component {
 
     return <React.Fragment>
       <Grid item sm={6} className={classNames(classes.flexItem, classes.justifyEnd)}>
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <Typography>City:</Typography>
           <Select
             multiple
@@ -246,7 +246,7 @@ class ConferencesTable extends Component {
         </Grid>
 
 
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <TableSearch
             onChange={changeQuery}
             handleClear={clearQuery}
@@ -255,7 +255,7 @@ class ConferencesTable extends Component {
           />
         </Grid>
 
-        <Grid container justify='flex-end' alignItems='center' className={classes.сontainer}>
+        <Grid container justify='flex-end' alignItems='center' className={classes.container}>
           <Button onClick={clearFilters} className={classes.clearBtn}>
             Clear
             <Clear />
