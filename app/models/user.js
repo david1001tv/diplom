@@ -30,15 +30,19 @@ const UserSchema = new Schema({
   }
 }, {
   timestamps: true
-}).plugin(uniqueValidator, { message: 'Field `{PATH}` must be unique' });
+}).plugin(uniqueValidator, {message: 'Field `{PATH}` must be unique'});
 
 UserSchema.pre('save', function (next) {
   let user = this;
 
-  if (!user.isModified('password')) return next()
+  if (!user.isModified('password')) {
+    return next();
+  }
 
   bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     bcrypt.hash(user.password, salt, null, function (err, hash) {
       if (err) {
         return next(err);
@@ -49,7 +53,7 @@ UserSchema.pre('save', function (next) {
   });
 });
 
-UserSchema.methods.comparePassword = async function (candidatePassword) {
+UserSchema.methods.comparePassword = async function (candidatePassword, cb) {
   return new Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, this.password, function (err, data) {
       if (err !== null) {

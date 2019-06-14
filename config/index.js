@@ -3,4 +3,4 @@ require('fs').readdirSync(base_dir + '/config').forEach(function (file) {
     let name = file.replace('.js', '')
     exports[name] = require('./' + file)
   }
-})
+});
