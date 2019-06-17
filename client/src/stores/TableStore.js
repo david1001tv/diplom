@@ -122,7 +122,7 @@ class TableStore {
   restoreItems = flow(function* (ids = []) {
     yield Api.patch(`${this.url}/restore`, JSON.stringify({ids}));
     this.tableData = this.tableData.map(row => ids.indexOf(row._id) !== -1 ? {...row, deleted: false} : row)
-  })
+  });
 
   changeQuery = query => this.query = query;
 

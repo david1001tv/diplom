@@ -26,7 +26,11 @@ const styles = theme => ({
     marginTop: 150,
     marginBottom: 100,
     marginLeft: '15%',
-    paddingBottom: 1
+    paddingBottom: 1,
+    '@media (max-width: 1024px)': {
+      width: '95%',
+      marginLeft: '2.5%',
+    }
   },
   header: {
     paddingTop: 50,

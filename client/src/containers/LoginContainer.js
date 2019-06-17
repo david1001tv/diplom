@@ -19,7 +19,10 @@ const styles = theme => ({
     left: '50%',
     width: '30%',
     transform: 'translate(-50%, -50%)',
-    paddingBottom: theme.spacing.unit
+    paddingBottom: theme.spacing.unit,
+    '@media (max-width: 1024px)': {
+      width: '95%',
+    }
   },
 
   textField: {

@@ -3,4 +3,4 @@ export const numberInput = cb => e => {
   if(isNaN(+val)) return;
 
   cb(e);
-}
+};

@@ -22,9 +22,12 @@ const styles = theme => ({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    width: '30%',
     transform: 'translate(-50%, -50%)',
-    paddingBottom: theme.spacing.unit
+    paddingBottom: theme.spacing.unit,
+    '@media (max-width: 1024px)': {
+      top: '60%',
+      width: '90%'
+    }
   },
 
   textField: {
